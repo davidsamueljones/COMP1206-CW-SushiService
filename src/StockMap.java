@@ -5,14 +5,14 @@
  * 
  * New methods in this class are thread safe using a central locking object.
  * 
- * Keys are generic, whereas stock levels are defined and hard-coded as Levels.
+ * Keys are generic, whereas stock levels are defined and hard-coded as StockLevels.
  * 
  * @param <K> The type of keys maintained by this map
  * 
  * Sushi Service - COMP1206 Coursework
  * @author David Jones [dsj1n15]
  */
-public class StockMap<K> extends ConcurrentLinkedHashMap<K, Levels> implements StockHandler<K> {
+public class StockMap<K> extends ConcurrentLinkedHashMap<K, StockLevels> implements StockHandler<K> {
 	private static final long serialVersionUID = -7217174370857494772L;
 	private final Object lock;
 	
@@ -32,7 +32,7 @@ public class StockMap<K> extends ConcurrentLinkedHashMap<K, Levels> implements S
 	}
 	
 	@Override
-	public Levels add(K key, Levels levels) {
+	public StockLevels add(K key, StockLevels levels) {
 		synchronized (lock) {
 			if (containsKey(key)) {
 				throw new IllegalArgumentException("Key already exists in stock map");
@@ -51,7 +51,7 @@ public class StockMap<K> extends ConcurrentLinkedHashMap<K, Levels> implements S
 	@Override
 	public void addStock(K item, int amount, boolean available) {
 		synchronized (lock) {
-			Levels curStock = get(item);
+			StockLevels curStock = get(item);
 			curStock.addStock(amount, available);
 		}
 	}
@@ -59,7 +59,7 @@ public class StockMap<K> extends ConcurrentLinkedHashMap<K, Levels> implements S
 	@Override
 	public boolean makeStockAvailable(K item, int amount) {
 		synchronized (lock) {
-			Levels curStock = get(item);
+			StockLevels curStock = get(item);
 			if (curStock.getUnavailableStock() < amount) {
 				return false;
 			}
@@ -71,7 +71,7 @@ public class StockMap<K> extends ConcurrentLinkedHashMap<K, Levels> implements S
 	@Override
 	public boolean makeStockUnavailable(K item, int amount) {
 		synchronized (lock) {
-			Levels curStock = get(item);
+			StockLevels curStock = get(item);
 			if (curStock.getAvailableStock() < amount) {
 				return false;
 			}

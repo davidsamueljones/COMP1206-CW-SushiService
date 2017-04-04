@@ -1,4 +1,12 @@
-class Levels {
+/**
+ * StockLevels class, holds relevant stock information.
+ * Note that this classes methods are not thread safe and relies on a containing structure to manage
+ * synchronisation. Unmanaged changes may lead to unexpected behaviour.
+ * 
+ * Sushi Service - COMP1206 Coursework
+ * @author David Jones [dsj1n15]
+ */
+class StockLevels {
 	private int stock;
 	private int availableStock;
 	private int restockLevel;
@@ -7,7 +15,7 @@ class Levels {
 	 * Instantiate levels with no stock and a restocking level.
 	 * @param restockLevel
 	 */
-	public Levels(int restockLevel) {
+	public StockLevels(int restockLevel) {
 		this(0, 0, restockLevel);
 	}
 	
@@ -15,7 +23,7 @@ class Levels {
 	 * Instantiate levels.
 	 * @param restockLevel
 	 */
-	public Levels(int stockLevel, int availableStock, int restockLevel) {
+	public StockLevels(int stockLevel, int availableStock, int restockLevel) {
 		setStock(stockLevel);
 		setAvailableStock(availableStock);
 		setRestockLevel(restockLevel);
@@ -121,7 +129,6 @@ class Levels {
 	}
 
 	/**
-	 * 
 	 * @return True if stock level has fallen below restock level, else false
 	 */
 	public boolean isStockRequired() {
@@ -143,4 +150,5 @@ class Levels {
 	public boolean isEnoughStock(int required) {
 		return (availableStock >= required);
 	}
+	
 }

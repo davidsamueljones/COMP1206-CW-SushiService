@@ -16,14 +16,14 @@ public interface StockHandler<T> {
 	 * @param levels Stock levels
 	 * @return Item's corresponding stock levels
 	 */
-	abstract public Levels add(T item, Levels levels);
+	abstract public StockLevels add(T item, StockLevels levels);
 	
 	/**
 	 * Remove an item from the stock handler.
 	 * @param key Item to remove
 	 * @return Item's corresponding stock levels, else null if item not found
 	 */
-	abstract public Levels remove(T item);
+	abstract public StockLevels remove(T item);
 	
 	/**
 	 * Add given item stocks to stock handler. Make available as indicated.
