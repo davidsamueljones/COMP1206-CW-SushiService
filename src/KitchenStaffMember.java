@@ -20,23 +20,14 @@ public class KitchenStaffMember implements Runnable {
 		this.working = working;
 	}
 	
-	/**
-	 * 
-	 * @param dish
-	 */
 	public boolean prepareDish(Dish dish) {
 		// Get storage stock handlers
 		StockHandler<Ingredient> ingredients = storage.getIngredients();
 		StockHandler<Dish> dishes = storage.getDishes();
-		// Synchronise remove and stock add
+		// Synchronise remove and stock add using storage instance as lock
 		synchronized (storage) {
 			if (ingredients.removeStock(dish.getIngredients())) {
 				statusUpdate(String.format("Preparing dish '%s'...", dish.getName()));
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				dishes.addStock(dish, 1, false);
 			}
 			else {
@@ -44,19 +35,22 @@ public class KitchenStaffMember implements Runnable {
 				return false;
 			}
 		}
-		// Wait
+		// Wait (simulate dish preparation)
+		randomWait();
+		// Finalise dish by making it available
+		dishes.makeStockAvailable(dish, 1);
+		statusUpdate(String.format("Prepared dish '%s'!", dish.getName()));	
+		return true;
+	}
+	
+	private static void randomWait() {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		// Finalise dish by making it available
-		statusUpdate(String.format("Prepared dish '%s'!", dish.getName()));	
-		dishes.makeStockAvailable(dish, 1);
-		return true;
 	}
 	
-
 	private void statusUpdate(String msg) {
 		System.out.println(String.format("[%s] : %s", name, msg));
 	}
