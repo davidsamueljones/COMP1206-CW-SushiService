@@ -1,3 +1,6 @@
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Main {
 	
 	public static void main(String[] args) {
@@ -13,23 +16,22 @@ public class Main {
 		StockManagement sm = new StockManagement();
 		StockHandler<Ingredient> ingredients = sm.getIngredients();
 		StockHandler<Dish> dishes = sm.getDishes();
-		ingredients.add(ing1, new Levels(15, 15, 20));
-		ingredients.add(ing2, new Levels(9, 6, 6));
-		dishes.add(dish1, new Levels(1, 1, 3));
+		ingredients.add(ing1, new StockLevels(15, 15, 20));
+		ingredients.add(ing2, new StockLevels(9, 6, 6));
+		dishes.add(dish1, new StockLevels(1, 1, 2));
 
 		KitchenStaffMember ks = new KitchenStaffMember("Steph", sm, true);
-		KitchenStaffMember ks2 = new KitchenStaffMember("David", sm, true);
+		KitchenStaffMember ks2 = new KitchenStaffMember("Kirtan", sm, true);
 	    Thread t = new Thread(ks);
 	    Thread t2 = new Thread(ks2);
 	    t.start();
-
-		 t2.start();
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		 System.out.println(ingredients.removeStock(ing1, 10));
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(ingredients.removeStock(ing1, 12));
+		t2.start();
 	}
 	
 }

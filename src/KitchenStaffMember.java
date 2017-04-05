@@ -13,26 +13,33 @@ public class KitchenStaffMember implements Runnable {
 	final private String name;
 	private StockManagement storage;
 	private boolean working;
-	
+
 	public KitchenStaffMember(String name, StockManagement storage, boolean working) {
 		this.name = name;
 		this.storage = storage;
 		this.working = working;
 	}
-	
-	public boolean prepareDish(Dish dish) {
+
+	public boolean prepareDish() {
 		// Get storage stock handlers
 		StockHandler<Ingredient> ingredients = storage.getIngredients();
 		StockHandler<Dish> dishes = storage.getDishes();
-		// Synchronise remove and stock add using storage instance as lock
-		synchronized (storage) {
-			if (ingredients.removeStock(dish.getIngredients())) {
-				statusUpdate(String.format("Preparing dish '%s'...", dish.getName()));
-				dishes.addStock(dish, 1, false);
-			}
-			else {
-				statusUpdate(String.format("Not enough stock to make dish '%s'!", dish.getName()));	
-				return false;
+
+		Dish dish;
+		synchronized (ingredients) {
+			synchronized (dishes) {
+				dish = storage.getRestockableDish();
+				if (dish == null) {
+					return false;
+				}
+				if (ingredients.removeStock(dish.getIngredients())) {
+					statusUpdate(String.format("Preparing dish '%s'...", dish.getName()));
+					dishes.addStock(dish, 1, false);
+				}
+				else {
+					statusUpdate(String.format("Not enough stock to make dish '%s'!", dish.getName()));	
+					return false;
+				}
 			}
 		}
 		// Wait (simulate dish preparation)
@@ -42,7 +49,7 @@ public class KitchenStaffMember implements Runnable {
 		statusUpdate(String.format("Prepared dish '%s'!", dish.getName()));	
 		return true;
 	}
-	
+
 	private static void randomWait() {
 		try {
 			Thread.sleep(2000);
@@ -50,18 +57,15 @@ public class KitchenStaffMember implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void statusUpdate(String msg) {
 		System.out.println(String.format("[%s] : %s", name, msg));
 	}
-	
+
 	@Override
 	public void run() {
 		while (working) {
-			Dish dish = storage.getRestockableDish();
-			if (dish != null) {
-				prepareDish(dish);
-			}
+			prepareDish();
 			// Wait
 			try {
 				Thread.sleep(1000);
@@ -75,7 +79,7 @@ public class KitchenStaffMember implements Runnable {
 	public String toString() {
 		return String.format("Kitchen Staff Member [name=%s]", name);
 	}	
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
@@ -89,5 +93,5 @@ public class KitchenStaffMember implements Runnable {
 		final int prime = 13;
 		return prime + (name == null ? 0 : name.hashCode());
 	}
-	
+
 }

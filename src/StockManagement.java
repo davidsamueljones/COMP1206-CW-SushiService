@@ -3,8 +3,10 @@ public class StockManagement {
 	private final StockHandler<Dish> dishes;
 	
 	public StockManagement() {
-		ingredients = new StockMap<Ingredient>(this);
-		dishes = new StockMap<Dish>(this);
+		// Lock stock handlers using current instance so that behaviour can be
+		// synchronised between different stocks
+		ingredients = new StockMap<Ingredient>();
+		dishes = new StockMap<Dish>();
 	}
 	
 	/**
@@ -21,14 +23,19 @@ public class StockManagement {
 		return ingredients;
 	}
 	
-	
-
-	
-	public synchronized Dish getRestockableDish() {
-		for (Dish dish : dishes.getStockRequired().keySet()) {
-			if (ingredients.isEnoughAvailableStock(dish.getIngredients())) {
-				return dish;
-			}	
+	/**
+	 * 
+	 * @return
+	 */
+	public Dish getRestockableDish() {
+		synchronized (ingredients) {
+			synchronized (dishes) {
+				for (Dish dish : dishes.getStockRequired().keySet()) {
+					if (ingredients.isEnoughAvailableStock(dish.getIngredients())) {
+						return dish;
+					}	
+				}
+			}
 		}
 		return null;
 	}

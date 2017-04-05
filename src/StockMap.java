@@ -14,33 +14,15 @@
  */
 public class StockMap<K> extends ConcurrentLinkedHashMap<K, StockLevels> implements StockHandler<K> {
 	private static final long serialVersionUID = -7217174370857494772L;
-	private final Object lock;
-	
-	/**
-	 * Instantiates a new StockMap, using self as synchronisation lock.
-	 */
-	public StockMap() {
-		this.lock = this;
-	}
-	
-	/**
-	 * Instantiates a new StockMap using a given object as a synchronisation lock.
-	 * @param lock Object to use for locking
-	 */
-	public StockMap(Object lock) {
-		this.lock = lock;		
-	}
-	
+
 	@Override
-	public StockLevels add(K key, StockLevels levels) {
-		synchronized (lock) {
-			if (containsKey(key)) {
-				throw new IllegalArgumentException("Key already exists in stock map");
-			}
-			return super.put(key, levels);
+	public synchronized StockLevels add(K key, StockLevels levels) {
+		if (containsKey(key)) {
+			throw new IllegalArgumentException("Key already exists in stock map");
 		}
+		return super.put(key, levels);
 	}
-	
+
 	@Override
 	public void addStock(QuantityMap<K> items, boolean available) {
 		for (K item: items.keySet()) {
@@ -49,61 +31,51 @@ public class StockMap<K> extends ConcurrentLinkedHashMap<K, StockLevels> impleme
 	}
 
 	@Override
-	public void addStock(K item, int amount, boolean available) {
-		synchronized (lock) {
-			StockLevels curStock = get(item);
-			curStock.addStock(amount, available);
-		}
+	public synchronized void addStock(K item, int amount, boolean available) {
+		StockLevels curStock = get(item);
+		curStock.addStock(amount, available);
 	}
 
 	@Override
-	public boolean makeStockAvailable(K item, int amount) {
-		synchronized (lock) {
-			StockLevels curStock = get(item);
-			if (curStock.getUnavailableStock() < amount) {
-				return false;
-			}
-			curStock.makeStockAvailable(amount);
+	public synchronized boolean makeStockAvailable(K item, int amount) {
+		StockLevels curStock = get(item);
+		if (curStock.getUnavailableStock() < amount) {
+			return false;
 		}
+		curStock.makeStockAvailable(amount);
 		return true;	
 	}
 
 	@Override
-	public boolean makeStockUnavailable(K item, int amount) {
-		synchronized (lock) {
-			StockLevels curStock = get(item);
-			if (curStock.getAvailableStock() < amount) {
-				return false;
-			}
-			curStock.makeStockUnavailable(amount);
+	public synchronized boolean makeStockUnavailable(K item, int amount) {
+		StockLevels curStock = get(item);
+		if (curStock.getAvailableStock() < amount) {
+			return false;
 		}
+		curStock.makeStockUnavailable(amount);
 		return true;	
 
 	}
-	
+
 	@Override
-	public boolean removeStock(QuantityMap<K> reqItems) {
-		synchronized (lock) {
-			// Verify enough stock before removal starts
-			if (!isEnoughAvailableStock(reqItems)) {
-				return false;
-			}		
-			for (K item: reqItems.keySet()) {
-				// Do not use overloaded method to avoid second stock check
-				get(item).removeStock(reqItems.get(item));
-			}
+	public synchronized boolean removeStock(QuantityMap<K> reqItems) {
+		// Verify enough stock before removal starts
+		if (!isEnoughAvailableStock(reqItems)) {
+			return false;
+		}		
+		for (K item: reqItems.keySet()) {
+			// Do not use overloaded method to avoid second stock check
+			get(item).removeStock(reqItems.get(item));
 		}
 		return true;
 	}
 
 	@Override
-	public boolean removeStock(K item, int amount) {
-		synchronized (lock) {
-			if (!isEnoughAvailableStock(item, amount)) {
-				return false;
-			}
-			get(item).removeStock(amount);
+	public synchronized boolean removeStock(K item, int amount) {
+		if (!isEnoughAvailableStock(item, amount)) {
+			return false;
 		}
+		get(item).removeStock(amount);
 		return true;
 	}
 
@@ -118,20 +90,16 @@ public class StockMap<K> extends ConcurrentLinkedHashMap<K, StockLevels> impleme
 	}
 
 	@Override
-	public boolean isEnoughAvailableStock(K item, int amount) {
-		synchronized (lock) {
-			return get(item).isEnoughStock(amount);
-		}
+	public synchronized boolean isEnoughAvailableStock(K item, int amount) {
+		return get(item).isEnoughStock(amount);
 	}
-	
+
 	@Override
-	public QuantityMap<K> getStockRequired() {
+	public synchronized QuantityMap<K> getStockRequired() {
 		QuantityMap<K> quantities = new QuantityMap<K>();
-		synchronized (lock) {
-			for (K item : keySet()) {
-				if (get(item).isStockRequired()) {
-					quantities.increment(item);
-				}
+		for (K item : keySet()) {
+			if (get(item).isStockRequired()) {
+				quantities.increment(item);
 			}
 		}
 		return quantities;
