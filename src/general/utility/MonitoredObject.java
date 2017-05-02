@@ -108,7 +108,7 @@ public class MonitoredObject<T> {
 	 * @param timeout How long to wait before timeout (ms where 0 = no timeout)
 	 * @return Whether there was an update
 	 */
-	public boolean waitForNew(int timeout) {
+	public synchronized boolean waitForNew(int timeout) {
 		try {
 			// If new update is available, there is no need to wait
 			if (!isNew()) {

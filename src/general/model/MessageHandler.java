@@ -42,12 +42,6 @@ public abstract class MessageHandler implements Runnable {
 				@Override
 				public void run() {
 					handleMessage(rx);
-					try {
-						Thread.sleep(10000);
-					} catch (final InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					// Remove thread from ongoing threads once handled
 					threads.remove(this);
 				}

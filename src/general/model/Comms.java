@@ -54,19 +54,18 @@ public class Comms {
 		if (source == null) {
 			throw new IllegalArgumentException("No Client Address - Server not being hosted");
 		}
-		// Remember setup
-		this.source = source;
-		this.defaultDestination = defaultDestination;
 		// Start a socket server listening for messages
 		try {
 			// Start a listening server
 			server = new MessageReceiver(source.getPort());
 			server.start();
 			// Update port number of source in case of dynamic assignment
-			source = new InetSocketAddress(source.getAddress(), server.getPort());
+			this.source = new InetSocketAddress(source.getAddress(), server.getPort());
 		} catch (BindException e) {
 			throw new IllegalArgumentException("Port number in use - Server not being hosted");
 		}
+		// Remember default location
+		this.defaultDestination = defaultDestination;
 	}
 
 	/**
