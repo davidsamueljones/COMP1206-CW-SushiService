@@ -18,11 +18,15 @@ import javax.swing.border.TitledBorder;
 
 import business.model.StockLevels;
 
+/**
+ * An inner record editor that handles a stock level; this class must be contained
+ * in an enclosing record editor class.
+ *
+ * @author David Jones [dsj1n15]
+ */
 public class StockPanel extends JPanel implements RecordEditor<StockLevels> {
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 4953583908325886546L;
+	
 	// Record objects
 	private final JPanel pnlStockLevels;
 	private final JTextField txtReserved;
@@ -159,6 +163,7 @@ public class StockPanel extends JPanel implements RecordEditor<StockLevels> {
 		gbc_nudRestockLevel.gridy = 1;
 		add(nudRestockLevel, gbc_nudRestockLevel);
 
+		// [Content Panel] <- 'Stockable' Label
 		lblStockable = new JLabel("Stockable:");
 		final GridBagConstraints gbc_lblStockable = new GridBagConstraints();
 		gbc_lblStockable.anchor = GridBagConstraints.EAST;
@@ -166,14 +171,14 @@ public class StockPanel extends JPanel implements RecordEditor<StockLevels> {
 		gbc_lblStockable.gridx = 0;
 		gbc_lblStockable.gridy = 2;
 		add(lblStockable, gbc_lblStockable);
-
+		// [Content Panel] <- 'Yes-Stockable' Radio Button
 		radStockableYes = new JRadioButton("Yes");
 		final GridBagConstraints gbc_radStockableYes = new GridBagConstraints();
 		gbc_radStockableYes.insets = new Insets(0, 0, 5, 5);
 		gbc_radStockableYes.gridx = 1;
 		gbc_radStockableYes.gridy = 2;
 		add(radStockableYes, gbc_radStockableYes);
-
+		// [Content Panel] <- 'No-Stockable' Radio Button
 		radStockableNo = new JRadioButton("No");
 		final GridBagConstraints gbc_radStockableNo = new GridBagConstraints();
 		gbc_radStockableNo.anchor = GridBagConstraints.WEST;
@@ -181,11 +186,10 @@ public class StockPanel extends JPanel implements RecordEditor<StockLevels> {
 		gbc_radStockableNo.gridx = 2;
 		gbc_radStockableNo.gridy = 2;
 		add(radStockableNo, gbc_radStockableNo);
-
+		// Group stockable radio buttons
 		bgStockable = new ButtonGroup();
 		bgStockable.add(radStockableYes);
 		bgStockable.add(radStockableNo);
-
 	}
 
 	/**

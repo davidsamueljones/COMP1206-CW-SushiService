@@ -83,5 +83,4 @@ public class Stock implements Serializable {
 		return fromSupplier;
 	}
 
-
 }

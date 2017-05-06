@@ -35,18 +35,18 @@ import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
 
-public class OrdersPanel extends AbstractRecordPanel<Order> {
-	/**
-	 *
-	 */
+/**
+ * An extension of AbstractRecordPanel that handles orders.
+ *
+ * @author David Jones [dsj1n15]
+ */
+public class OrdersPanel extends RecordPanel<Order> {
 	private static final long serialVersionUID = 8046768538848728633L;
-
+	// Record objects
 	private final ToolBarButton tbbDeleteCompleted;
-
 	private final JTextField txtDate;
 	private final JTextField txtStatus;
 	private final JTextField txtCustomer;
-
 	private final JTable tblDishes;
 	private final DishesListTableModel model_tblDishes;
 	private final JTextField txtTotalPrice;
@@ -55,10 +55,13 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 
 	/**
 	 * Create the panel.
+	 *
+	 * @param model Data model being served
 	 */
 	public OrdersPanel(BusinessModel model) {
 		super(model, "Order", "Orders");
 
+		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
 		gbl_pnlRecord.rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -66,6 +69,7 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
 		pnlRecord.setLayout(gbl_pnlRecord);
 
+		// [Record Panel] <- 'Date Field' Label
 		final JLabel lblDate = new JLabel("Date:");
 		final GridBagConstraints gbc_lblDate = new GridBagConstraints();
 		gbc_lblDate.anchor = GridBagConstraints.EAST;
@@ -73,7 +77,7 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 		gbc_lblDate.gridx = 0;
 		gbc_lblDate.gridy = 0;
 		pnlRecord.add(lblDate, gbc_lblDate);
-
+		// [Record Panel] <- 'Date Field' TextBox
 		txtDate = new JTextField();
 		final GridBagConstraints gbc_txtDate = new GridBagConstraints();
 		gbc_txtDate.anchor = GridBagConstraints.NORTH;
@@ -82,7 +86,6 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 		gbc_txtDate.gridx = 1;
 		gbc_txtDate.gridy = 0;
 		pnlRecord.add(txtDate, gbc_txtDate);
-		txtDate.setColumns(10);
 		txtDate.setEnabled(false);
 
 		final JLabel lblStatus = new JLabel("Status:");
@@ -190,11 +193,10 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 		// Disable Creation/Editing
 		setNewEnabled(false);
 		setEditEnabled(false);
-
+		
 		// Add delete completed to toolbar
 		tbbDeleteCompleted = tlbRecords.addButton("Delete Completed",
 				Utilities.loadImage(new File("resources/imgDeleteMultiple.png")));
-
 
 		// Load relevant table model
 		model_tblRecords = new OrderTableModel();
@@ -207,6 +209,7 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 		// Finalise
 		setEditingMode(RecordEditor.EditingMode.VIEW);
 
+		// [Delete Completed Button] - Remove all completed orders
 		tbbDeleteCompleted.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -230,7 +233,7 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 			}
 		});
 
-
+		// [Cancel Order Button] - Cancel loaded order
 		btnCancelOrder.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -239,18 +242,22 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 						"Are you sure you want to cancel the selected order?", "Cancel Order",
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (res == JOptionPane.YES_OPTION) {
-					cancelOrder();
+					cancelOrder(loadedRecord);
 				}
 			}
 		});
 	}
 
-	public boolean cancelOrder() {
+	/**
+	 * Cancel the given order if possible.
+	 * @return Whether the order was cancelled successfully
+	 */
+	public boolean cancelOrder(Order order) {
 		final ErrorBuilder eb = new ErrorBuilder();
 		synchronized (model.orders) {
 			// Get up to date order
 			final Order storedRecord =
-					Utilities.getCollectionItem(model.orders, loadedRecord, Order.class);
+					Utilities.getCollectionItem(model.orders, order, Order.class);
 			// Check if order exists and can be cancelled
 			if (storedRecord == null) {
 				eb.addError("Order being cancelled does not exist");
@@ -377,6 +384,11 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 		return false;
 	}
 
+	/**
+	 * An extension of ListTableModel that displays orders.
+	 *
+	 * @author David Jones [dsj1n15]
+	 */
 	class OrderTableModel extends ListTableModel<Order> {
 		private static final long serialVersionUID = 7294325804359010564L;
 		private final String[] COLUMN_TITLES = {"Date", "Customer", "Status", "Total Price (£)"};
@@ -413,6 +425,11 @@ public class OrdersPanel extends AbstractRecordPanel<Order> {
 
 	}
 
+	/**
+	 * An extension of ListTableModel that displays dishes and a respective quantity.
+	 *
+	 * @author David Jones [dsj1n15]
+	 */
 	class DishesListTableModel extends ListTableModel<Quantity<Dish>> {
 		private static final long serialVersionUID = 6848893576001534549L;
 		private final String[] COLUMN_TITLES = {"Name", "Quantity", "Price (£)"};

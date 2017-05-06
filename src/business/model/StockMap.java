@@ -10,7 +10,8 @@ import general.model.QuantityMap;
 
 /**
  * Class StockMap that extends HashMap to allow key mappings with specific functionality. New
- * methods in this class are thread safe using a central locking object.
+ * methods in this class are thread safe using the map as a locking object, any standard HashMap
+ * functions should lock to the map manually to synchronise.
  *
  * Keys are generic, whereas stock levels are defined and hard-coded as StockLevels.
  *

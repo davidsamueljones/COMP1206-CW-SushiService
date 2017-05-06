@@ -14,14 +14,15 @@ import javax.swing.JTextField;
 
 import business.model.CustomerLogin;
 import client.model.ClientModel;
+import general.gui.View;
 import general.model.Message;
 import general.utility.ErrorBuilder;
 
-public class ClientLoginPanel extends JPanel {
+public class LoginPanel extends JPanel implements View {
 	private static final long serialVersionUID = 6429716243336673633L;
 	private static final int DEFAULT_TXT_COLUMNS = 15;
 
-	private final ClientModel application;
+	private final ClientApplication application;
 
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
@@ -30,7 +31,7 @@ public class ClientLoginPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ClientLoginPanel(ClientModel application) {
+	public LoginPanel(ClientApplication application) {
 		this.application = application;
 		init();
 	}
@@ -38,18 +39,27 @@ public class ClientLoginPanel extends JPanel {
 	private void init() {
 		// Set layout
 		GridBagLayout layout = new GridBagLayout();
-		layout.columnWidths = new int[] {0, 0};
-		layout.rowHeights = new int[] {0, 0, 0};
-		layout.columnWeights = new double[] {0.0, 1.0};
-		layout.rowWeights = new double[] {0.0, 0.0, 0.0};
+		layout.columnWidths = new int[] {20, 0, 0, 20};
+		layout.rowHeights = new int[] {0, 0, 0, 0, 0, 0};
+		layout.columnWeights = new double[] {0.4, 0, 0.2, 0.4};
+		layout.rowWeights = new double[] {0.5, 0.0, 0.0, 0.0, 0.0, 0.5};
 		setLayout(layout);
 
+		JLabel lblInformation = new JLabel("<html>Enter customer login details:</html>");
+		GridBagConstraints gbc_lblInformation = new GridBagConstraints();
+		gbc_lblInformation.gridwidth = 2;
+		gbc_lblInformation.anchor = GridBagConstraints.WEST;
+		gbc_lblInformation.insets = new Insets(10, 5, 10, 5);
+		gbc_lblInformation.gridx = 1;
+		gbc_lblInformation.gridy = 1;
+		add(lblInformation, gbc_lblInformation);
+		
 		JLabel lblUsername = new JLabel("Username:");
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsername.anchor = GridBagConstraints.EAST;
-		gbc_lblUsername.gridx = 0;
-		gbc_lblUsername.gridy = 0;
+		gbc_lblUsername.gridx = 1;
+		gbc_lblUsername.gridy = 2;
 		add(lblUsername, gbc_lblUsername);
 
 		txtUsername = new JTextField();
@@ -57,16 +67,16 @@ public class ClientLoginPanel extends JPanel {
 		GridBagConstraints gbc_txtLoginUsername = new GridBagConstraints();
 		gbc_txtLoginUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_txtLoginUsername.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtLoginUsername.gridx = 1;
-		gbc_txtLoginUsername.gridy = 0;
+		gbc_txtLoginUsername.gridx = 2;
+		gbc_txtLoginUsername.gridy = 2;
 		add(txtUsername, gbc_txtLoginUsername);
 
 		JLabel lblPassword = new JLabel("Password:");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
-		gbc_lblPassword.gridx = 0;
-		gbc_lblPassword.gridy = 1;
+		gbc_lblPassword.gridx = 1;
+		gbc_lblPassword.gridy = 3;
 		add(lblPassword, gbc_lblPassword);
 
 		txtPassword = new JPasswordField();
@@ -74,8 +84,8 @@ public class ClientLoginPanel extends JPanel {
 		GridBagConstraints gbc_txtLoginPassword = new GridBagConstraints();
 		gbc_txtLoginPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_txtLoginPassword.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtLoginPassword.gridx = 1;
-		gbc_txtLoginPassword.gridy = 1;
+		gbc_txtLoginPassword.gridx = 2;
+		gbc_txtLoginPassword.gridy = 3;
 		add(txtPassword, gbc_txtLoginPassword);
 
 		btnLogin = new JButton("Login");
@@ -83,8 +93,8 @@ public class ClientLoginPanel extends JPanel {
 		gbc_btnLogin.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnLogin.gridwidth = 2;
 		gbc_btnLogin.insets = new Insets(0, 0, 5, 5);
-		gbc_btnLogin.gridx = 0;
-		gbc_btnLogin.gridy = 2;
+		gbc_btnLogin.gridx = 1;
+		gbc_btnLogin.gridy = 4;
 		add(btnLogin, gbc_btnLogin);
 
 		// !!! Login
@@ -93,14 +103,25 @@ public class ClientLoginPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				CustomerLogin login = new CustomerLogin(txtUsername.getText(),
 						String.valueOf(txtPassword.getPassword()));
-				Message message = new Message(Message.Command.SUBMIT_LOGIN, null, login);
-				if (application.getComms().sendMessage(message)) {
-					ErrorBuilder eb = application.login();
-					// !!! Handle message
-					System.out.println(eb.listComments(""));
-				}
+				application.login(login);
 			}
 		});
 
+	}
+
+	@Override
+	public void initialise() {
+		clear();
+	}
+
+	private void clear() {
+		txtUsername.setText(null);
+		txtPassword.setText(null);
+		txtUsername.requestFocusInWindow();
+	}
+
+	@Override
+	public void refresh() {
+		// do nothing
 	}
 }

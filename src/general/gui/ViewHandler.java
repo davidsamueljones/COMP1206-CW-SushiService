@@ -2,6 +2,13 @@ package general.gui;
 
 import java.awt.Component;
 
+/**
+ * Interface for handling a view. A view is defined as a unique named component which should
+ * implement the View interface. The current view can be tracked and changed using relevant
+ * methods. In addition, utility methods are provided to invoke the View interface directly.
+ * 
+ * @author David Jones [dsj1n15]
+ */
 public interface ViewHandler {
 
 	/**

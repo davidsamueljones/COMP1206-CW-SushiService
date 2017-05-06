@@ -32,8 +32,11 @@ public class BusinessModel implements Serializable {
 
 	// List of orders?
 	public BusinessModel() {
-		// !!! TEST
+		CREATE_TEST();
+	}
 
+	//!!! TEST
+	public void CREATE_TEST() {
 		// !!! Test postcodes
 		final Postcode postcode1 = new Postcode("PO7", 4);
 		postcodes.add(postcode1);
@@ -97,7 +100,7 @@ public class BusinessModel implements Serializable {
 		drones.add(drone1);
 		drone1.startWorking();
 	}
-
+	
 	/**
 	 * @return Current comms instance
 	 */
@@ -117,12 +120,14 @@ public class BusinessModel implements Serializable {
 			throw new IllegalStateException("[MODEL] : Comms already instantiated");
 		}
 		try {
+			System.out.println("[MODEL] : Comms starting...");
 			// Start comms
 			comms = new Comms(source);
 			// Create associated message handler
 			final MessageHandler messageHandler = new BusinessMessageHandler(this);
 			messageHandlerThread = new Thread(messageHandler);
 			messageHandlerThread.start();
+			System.out.println("[MODEL] : Comms started");
 			return true;
 		} catch (final Exception e) {
 			System.err.println(e.getMessage());
@@ -217,20 +222,11 @@ public class BusinessModel implements Serializable {
 		}
 	}
 
-	public Customer findLogin(CustomerLogin login) {
-		return customers.get(login);
-	}
-
 	public void addCustomer(Customer customer) {
 		synchronized (customers) {
 			customers.put(customer.getLogin(), customer);
 		}
 	}
-
-	public Postcode[] getPostcodes() {
-		return postcodes.toArray(new Postcode[postcodes.size()]);
-	}
-
 
 	public Set<Order> getOrdersOfStatus(Order.Status status) {
 		synchronized (orders) {
@@ -248,16 +244,16 @@ public class BusinessModel implements Serializable {
 		return reqDelivery;
 	}
 
-	public Set<Order> getOrdersFromCustomer(Customer customer) {
+	public Set<Order> getOrdersFromCustomer(CustomerLogin login) {
 		synchronized (orders) {
-			return getOrdersFromCustomer(customer, orders);
+			return getOrdersFromCustomer(login, orders);
 		}
 	}
 
-	public static Set<Order> getOrdersFromCustomer(Customer customer, Set<Order> orders) {
+	public static Set<Order> getOrdersFromCustomer(CustomerLogin login, Set<Order> orders) {
 		final Set<Order> fromCustomer = new HashSet<>();
 		for (final Order order : orders) {
-			if (order.getCustomer().equals(customer)) {
+			if (order.getCustomer().getLogin().equals(login)) {
 				fromCustomer.add(order);
 			}
 		}
@@ -265,8 +261,5 @@ public class BusinessModel implements Serializable {
 	}
 
 
-	public StockMap<Dish> getDishes() {
-		return stock.dishes;
-	}
 
 }

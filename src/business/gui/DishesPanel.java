@@ -48,9 +48,14 @@ import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
 
-
-public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
+/**
+ * An extension of AbstractRecordPanel that handles dishes and their respective stock levels.
+ *
+ * @author David Jones [dsj1n15]
+ */
+public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 	private static final long serialVersionUID = -6211990855581822837L;
+	// Record objects
 	private JTextField txtName;
 	private JTextArea txtDescription;
 	private JSpinner nudPrice;
@@ -62,16 +67,23 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 	private JButton btnSetIngredientQuantity;
 	private StockPanel pnlStockLevels;
 
+	/**
+	 * Create the panel.
+	 *
+	 * @param model Data model being served
+	 */
 	public DishesPanel(BusinessModel model) {
 		super(model, "Dish", "Dishes");
 
-		final GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] {0, 0};
-		gridBagLayout.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[] {0.0, 1.0};
-		gridBagLayout.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		pnlRecord.setLayout(gridBagLayout);
+		// [Record Panel] - Set layout as grid bag
+		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
+		gbl_pnlRecord.columnWidths = new int[] {0, 0};
+		gbl_pnlRecord.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0};
+		gbl_pnlRecord.columnWeights = new double[] {0.0, 1.0};
+		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		pnlRecord.setLayout(gbl_pnlRecord);
 
+		// [Record Panel] <- 'Name Field' Label
 		final JLabel lblName = new JLabel("Name:");
 		final GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.EAST;
@@ -79,7 +91,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_lblName.gridx = 0;
 		gbc_lblName.gridy = 0;
 		pnlRecord.add(lblName, gbc_lblName);
-
+		// [Record Panel] <- 'Name Field' TextBox
 		txtName = new JTextField();
 		final GridBagConstraints gbc_txtName = new GridBagConstraints();
 		gbc_txtName.insets = new Insets(5, 0, 5, 5);
@@ -87,8 +99,8 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_txtName.gridx = 1;
 		gbc_txtName.gridy = 0;
 		pnlRecord.add(txtName, gbc_txtName);
-		txtName.setColumns(10);
-
+		
+		// [Record Panel] <- 'Description Field' Label
 		final JLabel lblDescription = new JLabel("Description:");
 		final GridBagConstraints gbc_lblDescription = new GridBagConstraints();
 		gbc_lblDescription.anchor = GridBagConstraints.EAST;
@@ -96,13 +108,13 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_lblDescription.gridx = 0;
 		gbc_lblDescription.gridy = 1;
 		pnlRecord.add(lblDescription, gbc_lblDescription);
-
+		// [Record Panel] <- 'Description Field' TextArea
 		txtDescription = new JTextArea();
 		txtDescription.setLineWrap(true);
 		txtDescription.setTabSize(4);
 		final JScrollPane scrDescription = new JScrollPane(txtDescription);
 		scrDescription.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
+		// Make scrollable
 		final GridBagConstraints gbc_scrDescription = new GridBagConstraints();
 		gbc_scrDescription.insets = new Insets(0, 5, 5, 10);
 		gbc_scrDescription.fill = GridBagConstraints.BOTH;
@@ -111,6 +123,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		pnlRecord.add(scrDescription, gbc_scrDescription);
 		scrDescription.setPreferredSize(new Dimension(0, 100));
 
+		// [Record Panel] <- 'Price Field' Label
 		final JLabel lblPrice = new JLabel("Price (£):");
 		final GridBagConstraints gbc_lblPrice = new GridBagConstraints();
 		gbc_lblPrice.insets = new Insets(0, 5, 5, 5);
@@ -118,8 +131,9 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_lblPrice.gridx = 0;
 		gbc_lblPrice.gridy = 2;
 		pnlRecord.add(lblPrice, gbc_lblPrice);
-
+		// [Record Panel] <- 'Price Field' Spinner
 		nudPrice = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 1000, 0.01));
+		// Enforce price format 0.00
 		final JSpinner.NumberEditor editor = (JSpinner.NumberEditor) nudPrice.getEditor();
 		final DecimalFormat format = editor.getFormat();
 		format.setMinimumFractionDigits(2);
@@ -131,6 +145,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_nudPrice.gridy = 2;
 		pnlRecord.add(nudPrice, gbc_nudPrice);
 
+		// [Record Panel] <- 'Ingredients' Panel
 		final JPanel pnlIngredients = new JPanel();
 		final GridBagConstraints gbc_pnlIngredients = new GridBagConstraints();
 		gbc_pnlIngredients.gridwidth = 2;
@@ -145,10 +160,10 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbl_pnlIngredients.columnWeights = new double[] {1.0};
 		gbl_pnlIngredients.rowWeights = new double[] {0.0, 0.0, Double.MIN_VALUE};
 		pnlIngredients.setLayout(gbl_pnlIngredients);
-		pnlIngredients
-				.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-						"Ingredients", TitledBorder.LEADING, TitledBorder.TOP));
+		pnlIngredients.setBorder(BorderFactory.createTitledBorder(
+				BorderFactory.createEtchedBorder(), "Ingredients", TitledBorder.LEADING, TitledBorder.TOP));
 
+		// [Ingredients Panel] <- 'Ingredients Field' Table
 		tblIngredients = new JTable();
 		tblIngredients.setEnabled(false);
 		tblIngredients.setGridColor(Color.LIGHT_GRAY);
@@ -157,7 +172,6 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		tblIngredients.setModel(model_tblIngredients);
 		tblIngredients.getRowSorter().toggleSortOrder(0);
 		Utilities.setColumnStringFormat(tblIngredients, 2, "%.2f", SwingConstants.RIGHT);
-
 		// Make scrollable
 		final JScrollPane scrIngredients = new JScrollPane(tblIngredients);
 		scrIngredients.setBackground(this.getBackground());
@@ -170,7 +184,8 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		pnlIngredients.add(scrIngredients, gbc_scrIngredients);
 		scrIngredients.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		scrIngredients.setPreferredSize(new Dimension(0, 0));
-
+		
+		// [Ingredients Panel] <- 'Ingredient Controls' Table
 		pnlIngredientControls = new JPanel();
 		final GridBagConstraints gbc_pnlIngredientControls = new GridBagConstraints();
 		gbc_pnlIngredientControls.fill = GridBagConstraints.BOTH;
@@ -184,7 +199,8 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbl_pnlIngredientControls.columnWeights = new double[] {0.0, 1.0};
 		gbl_pnlIngredientControls.rowWeights = new double[] {0.0, 0.0, 0.0, Double.MIN_VALUE};
 		pnlIngredientControls.setLayout(gbl_pnlIngredientControls);
-
+		
+		// [Ingredients Controls Panel] <- 'Ingredient' ComboBox
 		cboIngredient = new JComboBox<>();
 		final GridBagConstraints gbc_cboNewIngredient = new GridBagConstraints();
 		gbc_cboNewIngredient.gridwidth = 2;
@@ -194,6 +210,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_cboNewIngredient.gridy = 0;
 		pnlIngredientControls.add(cboIngredient, gbc_cboNewIngredient);
 
+		// [Ingredients Controls Panel] <- 'Quantity' Label
 		final JLabel lblQuantity = new JLabel("Quantity:");
 		final GridBagConstraints gbc_lblQuantity = new GridBagConstraints();
 		gbc_lblQuantity.insets = new Insets(0, 0, 5, 5);
@@ -201,6 +218,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_lblQuantity.gridy = 1;
 		pnlIngredientControls.add(lblQuantity, gbc_lblQuantity);
 
+		// [Ingredients Controls Panel] <- 'Quantity' Spinner
 		nudIngredientQuantity = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 1000, 0.01));
 		final GridBagConstraints gbc_nudIngredientQuantity = new GridBagConstraints();
 		gbc_nudIngredientQuantity.insets = new Insets(0, 0, 5, 0);
@@ -209,6 +227,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_nudIngredientQuantity.gridy = 1;
 		pnlIngredientControls.add(nudIngredientQuantity, gbc_nudIngredientQuantity);
 
+		// [Ingredients Controls Panel] <- 'Set Ingredient Quantity' Button
 		btnSetIngredientQuantity = new JButton("Set Ingredient Quantity");
 		final GridBagConstraints gbc_btnRemoveIngredient = new GridBagConstraints();
 		gbc_btnRemoveIngredient.fill = GridBagConstraints.HORIZONTAL;
@@ -218,6 +237,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		gbc_btnRemoveIngredient.gridy = 2;
 		pnlIngredientControls.add(btnSetIngredientQuantity, gbc_btnRemoveIngredient);
 
+		// [Record Panel] <- 'Stock Panel'
 		pnlStockLevels = new StockPanel();
 		final GridBagConstraints gbc_pnlStockLevels = new GridBagConstraints();
 		gbc_pnlStockLevels.fill = GridBagConstraints.BOTH;
@@ -239,6 +259,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 		// Finalise
 		setEditingMode(RecordEditor.EditingMode.VIEW);
 
+		// [Ingredient ComboBox] - Display current quantity on selection
 		cboIngredient.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -256,7 +277,8 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 				}
 			}
 		});
-
+		
+		// [Set Ingredient Quantity] - Set ingredient quantity in recipe
 		btnSetIngredientQuantity.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -296,20 +318,16 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 
 	}
 
+	/**
+	 * Load available ingredients into combo box
+	 * This thread should be invoked on the EDT
+	 */
 	private void loadIngredients() {
-		final Set<Ingredient> set = new HashSet<>();
+		final Ingredient[] array;
 		synchronized (model.stock.ingredients) {
-			// Clone keyset so changes do not affect the map
-			for (final Ingredient ingredient : model.stock.ingredients.keySet()) {
-				set.add(ingredient);
-			}
-			// Add recipe ingredients in case some are no longer stocked
-			final List<Quantity<Ingredient>> recipe = model_tblIngredients.getList();
-			for (final Quantity<Ingredient> ingredient : recipe) {
-				set.add(ingredient.getItem());
-			}
+			final Set<Ingredient> set = model.stock.ingredients.keySet();
+			array = set.toArray(new Ingredient[set.size()]);
 		}
-		final Ingredient[] array = set.toArray(new Ingredient[set.size()]);
 		Arrays.sort(array);
 		final ComboBoxModel<Ingredient> model = new DefaultComboBoxModel<>(array);
 		cboIngredient.setModel(model);
@@ -354,7 +372,7 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 	@Override
 	public void loadRecord(StockItem<Dish> record) {
 		if (record != null) {
-			// Load Ingredient
+			// Load Dish
 			final Dish dish = record.getItem();
 			txtName.setText(dish.getName());
 			txtDescription.setText(dish.getDescription());
@@ -555,7 +573,12 @@ public class DishesPanel extends AbstractRecordPanel<StockItem<Dish>> {
 			}
 		}
 	}
-
+	
+	/**
+	 * An extension of ListTableModel that displays ingredients and a respective quantity.
+	 *
+	 * @author David Jones [dsj1n15]
+	 */
 	class IngredientListTableModel extends ListTableModel<Quantity<Ingredient>> {
 		private static final long serialVersionUID = 6848893576001534549L;
 		private final String[] COLUMN_TITLES = {"Name", "Unit", "Quantity"};

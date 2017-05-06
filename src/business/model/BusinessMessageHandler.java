@@ -5,19 +5,21 @@ import java.util.Set;
 
 import general.model.Message;
 import general.model.MessageHandler;
+import general.model.ObjectMessage;
+import general.model.Quantity;
 import general.model.QuantityMap;
 import general.utility.ErrorBuilder;
 
 public class BusinessMessageHandler extends MessageHandler {
-	private final BusinessModel application;
+	private final BusinessModel model;
 
-	public BusinessMessageHandler(BusinessModel application) {
-		super(application.getComms());
-		this.application = application;
+	public BusinessMessageHandler(BusinessModel model) {
+		super(model.getComms());
+		this.model = model;
 	}
 
 	@Override
-	public void handleMessage(Message rx) {
+	protected void handleMessage(Message rx) {
 		switch (rx.getCommand()) {
 			case REGISTER_NEW_CUSTOMER:
 				handleRegistration(rx);
@@ -38,90 +40,116 @@ public class BusinessMessageHandler extends MessageHandler {
 				handleSubmitOrder(rx);
 				break;
 			default:
-				System.err.println("Unsupported message type : " + rx.getCommand());
-				break;
+				throw new IllegalArgumentException(String.format(
+						"Unsupported message type '%s'", rx.getCommand()));
 		}
 	}
 
 	private void handleRegistration(Message rx) {
-		final Customer sentCustomer = rx.getObjectAs(Customer.class);
-		// Verify user account
-		Message tx;
-		if (application.findLogin(sentCustomer.getLogin()) == null) {
-			application.addCustomer(sentCustomer);
-			tx = new Message(Message.Command.APPROVE_LOGIN, null, sentCustomer);
+		// Get expected objects from message	
+		ObjectMessage rxObj = expectObjectMessage(rx);
+		final Customer sentCustomer = rxObj.getObject("CUSTOMER", Customer.class);
+		
+		// Validate locally
+		final ErrorBuilder eb = sentCustomer.validate();
+		// Check for existence of account
+		if (model.customers.get(sentCustomer.getLogin()) == null) {
+			// Add customer to allowed logins
+			model.addCustomer(sentCustomer);
 		} else {
-			final ErrorBuilder eb = new ErrorBuilder();
 			eb.addError("Username already exists");
-			tx = new Message(Message.Command.REJECT_LOGIN, eb);
 		}
-		reply(rx, tx);
+		
+		// Reply with registration response, eb contains error on failure
+		reply(rx, new Message(Message.Command.REGISTER_RESPONSE, eb));
 	}
 
 	private void handleSubmitLogin(Message rx) {
-		final CustomerLogin sentLogin = rx.getObjectAs(CustomerLogin.class);
-		final Customer storedCustomer = application.findLogin(sentLogin);
+		// Get expected objects from message	
+		ObjectMessage rxObj = expectObjectMessage(rx);
+		final CustomerLogin sentLogin = rxObj.getObject("CUSTOMER_LOGIN", CustomerLogin.class);
+		
 		// Find password (null if no account stored)
+		Customer storedCustomer = model.customers.get(sentLogin);
 		String storedPasswordHash = null;
 		if (storedCustomer != null) {
 			storedPasswordHash = storedCustomer.getLogin().getPasswordHash();
 		}
 		// Verify stored password is the same as sent password
-		Message tx;
 		final ErrorBuilder eb = new ErrorBuilder();
-		if (sentLogin.getPasswordHash().equals(storedPasswordHash)) {
-			tx = new Message(Message.Command.APPROVE_LOGIN, eb, storedCustomer);
-		} else {
-			eb.addComment("Incorrect username or password", true);
-			tx = new Message(Message.Command.REJECT_LOGIN, eb);
+		if (!sentLogin.getPasswordHash().equals(storedPasswordHash)) {
+			eb.addError("Incorrect username or password");
+			// Clear customer from variable so it is not sent
+			storedCustomer = null;
 		}
+		
+		// Reply with login response, CUSTOMER object null on failure and eb contains error
+		ObjectMessage tx = new ObjectMessage(Message.Command.LOGIN_RESPONSE, eb);
+		tx.addObject("CUSTOMER", storedCustomer);
 		reply(rx, tx);
+		
 	}
 
 	private void handleGetPostcodes(Message rx) {
-		final Set<Postcode> postcodes = application.postcodes;
+		// Reply with array object of postcodes served by business
+		final Set<Postcode> postcodes = model.postcodes;
 		final Postcode[] postcodeArray = postcodes.toArray(new Postcode[postcodes.size()]);
-		final Message tx = new Message(Message.Command.UPDATE_POSTCODES, null, postcodeArray);
+		final ObjectMessage tx = new ObjectMessage(Message.Command.UPDATE_POSTCODES);
+		tx.addObject("POSTCODES", postcodeArray);
 		reply(rx, tx);
 	}
 
 	private void handleGetDishStock(Message rx) {
-		final QuantityMap<Dish> dishes = application.stock.dishes.getStockAvailable();
-		final Message tx = new Message(Message.Command.UPDATE_DISH_STOCK, null, dishes);
+		// Reply with map of dishes and their available stock
+		final QuantityMap<Dish> dishes = model.stock.dishes.getStockAvailable();
+		final ObjectMessage tx = new ObjectMessage(Message.Command.UPDATE_DISH_STOCK);
+		tx.addObject("DISHES", dishes);
 		reply(rx, tx);
 	}
 
 	private void handleGetExistingOrders(Message rx) {
-		final Customer sentCustomer = rx.getObjectAs(Customer.class);
-		final Set<Order> orders = application.getOrdersFromCustomer(sentCustomer);
+		// Get expected objects from message	
+		ObjectMessage rxObj = expectObjectMessage(rx);
+		final CustomerLogin sentLogin = rxObj.getObject("CUSTOMER_LOGIN", CustomerLogin.class);
+		
+		// Reply with set of customer orders
+		final Set<Order> orders = model.getOrdersFromCustomer(sentLogin);
 		final Order[] orderArray = orders.toArray(new Order[orders.size()]);
-		final Message tx = new Message(Message.Command.UPDATE_EXISTING_ORDERS, null, orderArray);
+		final ObjectMessage tx = new ObjectMessage(Message.Command.UPDATE_EXISTING_ORDERS);
+		tx.addObject("ORDERS", orderArray);
 		reply(rx, tx);
 	}
 
 	private void handleSubmitOrder(Message rx) {
-		final Order order = rx.getObjectAs(Order.class);
+		// Get expected objects from message	
+		ObjectMessage rxObj = expectObjectMessage(rx);
+		final Order order = rxObj.getObject("ORDER", Order.class);
+		
 		// Update order time to use business time
 		order.setDate(LocalDateTime.now());
 		order.setStatus(Order.Status.RECEIVED);
 
-		// !!! Check order not empty (could be done other end)
-		// !!! Check prices have not changed
+		// Validate order locally
+		ErrorBuilder eb = order.validate();
+		// Check postcode of customer is being served
+		Customer customer = order.getCustomer();
+		if (model.postcodes.contains(customer.getPostcode())) {
+			eb.addError("Customer postcode not served by business");
+		}
 
 		// Attempt to reserve stock
-		Message tx;
-		if (application.stock.dishes.reserveStock(order.getDishes())) {
-			// Stock reserved
+		if (model.stock.dishes.reserveStock(order.getDishes())) {
+			// Stock reserved, make order
 			order.setStatus(Order.Status.READY_FOR_DISPATCH);
-			application.orders.add(order);
-			tx = new Message(Message.Command.ORDER_ACCEPTED, null, order);
+			synchronized (model.orders) {
+				model.orders.add(order);
+			}
 		} else {
 			// Not enough stock
-			final ErrorBuilder eb = new ErrorBuilder();
 			eb.addError("Not enough stock available to complete order");
-			tx = new Message(Message.Command.ORDER_REJECTED, eb);
 		}
-		reply(rx, tx);
+		// Reply with order response, eb contains error on failure
+		reply(rx, new Message(Message.Command.ORDER_RESPONSE, eb));
 	}
 
 }

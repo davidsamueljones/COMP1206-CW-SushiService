@@ -88,7 +88,7 @@ public class Comms {
 	 * @return True if send successful, else false
 	 */
 	public boolean sendMessage(Message message, InetSocketAddress destination) {
-		System.out.println("Sending " + message.getCommand() + " " + message);
+		System.out.println(String.format("[COMMS] Sending %s -> %s", message, destination));
 		Socket client = null;
 		try {
 			// Connect to server
@@ -99,8 +99,7 @@ public class Comms {
 			SerializationUtils.serialize(message, client.getOutputStream());
 			return true;
 		} catch (IOException e) {
-			System.out.println("Error " + message.getCommand() + " " + message
-					+ " : Could not connect to server");
+			System.err.println(String.format("[COMMS] Failed sending %s : Could not connect to server", message));
 			return false;
 		} finally {
 			if (client != null) {

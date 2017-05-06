@@ -21,7 +21,6 @@ public class Drone extends Worker {
 	// Constants used for timing
 	private static final int HOUR_MS = 3600000;
 	private static final double SPEED_MODIFIER = 0.001; // 0.1% of actual
-
 	// Drone speed
 	private double speed;
 	// Model being served
@@ -67,8 +66,10 @@ public class Drone extends Worker {
 
 	@Override
 	protected void doWork() throws InterruptedException {
-		// Prioritise order delivery
+		// Prioritise order delivery and only handle a single
+		// task as a unit of work
 		if (!deliverOrder()) {
+			// If no orders attempt ingredient restock
 			restockIngredients();
 		}
 	}
@@ -92,7 +93,7 @@ public class Drone extends Worker {
 			if (reqDelivery.size() > 0) {
 				// Get target customer as first in order list
 				targetCustomer = reqDelivery.iterator().next().getCustomer();
-				toDeliver = BusinessModel.getOrdersFromCustomer(targetCustomer, reqDelivery);
+				toDeliver = BusinessModel.getOrdersFromCustomer(targetCustomer.getLogin(), reqDelivery);
 				// Start order dispatch
 				for (final Order order : toDeliver) {
 					// Remove reserved stock from stock

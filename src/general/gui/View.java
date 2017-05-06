@@ -1,5 +1,12 @@
 package general.gui;
 
+/**
+ * Interface for handling a View. A view is defined as something that should have an initialisation
+ * and refresh behaviour. The implementation should dictate exact behaviour but it is assumed that
+ * initialisation will occur when a view is being made visible and a refresh occurs frequently.
+ * 
+ * @author David Jones [dsj1n15]
+ */
 public interface View {
 
 	/**

@@ -25,16 +25,24 @@ import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
 
-public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
-	/**
-	 *
-	 */
+/**
+ * An extension of AbstractRecordPanel that handles suppliers.
+ *
+ * @author David Jones [dsj1n15]
+ */
+public class SuppliersPanel extends RecordPanel<Supplier> {
 	private static final long serialVersionUID = -5294497133864971568L;
+	// Record objects
 	private final JTextField txtName;
 	private final JSpinner nudDistance;
 	private final JLabel lblRestocking;
 	private final JPanel pnlRestocking;
 
+	/**
+	 * Create the panel.
+	 *
+	 * @param model Data model being served
+	 */
 	public SuppliersPanel(BusinessModel model) {
 		super(model, "Supplier", "Suppliers");
 
@@ -46,6 +54,7 @@ public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
 		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 0.0, 1.0};
 		pnlRecord.setLayout(gbl_pnlRecord);
 
+		// [Record Panel] <- 'Name Field' Label
 		final JLabel lblName = new JLabel("Name:");
 		final GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.EAST;
@@ -53,7 +62,7 @@ public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
 		gbc_lblName.gridx = 0;
 		gbc_lblName.gridy = 0;
 		pnlRecord.add(lblName, gbc_lblName);
-
+		// [Record Panel] <- 'Name Field' TextBox
 		txtName = new JTextField();
 		final GridBagConstraints gbc_txtName = new GridBagConstraints();
 		gbc_txtName.insets = new Insets(5, 0, 5, 5);
@@ -62,6 +71,7 @@ public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
 		gbc_txtName.gridy = 0;
 		pnlRecord.add(txtName, gbc_txtName);
 
+		// [Record Panel] <- 'Distance Field' Label
 		final JLabel lblDistance = new JLabel("Distance (km):");
 		final GridBagConstraints gbc_lblDistance = new GridBagConstraints();
 		gbc_lblDistance.anchor = GridBagConstraints.EAST;
@@ -69,7 +79,7 @@ public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
 		gbc_lblDistance.gridx = 0;
 		gbc_lblDistance.gridy = 1;
 		pnlRecord.add(lblDistance, gbc_lblDistance);
-
+		// [Record Panel] <- 'Distance Field' Spinner
 		nudDistance = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 1000, 0.01));
 		final GridBagConstraints gbc_nudDistance = new GridBagConstraints();
 		gbc_nudDistance.fill = GridBagConstraints.HORIZONTAL;
@@ -78,6 +88,7 @@ public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
 		gbc_nudDistance.gridy = 1;
 		pnlRecord.add(nudDistance, gbc_nudDistance);
 
+		// [Record Panel] <- 'Restocking Field' Label
 		lblRestocking = new JLabel("Restocking:");
 		final GridBagConstraints gbc_lblRestocking = new GridBagConstraints();
 		gbc_lblRestocking.anchor = GridBagConstraints.EAST;
@@ -85,7 +96,7 @@ public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
 		gbc_lblRestocking.gridx = 0;
 		gbc_lblRestocking.gridy = 2;
 		pnlRecord.add(lblRestocking, gbc_lblRestocking);
-
+		// [Record Panel] <- 'Restocking Field' Panel
 		pnlRestocking = new JPanel();
 		final GridBagConstraints gbc_pnlRestocking = new GridBagConstraints();
 		gbc_pnlRestocking.fill = GridBagConstraints.BOTH;
@@ -282,11 +293,15 @@ public class SuppliersPanel extends AbstractRecordPanel<Supplier> {
 		return false;
 	}
 
+	/**
+	 * An extension of ListTableModel that displays suppliers.
+	 *
+	 * @author David Jones [dsj1n15]
+	 */
 	class SupplierTableModel extends ListTableModel<Supplier> {
 		private static final long serialVersionUID = 6848893576001534549L;
 		private final String[] COLUMN_TITLES = {"Name", "Distance (km)", "Restocking"};
 		private final Class<?>[] COLUMN_CLASSES = {String.class, Double.class, Boolean.class};
-
 		/**
 		 * Instantiate table model with default column titles and classes.
 		 */

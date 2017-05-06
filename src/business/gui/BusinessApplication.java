@@ -73,10 +73,9 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 		model.resume();
 
 		// Set GUI Properties
-		setMinimumSize(new Dimension(715, 300));
+		setMinimumSize(new Dimension(810, 300));
 		pack();
 		setLocationRelativeTo(null);
-		setExtendedState(Frame.MAXIMIZED_BOTH);
 	}
 
 	/**
@@ -166,9 +165,10 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 		addView(pnlKitchenStaff, "Kitchen Staff", true);
 		final JPanel pnlDrones = new DronesPanel(model);
 		addView(pnlDrones, "Drones", true);
-
+		final JPanel pnlPostcodes = new PostcodesPanel(model);
+		addView(pnlPostcodes, "Postcodes", true);
+		
 		// Set initial selection to ingredients page
-		pnlHeader.getNavigationBar().setSelected("Ingredients");
 		setView("Ingredients");
 	}
 
@@ -216,6 +216,7 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 	public void setView(String view) {
 		cl_pnlView.show(pnlView, view);
 		pnlHeader.setPage(view);
+		pnlHeader.getNavigationBar().setSelected(view);
 		synchronized (viewLock) {
 			currentView = views.get(view);
 		}

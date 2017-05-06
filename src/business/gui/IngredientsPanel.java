@@ -32,9 +32,8 @@ import general.utility.Utilities;
  *
  * @author David Jones [dsj1n15]
  */
-public class IngredientsPanel extends AbstractRecordPanel<StockItem<Ingredient>> {
+public class IngredientsPanel extends RecordPanel<StockItem<Ingredient>> {
 	private static final long serialVersionUID = 5163613751286161072L;
-
 	// Record objects
 	private final JTextField txtName;
 	private final JComboBox<Ingredient.Unit> cboUnit;

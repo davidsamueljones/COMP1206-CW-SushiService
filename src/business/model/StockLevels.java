@@ -8,15 +8,15 @@ import java.io.Serializable;
  * This classes methods are thread safe for a single instance but rely on a containing structure to
  * manage synchronisation between multiple instances.
  *
- * Sushi Service - COMP1206 Coursework
- *
  * @author David Jones [dsj1n15]
  */
 public class StockLevels implements Serializable {
 	private static final long serialVersionUID = 7617061460902994224L;
+	// Actual stock levels
 	private double stock;
 	private double restocking;
 	private double reserved;
+	// Stocking properties
 	private int restockLevel;
 	private boolean stockable;
 
@@ -30,7 +30,7 @@ public class StockLevels implements Serializable {
 	/**
 	 * Instantiate levels with no initial stock and a restock level.
 	 *
-	 * @param restockLevel
+	 * @param restockLevel Initial restock level
 	 */
 	public StockLevels(int restockLevel) {
 		this(0, restockLevel);
@@ -38,21 +38,17 @@ public class StockLevels implements Serializable {
 
 	/**
 	 * Instantiate levels with initial stock and a restock level. Restocking and reserved levels are
-	 * defaulted to 0.
+	 * defaulted to 0 with restocking enabled.
 	 *
-	 * @param restockLevel
+	 * @param stockLevel Starting stock level
+	 * @param restockLevel Initial restock level
 	 */
 	public StockLevels(double stockLevel, int restockLevel) {
-		this(stockLevel, 0, 0, restockLevel, true);
-	}
-
-	private StockLevels(double stockLevel, double restocking, double reserved, int restockLevel,
-			boolean stockable) {
 		setStock(stockLevel);
-		setRestocking(restocking);
-		setReserved(reserved);
+		setRestocking(0);
+		setReserved(0);
 		setRestockLevel(restockLevel);
-		setStockable(stockable);
+		setStockable(true);
 	}
 
 	/**
@@ -112,7 +108,7 @@ public class StockLevels implements Serializable {
 	}
 
 	/**
-	 * Add the given amount of stock to the amount of stock being restocked
+	 * Add the given amount of stock to the amount of stock being restocked.
 	 *
 	 * @param amount Amount to add
 	 */
@@ -187,6 +183,22 @@ public class StockLevels implements Serializable {
 	}
 
 	/**
+	 * @return Whether stock should be allowed to restocked; this is 
+	 * not enforced but can be used as a flag.
+	 */
+	public boolean isStockable() {
+		return stockable;
+	}
+
+	/**
+	 * @param stockable Whether stock should be allowed to restocked; this will 
+	 * not be enforced but should be used as a flag.
+	 */
+	public void setStockable(boolean stockable) {
+		this.stockable = stockable;
+	}
+	
+	/**
 	 * Available stock is defined as all stock that is not reserved or being restocked.
 	 *
 	 * @return The amount of available stock
@@ -221,14 +233,6 @@ public class StockLevels implements Serializable {
 	 */
 	public synchronized boolean isEnoughStock(double required) {
 		return (getStockAvailable() >= required);
-	}
-
-	public boolean isStockable() {
-		return stockable;
-	}
-
-	public void setStockable(boolean stockable) {
-		this.stockable = stockable;
 	}
 
 }

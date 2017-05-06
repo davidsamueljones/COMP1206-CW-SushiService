@@ -24,11 +24,14 @@ import general.gui.ListTableModel;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
 
-public class CustomersPanel extends AbstractRecordPanel<Customer> {
-	/**
-	 *
-	 */
+/**
+ * An extension of AbstractRecordPanel that handles customers. Customers can only be deleted.
+ *
+ * @author David Jones [dsj1n15]
+ */
+public class CustomersPanel extends RecordPanel<Customer> {
 	private static final long serialVersionUID = 5315161679613333363L;
+	// Record objects
 	private final JTextField txtUsername;
 	private final JTextField txtFullName;
 	private final JTextField txtAddress;
@@ -37,10 +40,13 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 
 	/**
 	 * Create the panel.
+	 *
+	 * @param model Data model being served
 	 */
 	public CustomersPanel(BusinessModel model) {
 		super(model, "Customer", "Customers");
 
+		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
 		gbl_pnlRecord.rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -48,6 +54,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
 		pnlRecord.setLayout(gbl_pnlRecord);
 
+		// [Record Panel] <- 'Username Field' Label
 		final JLabel lblUsername = new JLabel("Username:");
 		final GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 		gbc_lblUsername.anchor = GridBagConstraints.EAST;
@@ -55,7 +62,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbc_lblUsername.gridx = 0;
 		gbc_lblUsername.gridy = 0;
 		pnlRecord.add(lblUsername, gbc_lblUsername);
-
+		// [Record Panel] <- 'Username Field' TextField
 		txtUsername = new JTextField();
 		final GridBagConstraints gbc_txtUsername = new GridBagConstraints();
 		gbc_txtUsername.insets = new Insets(5, 0, 5, 5);
@@ -66,6 +73,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		txtUsername.setColumns(10);
 		txtUsername.setEnabled(false);
 
+		// [Record Panel] <- 'Full Name Field' Label
 		final JLabel lblFullName = new JLabel("Full Name:");
 		final GridBagConstraints gbc_lblFullName = new GridBagConstraints();
 		gbc_lblFullName.anchor = GridBagConstraints.EAST;
@@ -73,7 +81,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbc_lblFullName.gridx = 0;
 		gbc_lblFullName.gridy = 1;
 		pnlRecord.add(lblFullName, gbc_lblFullName);
-
+		// [Record Panel] <- 'Full Name Field' TextBox
 		txtFullName = new JTextField();
 		final GridBagConstraints gbc_txtFullName = new GridBagConstraints();
 		gbc_txtFullName.anchor = GridBagConstraints.NORTH;
@@ -85,6 +93,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		txtFullName.setColumns(10);
 		txtFullName.setEnabled(false);
 
+		// [Record Panel] <- 'Address Field' Label
 		final JLabel lblAddress = new JLabel("Address:");
 		final GridBagConstraints gbc_lblAddress = new GridBagConstraints();
 		gbc_lblAddress.anchor = GridBagConstraints.EAST;
@@ -92,7 +101,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbc_lblAddress.gridx = 0;
 		gbc_lblAddress.gridy = 2;
 		pnlRecord.add(lblAddress, gbc_lblAddress);
-
+		// [Record Panel] <- 'Address Field' TextField
 		txtAddress = new JTextField();
 		final GridBagConstraints gbc_txtAddress = new GridBagConstraints();
 		gbc_txtAddress.insets = new Insets(0, 0, 5, 5);
@@ -100,9 +109,9 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbc_txtAddress.gridx = 1;
 		gbc_txtAddress.gridy = 2;
 		pnlRecord.add(txtAddress, gbc_txtAddress);
-		txtAddress.setColumns(10);
 		txtAddress.setEnabled(false);
 
+		// [Record Panel] <- 'Postcode Field' Label
 		final JLabel lblPostcode = new JLabel("Postcode:");
 		final GridBagConstraints gbc_lblPostcode = new GridBagConstraints();
 		gbc_lblPostcode.anchor = GridBagConstraints.EAST;
@@ -110,7 +119,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbc_lblPostcode.gridx = 0;
 		gbc_lblPostcode.gridy = 3;
 		pnlRecord.add(lblPostcode, gbc_lblPostcode);
-
+		// [Record Panel] <- 'Postcode Field' TextField
 		txtPostcode = new JTextField();
 		final GridBagConstraints gbc_txtPostcode = new GridBagConstraints();
 		gbc_txtPostcode.anchor = GridBagConstraints.NORTH;
@@ -119,9 +128,9 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbc_txtPostcode.gridx = 1;
 		gbc_txtPostcode.gridy = 3;
 		pnlRecord.add(txtPostcode, gbc_txtPostcode);
-		txtPostcode.setColumns(10);
 		txtPostcode.setEnabled(false);
 
+		// [Record Panel] <- 'Valid Field' Label
 		final JLabel lblValid = new JLabel("Valid:");
 		final GridBagConstraints gbc_lblValid = new GridBagConstraints();
 		gbc_lblValid.anchor = GridBagConstraints.EAST;
@@ -129,7 +138,7 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		gbc_lblValid.gridx = 0;
 		gbc_lblValid.gridy = 4;
 		pnlRecord.add(lblValid, gbc_lblValid);
-
+		// [Record Panel] <- 'Valid Field' Panel
 		pnlValid = new JPanel();
 		final GridBagConstraints gbc_pnlValid = new GridBagConstraints();
 		gbc_pnlValid.fill = GridBagConstraints.BOTH;
@@ -253,6 +262,11 @@ public class CustomersPanel extends AbstractRecordPanel<Customer> {
 		return false;
 	}
 
+	/**
+	 * An extension of ListTableModel that displays customers.
+	 *
+	 * @author David Jones [dsj1n15]
+	 */
 	class CustomerTableModel extends ListTableModel<Customer> {
 		private static final long serialVersionUID = 7294325804359010564L;
 		private final String[] COLUMN_TITLES =

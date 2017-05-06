@@ -10,8 +10,6 @@ import general.utility.Validatable;
 /**
  * Dish class, holds data about a dish. Name of dish defines class equality.
  *
- * Sushi Service - COMP1206 Coursework
- *
  * @author David Jones [dsj1n15]
  */
 public class Dish implements Serializable, Validatable, Comparable<Dish> {
@@ -101,8 +99,8 @@ public class Dish implements Serializable, Validatable, Comparable<Dish> {
 		if (name == null || name.isEmpty()) {
 			eb.addError("Name field is empty");
 		}
-		if (price < 0) {
-			eb.addError("Price cannot be negative");
+		if (price <= 0) {
+			eb.addError("Price must be positive");
 		}
 		if (ingredients == null || ingredients.size() == 0) {
 			eb.addError("The recipe uses no ingredients");

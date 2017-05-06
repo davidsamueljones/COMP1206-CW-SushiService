@@ -12,8 +12,6 @@ import general.utility.ErrorBuilder;
  *
  * Name of kitchen staff member defines class equality.
  *
- * Sushi Service - COMP1206 Coursework
- *
  * @author David Jones [dsj1n15]
  */
 public class KitchenStaffMember extends Worker {

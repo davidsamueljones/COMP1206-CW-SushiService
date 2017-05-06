@@ -106,7 +106,10 @@ public class Ingredient implements Serializable, Validatable, Comparable<Ingredi
 		return name.compareTo(obj.name);
 	}
 
-	// !!! Anymore?
+	/**
+	 * List of units allowed by ingredient. 
+	 * @author David Jones [dsj1n15]
+	 */
 	public static enum Unit {
 		g, kg, ml, l, oz, lb, items
 	}

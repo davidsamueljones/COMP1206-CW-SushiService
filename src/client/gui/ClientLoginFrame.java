@@ -85,7 +85,7 @@ public class ClientLoginFrame extends JFrame {
 		tabs.add("Login", pnlLogin);
 
 		// Create registration panel add add it to tabs
-		pnlRegister = new ClientRegisterPanel(application);
+		pnlRegister = new RegisterPanel(application);
 		pnlRegister.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		tabs.add("Register", pnlRegister);
 

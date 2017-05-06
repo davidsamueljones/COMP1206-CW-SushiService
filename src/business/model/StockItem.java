@@ -2,29 +2,39 @@ package business.model;
 
 import java.util.Objects;
 
+/**
+ * StockItem class, pairs a stock level with an item.
+ * 
+ * @author David Jones [dsj1n15]
+ *
+ * @param <T> The type of item being handled
+ */
 public class StockItem<T> {
-	private T item;
-	private StockLevels stockLevels;
+	private final T item;
+	private final StockLevels stockLevels;
 
+	/**
+	 * Instantiate a stock item.
+	 * @param item Item that stock item should represent
+	 * @param stockLevels Stock levels attached to item
+	 */
 	public StockItem(T item, StockLevels stockLevels) {
-		this.setIngredient(item);
-		this.setStockLevels(stockLevels);
+		this.item = item;
+		this.stockLevels = stockLevels;
 	}
 
+	/**
+	 * @return Item represented by object
+	 */
 	public T getItem() {
 		return item;
 	}
 
-	public void setIngredient(T item) {
-		this.item = item;
-	}
-
+	/**
+	 * @return Stock levels held by object
+	 */
 	public StockLevels getStockLevels() {
 		return stockLevels;
-	}
-
-	public void setStockLevels(StockLevels stockLevels) {
-		this.stockLevels = stockLevels;
 	}
 
 	@Override

@@ -31,11 +31,14 @@ import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
 
-public class DronesPanel extends AbstractRecordPanel<Drone> {
-	/**
-	 *
-	 */
+/**
+ * An extension of AbstractRecordPanel that handles drones.
+ *
+ * @author David Jones [dsj1n15]
+ */
+public class DronesPanel extends RecordPanel<Drone> {
 	private static final long serialVersionUID = 8542794426225148740L;
+	// Record objects
 	private final JTextField txtIdentifier;
 	private final JSpinner nudSpeed;
 	private final JLabel lblAction;
@@ -43,6 +46,11 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 	private final JTextArea txtAction;
 	private final JButton btnWorking;
 
+	/**
+	 * Create the panel.
+	 *
+	 * @param model Data model being served
+	 */
 	public DronesPanel(BusinessModel model) {
 		super(model, "Drone", "Drones");
 
@@ -54,6 +62,7 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0};
 		pnlRecord.setLayout(gbl_pnlRecord);
 
+		// [Record Panel] <- 'Identifier Field' Label
 		final JLabel lblIdentifier = new JLabel("Identifier:");
 		final GridBagConstraints gbc_lblIdentifier = new GridBagConstraints();
 		gbc_lblIdentifier.anchor = GridBagConstraints.EAST;
@@ -61,7 +70,7 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		gbc_lblIdentifier.gridx = 0;
 		gbc_lblIdentifier.gridy = 0;
 		pnlRecord.add(lblIdentifier, gbc_lblIdentifier);
-
+		// [Record Panel] <- 'Identifier Field' TextField
 		txtIdentifier = new JTextField();
 		final GridBagConstraints gbc_txtIdentifier = new GridBagConstraints();
 		gbc_txtIdentifier.insets = new Insets(5, 0, 5, 5);
@@ -70,7 +79,8 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		gbc_txtIdentifier.gridy = 0;
 		pnlRecord.add(txtIdentifier, gbc_txtIdentifier);
 		txtIdentifier.setEnabled(false);
-
+		
+		// [Record Panel] <- 'Speed Field' Label
 		final JLabel lblSpeed = new JLabel("Speed (km/h):");
 		final GridBagConstraints gbc_lblSpeed = new GridBagConstraints();
 		gbc_lblSpeed.anchor = GridBagConstraints.EAST;
@@ -78,7 +88,7 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		gbc_lblSpeed.gridx = 0;
 		gbc_lblSpeed.gridy = 1;
 		pnlRecord.add(lblSpeed, gbc_lblSpeed);
-
+		// [Record Panel] <- 'Speed Field' Spinner
 		nudSpeed = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 1000, 0.01));
 		final GridBagConstraints gbc_nudSpeed = new GridBagConstraints();
 		gbc_nudSpeed.insets = new Insets(0, 0, 5, 5);
@@ -87,6 +97,7 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		gbc_nudSpeed.gridy = 1;
 		pnlRecord.add(nudSpeed, gbc_nudSpeed);
 
+		// [Record Panel] <- 'Current Action' Label
 		lblAction = new JLabel("Action:");
 		final GridBagConstraints gbc_lblAction = new GridBagConstraints();
 		gbc_lblAction.anchor = GridBagConstraints.NORTHEAST;
@@ -94,14 +105,14 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		gbc_lblAction.gridx = 0;
 		gbc_lblAction.gridy = 2;
 		pnlRecord.add(lblAction, gbc_lblAction);
-
+		// [Record Panel] <- 'Current Action' TextArea
 		txtAction = new JTextArea();
 		txtAction.setLineWrap(true);
 		txtAction.setTabSize(4);
 		txtAction.setEnabled(false);
+		// Make scrollable
 		scrAction = new JScrollPane(txtAction);
 		scrAction.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
 		final GridBagConstraints gbc_scrAction = new GridBagConstraints();
 		gbc_scrAction.insets = new Insets(0, 5, 5, 10);
 		gbc_scrAction.fill = GridBagConstraints.BOTH;
@@ -110,7 +121,8 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		pnlRecord.add(scrAction, gbc_scrAction);
 		scrAction.setPreferredSize(new Dimension(0, 50));
 
-		btnWorking = new JButton("Starting Working");
+		// [Record Panel] <- 'Working' Button
+		btnWorking = new JButton();
 		final GridBagConstraints gbc_btnWorking = new GridBagConstraints();
 		gbc_btnWorking.gridwidth = 2;
 		gbc_btnWorking.fill = GridBagConstraints.HORIZONTAL;
@@ -128,13 +140,14 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		// Finalise
 		setEditingMode(RecordEditor.EditingMode.VIEW);
 
+		// [Working Button] <- Toggle whether worker is working
 		btnWorking.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (loadedRecord.isStartable()) {
-					setWorking(true);
+					setWorking(loadedRecord, true);
 				} else if (loadedRecord.isStoppable()) {
-					setWorking(false);
+					setWorking(loadedRecord, false);
 				}
 				// Trigger update immediately
 				refresh();
@@ -142,6 +155,62 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		});
 	}
 
+	/**
+	 * Stop a worker.
+	 * @param worker Worker to stop 
+	 * @param work Whether worker should stop
+	 * @return Whether worker was stoppable
+	 */
+	public boolean setWorking(Drone worker, boolean work) {
+		final ErrorBuilder eb = new ErrorBuilder();
+		synchronized (model.kitchenStaff) {
+			// Get up to date kitchen staff member
+			final Drone storedRecord =
+					Utilities.getCollectionItem(model.drones, worker, Drone.class);
+			if (storedRecord == null) {
+				eb.addError("Drone does not exist in model");
+			}
+			if (!eb.isError()) {
+				try {
+					if (work) {
+						storedRecord.startWorking();
+					} else {
+						storedRecord.stopWorking();
+					}
+					return true;
+				} catch (final Exception e) {
+					eb.addError(e.getMessage());
+				}
+			}
+		}
+		// Show error builder message
+		JOptionPane.showMessageDialog(null, eb.listComments("Set Working Failed"),
+				"Set Working Failed", JOptionPane.ERROR_MESSAGE);
+		return false;
+	}
+	
+	/**
+	 * Get a random and unique identifier for a drone.
+	 * @return New identifier
+	 */
+	public String getNewIdentifier() {
+		// Find all current identifiers
+		Set<String> existing;
+		synchronized (model.drones) {
+			existing = new HashSet<>(model.drones.size());
+			for (final Drone drone : model.drones) {
+				existing.add(drone.getIdentifier());
+			}
+		}
+		// Generate a random identifier that is not a current identiifer
+		while (true) {
+			final String newIdentifier = Drone.generateIdentifier(8);
+			if (!existing.contains(newIdentifier)) {
+				return newIdentifier;
+			}
+		}
+	}
+	
 	@Override
 	public void initialise() {
 		refresh();
@@ -219,34 +288,6 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 	@Override
 	public void updateRecord(Drone record) {
 		record.setSpeed((double) nudSpeed.getValue());
-	}
-
-	public boolean setWorking(boolean work) {
-		final ErrorBuilder eb = new ErrorBuilder();
-		synchronized (model.kitchenStaff) {
-			// Get up to date kitchen staff member
-			final Drone storedRecord =
-					Utilities.getCollectionItem(model.drones, loadedRecord, Drone.class);
-			if (storedRecord == null) {
-				eb.addError("Drone does not exist in model");
-			}
-			if (!eb.isError()) {
-				try {
-					if (work) {
-						storedRecord.startWorking();
-					} else {
-						storedRecord.stopWorking();
-					}
-					return true;
-				} catch (final Exception e) {
-					eb.addError(e.getMessage());
-				}
-			}
-		}
-		// Show error builder message
-		JOptionPane.showMessageDialog(null, eb.listComments("Set Working Failed"),
-				"Set Working Failed", JOptionPane.ERROR_MESSAGE);
-		return false;
 	}
 
 	@Override
@@ -351,23 +392,11 @@ public class DronesPanel extends AbstractRecordPanel<Drone> {
 		}
 	}
 
-	public String getNewIdentifier() {
-		// Find all current identifiers
-		Set<String> existing;
-		synchronized (model.drones) {
-			existing = new HashSet<>(model.drones.size());
-			for (final Drone drone : model.drones) {
-				existing.add(drone.getIdentifier());
-			}
-		}
-		while (true) {
-			final String newIdentifier = Drone.generateIdentifier(8);
-			if (!existing.contains(newIdentifier)) {
-				return newIdentifier;
-			}
-		}
-	}
-
+	/**
+	 * An extension of ListTableModel that displays drones.
+	 *
+	 * @author David Jones [dsj1n15]
+	 */
 	class DroneTableModel extends ListTableModel<Drone> {
 		private static final long serialVersionUID = -528707502227057343L;
 		private final String[] COLUMN_TITLES =

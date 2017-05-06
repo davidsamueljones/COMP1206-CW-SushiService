@@ -26,11 +26,14 @@ import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
 
-public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
-	/**
-	 *
-	 */
+/**
+ * An extension of AbstractRecordPanel that handles kitchen staff.
+ *
+ * @author David Jones [dsj1n15]
+ */
+public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 	private static final long serialVersionUID = 2779726580663814359L;
+	// Record objects
 	private final JTextField txtName;
 	private final JLabel lblAction;
 	private final JScrollPane scrAction;
@@ -39,6 +42,8 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 
 	/**
 	 * Create the panel.
+	 *
+	 * @param model Data model being served
 	 */
 	public KitchenStaffPanel(BusinessModel model) {
 		super(model, "Staff Member", "Staff");
@@ -50,7 +55,8 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		gbl_pnlRecord.columnWeights = new double[] {0.0, 1.0};
 		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0};
 		pnlRecord.setLayout(gbl_pnlRecord);
-
+		
+		// [Record Panel] <- 'Name Field' Label
 		final JLabel lblName = new JLabel("Name:");
 		final GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.EAST;
@@ -58,7 +64,7 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		gbc_lblName.gridx = 0;
 		gbc_lblName.gridy = 0;
 		pnlRecord.add(lblName, gbc_lblName);
-
+		// [Record Panel] <- 'Name Field' TextBox
 		txtName = new JTextField();
 		final GridBagConstraints gbc_txtName = new GridBagConstraints();
 		gbc_txtName.insets = new Insets(5, 0, 5, 5);
@@ -68,6 +74,7 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		pnlRecord.add(txtName, gbc_txtName);
 		txtName.setColumns(10);
 
+		// [Record Panel] <- 'Current Action' Label
 		lblAction = new JLabel("Action:");
 		final GridBagConstraints gbc_lblAction = new GridBagConstraints();
 		gbc_lblAction.anchor = GridBagConstraints.NORTHEAST;
@@ -75,14 +82,14 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		gbc_lblAction.gridx = 0;
 		gbc_lblAction.gridy = 1;
 		pnlRecord.add(lblAction, gbc_lblAction);
-
+		// [Record Panel] <- 'Current Action' TextArea
 		txtAction = new JTextArea();
 		txtAction.setLineWrap(true);
 		txtAction.setTabSize(4);
 		txtAction.setEnabled(false);
 		scrAction = new JScrollPane(txtAction);
 		scrAction.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
+		// Make scrollable
 		final GridBagConstraints gbc_scrAction = new GridBagConstraints();
 		gbc_scrAction.insets = new Insets(0, 5, 5, 10);
 		gbc_scrAction.fill = GridBagConstraints.BOTH;
@@ -91,6 +98,7 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		pnlRecord.add(scrAction, gbc_scrAction);
 		scrAction.setPreferredSize(new Dimension(0, 50));
 
+		// [Record Panel] <- 'Working ' Button
 		btnWorking = new JButton("Starting Working");
 		final GridBagConstraints gbc_btnWorking = new GridBagConstraints();
 		gbc_btnWorking.gridwidth = 2;
@@ -111,13 +119,14 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		// Finalise
 		setEditingMode(RecordEditor.EditingMode.VIEW);
 
+		// [Working Button] <- Toggle whether worker is working
 		btnWorking.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (loadedRecord.isStartable()) {
-					setWorking(true);
+					setWorking(loadedRecord, true);
 				} else if (loadedRecord.isStoppable()) {
-					setWorking(false);
+					setWorking(loadedRecord, false);
 				}
 				// Trigger update immediately
 				refresh();
@@ -125,7 +134,39 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		});
 	}
 
-
+	/**
+	 * Stop a worker.
+	 * @param worker Worker to stop 
+	 * @param work Whether worker should stop
+	 * @return Whether worker was stoppable
+	 */
+	public boolean setWorking(KitchenStaffMember worker, boolean work) {
+		final ErrorBuilder eb = new ErrorBuilder();
+		synchronized (model.kitchenStaff) {
+			// Get up to date kitchen staff member
+			final KitchenStaffMember storedRecord = Utilities.getCollectionItem(model.kitchenStaff,
+					worker, KitchenStaffMember.class);
+			if (storedRecord == null) {
+				eb.addError("Kitchen staff member does not exist in model");
+			}
+			if (!eb.isError()) {
+				try {
+					if (work) {
+						storedRecord.startWorking();
+					} else {
+						storedRecord.stopWorking();
+					}
+					return true;
+				} catch (final Exception e) {
+					eb.addError(e.getMessage());
+				}
+			}
+		}
+		// Show error builder message
+		JOptionPane.showMessageDialog(null, eb.listComments("Set Working Failed"),
+				"Set Working Failed", JOptionPane.ERROR_MESSAGE);
+		return false;
+	}
 
 	@Override
 	public void initialise() {
@@ -205,34 +246,6 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		throw new IllegalStateException("Unsupported operation");
 	}
 
-	public boolean setWorking(boolean work) {
-		final ErrorBuilder eb = new ErrorBuilder();
-		synchronized (model.kitchenStaff) {
-			// Get up to date kitchen staff member
-			final KitchenStaffMember storedRecord = Utilities.getCollectionItem(model.kitchenStaff,
-					loadedRecord, KitchenStaffMember.class);
-			if (storedRecord == null) {
-				eb.addError("Kitchen staff member does not exist in model");
-			}
-			if (!eb.isError()) {
-				try {
-					if (work) {
-						storedRecord.startWorking();
-					} else {
-						storedRecord.stopWorking();
-					}
-					return true;
-				} catch (final Exception e) {
-					eb.addError(e.getMessage());
-				}
-			}
-		}
-		// Show error builder message
-		JOptionPane.showMessageDialog(null, eb.listComments("Set Working Failed"),
-				"Set Working Failed", JOptionPane.ERROR_MESSAGE);
-		return false;
-	}
-
 	@Override
 	public boolean saveNewRecord() {
 		final ErrorBuilder eb = new ErrorBuilder();
@@ -306,6 +319,11 @@ public class KitchenStaffPanel extends AbstractRecordPanel<KitchenStaffMember> {
 		}
 	}
 
+	/**
+	 * An extension of ListTableModel that displays kitchen staff members.
+	 *
+	 * @author David Jones [dsj1n15]
+	 */
 	class KitchenStaffMemberTableModel extends ListTableModel<KitchenStaffMember> {
 		private static final long serialVersionUID = -528707502227057343L;
 		private final String[] COLUMN_TITLES = {"Name", "Current Action", "Status"};

@@ -28,7 +28,7 @@ public class BusinessLocations {
 		// Initialise a modifiable map of locations
 		final Map<String, BusinessLocation> locs = new HashMap<>();
 		// Add locations
-		addLocation(locs, "Southampton_1", "localhost", 23535);
+		addLocation(locs, "Southampton_1", "localhost", 23534);
 		addLocation(locs, "Southampton_2", "localhost", 23536);
 		addLocation(locs, "Portsmouth", "localhost", 23537);
 		// Make public map an unmodifiable copy

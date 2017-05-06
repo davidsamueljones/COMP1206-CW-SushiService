@@ -8,11 +8,28 @@ import java.io.IOException;
 
 import general.utility.SerializationUtils;
 
+/**
+ * Data persistence layer for storage and retrieval of objects in files.
+ * Defines location and file extension of stored objects.
+ * 
+ * @author David Jones [dsj1n15]
+ */
 public class DataPersistence {
 	private static final String DIRECTORY = "storage";
-	private static final String FILE_EXTENSION = "dat";
+	private static final String FILE_EXTENSION = "ssdp";
 
-
+	/**
+	 * Do not allow this class to be instantiated.
+	 */
+	public DataPersistence() {}
+	
+	/**
+	 * Store the given object using the file determined from the identifier.
+	 * 
+	 * @param identifier Identifier to use for storage
+	 * @param object Object to store
+	 * @throws FileNotFoundException Unable to open file location found using identifier
+	 */
 	public static void store(String identifier, Object object) throws FileNotFoundException {
 		final File file = getFile(identifier);
 		// Make directories if required
@@ -27,6 +44,13 @@ public class DataPersistence {
 		}
 	}
 
+	/**
+	 * Retrieve an object from the persistence layer with the given identifier.
+	 * 
+	 * @param identifier Identifier to try and find stored object for
+	 * @return Object loaded from file
+	 * @throws FileNotFoundException Unable to open file location found using identifier
+	 */
 	public static Object get(String identifier) throws FileNotFoundException {
 		// Open file input stream using identifiers respective file
 		final FileInputStream fis = new FileInputStream(getFile(identifier));
@@ -40,6 +64,11 @@ public class DataPersistence {
 		return object;
 	}
 
+	/**
+	 * Determine the persistence path for an identifier.
+	 * @param identifier Identifier to get path (File) for
+	 * @return File that identifier should represent  
+	 */
 	private static File getFile(String identifier) {
 		return new File(String.format("%s/%s.%s", DIRECTORY, identifier, FILE_EXTENSION));
 	}

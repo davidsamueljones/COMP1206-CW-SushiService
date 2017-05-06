@@ -13,11 +13,9 @@ import general.utility.ErrorBuilder;
 public class Message implements Serializable {
 	private static final long serialVersionUID = -7961308398237966546L;
 	// A command dictating how the message should be handled
-	private final Command command;
-	// An error builder; this is always available alongside object storage
-	private final ErrorBuilder eb;
-	// An object or collection of objects for large data transfer
-	private final Object object;
+	protected final Command command;
+	// Storage for comments and error indication
+	protected final ErrorBuilder eb;
 	// The sender of the message, this should be the server for replies
 	private InetSocketAddress sender;
 
@@ -37,20 +35,8 @@ public class Message implements Serializable {
 	 * @param eb Comments in error builder to send
 	 */
 	public Message(Command command, ErrorBuilder eb) {
-		this(command, eb, null);
-	}
-
-	/**
-	 * Initialise a message with all final fields.
-	 *
-	 * @param command Command dictating how message should be handled
-	 * @param eb Comments in error builder to send
-	 * @param object Object or collection of objects to send
-	 */
-	public Message(Command command, ErrorBuilder eb, Object object) {
 		this.command = command;
 		this.eb = eb;
-		this.object = object;
 	}
 
 	/**
@@ -68,28 +54,6 @@ public class Message implements Serializable {
 	}
 
 	/**
-	 * @return Attached object
-	 */
-	public Object getObject() {
-		return object;
-	}
-
-	/**
-	 * Get attached object as a given type using a safe cast. This method only has defined behaviour
-	 * for single object instances of a single type.
-	 *
-	 * @param type Type to cast to
-	 * @return Attached object casted to type
-	 */
-	public <T> T getObjectAs(Class<T> type) {
-		if (type.isInstance(object)) {
-			return type.cast(object);
-		} else {
-			return null;
-		}
-	}
-
-	/**
 	 * @return The sender of the message
 	 */
 	public InetSocketAddress getSender() {
@@ -103,6 +67,11 @@ public class Message implements Serializable {
 		this.sender = sender;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("[Message %s@%s]", command, hashCode());
+	}
+	
 	/**
 	 * An enumeration of hard-coded command types accepted in messages.
 	 *
@@ -112,7 +81,7 @@ public class Message implements Serializable {
 		// Client
 		SUBMIT_LOGIN, REGISTER_NEW_CUSTOMER, GET_POSTCODES, GET_EXISTING_ORDERS, GET_DISH_STOCK, SUBMIT_ORDER,
 		// Business
-		APPROVE_LOGIN, REJECT_LOGIN, UPDATE_POSTCODES, UPDATE_EXISTING_ORDERS, UPDATE_DISH_STOCK, ORDER_ACCEPTED, ORDER_REJECTED;
+		LOGIN_RESPONSE, REGISTER_RESPONSE, UPDATE_POSTCODES, UPDATE_EXISTING_ORDERS, UPDATE_DISH_STOCK, ORDER_RESPONSE;
 	}
 
 }

@@ -38,7 +38,7 @@ import general.utility.Utilities;
  *
  * @param <T> Type being handled by record panel
  */
-public abstract class AbstractRecordPanel<T> extends JPanel implements View, RecordEditor<T> {
+public abstract class RecordPanel<T> extends JPanel implements View, RecordEditor<T> {
 	private static final long serialVersionUID = -9219503779318689377L;
 	private static final int MIN_WIDTH_LHS = 300;
 
@@ -83,7 +83,7 @@ public abstract class AbstractRecordPanel<T> extends JPanel implements View, Rec
 	 *
 	 * @param model Data model being served
 	 */
-	public AbstractRecordPanel(BusinessModel model) {
+	public RecordPanel(BusinessModel model) {
 		this(model, "Record", "Records");
 	}
 
@@ -94,7 +94,7 @@ public abstract class AbstractRecordPanel<T> extends JPanel implements View, Rec
 	 * @param singleType Type of a single record
 	 * @param pluralType Plural of single record
 	 */
-	public AbstractRecordPanel(BusinessModel model, String singleType, String pluralType) {
+	public RecordPanel(BusinessModel model, String singleType, String pluralType) {
 		// Verify model is valid
 		if (model == null) {
 			throw new IllegalArgumentException("Business model cannot be null");

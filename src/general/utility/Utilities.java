@@ -31,7 +31,9 @@ public class Utilities {
 	public static final DateTimeFormatter DATE_TIME_FORMAT =
 			DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm");
 
-	/** Don't let anyone instantiate this class */
+	/**
+	 * Do not allow this class to be instantiated.
+	 */
 	private Utilities() {}
 
 	public static Image loadImage(File filename) {
@@ -59,14 +61,6 @@ public class Utilities {
 	public static Dimension addDimensions(Dimension d1, Dimension d2) {
 		return new Dimension(d1.width + d2.width, d1.height + d2.height);
 	}
-
-	// http://stackoverflow.com/questions/3949382/jspinner-value-change-events
-	// public static void setSpinnerCommitOnEdit(JSpinner spinner) {
-	// JComponent comp = spinner.getEditor();
-	// JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
-	// DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
-	// formatter.setCommitsOnValidEdit(true);
-	// }
 
 	public static void setColumnDateFormat(JTable table, int idx, DateTimeFormatter format) {
 		setColumnRenderer(table, idx, new DefaultTableCellRenderer() {

@@ -3,6 +3,8 @@ package general.model;
 import java.util.Collection;
 import java.util.HashSet;
 
+import business.model.Order;
+
 /**
  * Abstract class to handle the control flow of message handling for messages received by a single
  * instance of Comms. Implementations of MessageHandler should dictates how a received message is
@@ -36,12 +38,16 @@ public abstract class MessageHandler implements Runnable {
 				break;
 			}
 			// Print acknowledgement
-			System.out.println("[Message Handler] : Received " + rx.getCommand() + " " + rx);
+			System.out.println(String.format("[MSG HANDLER] : Received %s", rx));
 			// Handle message in new thread
 			final Thread thread = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					handleMessage(rx);
+					try {
+						handleMessage(rx);
+					} catch (Exception e) {
+						System.err.println(String.format("[MSG HANDLER] : Handling failed - %s", e.getMessage()));
+					}
 					// Remove thread from ongoing threads once handled
 					threads.remove(this);
 				}
@@ -60,12 +66,28 @@ public abstract class MessageHandler implements Runnable {
 				thread.join();
 			} catch (final InterruptedException e) {
 				System.err
-						.println("[Message Handler] : Unable to wait for message handling threads");
+						.println("[MSG HANDLER] : Unable to wait for message handling threads");
 				e.printStackTrace();
 			}
 		}
 	}
 
+	/**
+	 * Cast given message to an object message using a checked cast. If message is not
+	 * of object message an exception is thrown.
+	 * 
+	 * @param message Message, expected to be of type ObjectMessage
+	 * @return Message casted as ObjectMessage
+	 * @throws ClassCastException Message not ObjectMessage
+	 */
+	protected ObjectMessage expectObjectMessage(Message message) throws ClassCastException {
+		if (message instanceof ObjectMessage) {
+			return (ObjectMessage) message;
+		} else {
+			throw new ClassCastException("Expected object message");
+		}
+	}
+	
 	/**
 	 * Send a new message to the return address of another message.
 	 *
@@ -75,7 +97,7 @@ public abstract class MessageHandler implements Runnable {
 	protected void reply(Message rx, Message tx) {
 		comms.sendMessage(tx, rx.getSender());
 	}
-
+	
 	/**
 	 * Process message, handling data fields accordingly. Message handling should look for expected
 	 * data as opposed to interpreting given data for safety. Any unexpected message types should be
@@ -84,6 +106,6 @@ public abstract class MessageHandler implements Runnable {
 	 *
 	 * @param message Message to handle
 	 */
-	public abstract void handleMessage(Message message);
+	protected abstract void handleMessage(Message message);
 
 }

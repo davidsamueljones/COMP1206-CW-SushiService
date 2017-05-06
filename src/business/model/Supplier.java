@@ -9,8 +9,6 @@ import general.utility.Validatable;
 /**
  * Supplier class, holds data about a supplier. Name of supplier defines class equality.
  *
- * Sushi Service - COMP1206 Coursework
- *
  * @author David Jones [dsj1n15]
  */
 public class Supplier implements Serializable, Validatable, Comparable<Supplier> {
@@ -61,10 +59,16 @@ public class Supplier implements Serializable, Validatable, Comparable<Supplier>
 		this.distance = distance;
 	}
 
+	/**
+	 * @return Whether supplier is currently being restocked
+	 */
 	public synchronized boolean isBeingRestocked() {
 		return beingRestocked;
 	}
 
+	/**
+	 * @param beingRestocked Whether supplier is being restocked
+	 */
 	public synchronized void setBeingRestocked(boolean beingRestocked) {
 		this.beingRestocked = beingRestocked;
 	}

@@ -8,27 +8,66 @@ import java.util.Objects;
 import general.utility.ErrorBuilder;
 import general.utility.Validatable;
 
+/**
+ * CustomerLogin class, holds login information for a customer. The login can be
+ * verified using a checksum consisting of username and the password hash. It should
+ * be noted that this is not a hugely secure implementation but shows some of the methods
+ * that may be required in data storage.
+ * 
+ * Username of customer login defines class equality.
+ *
+ * @author David Jones [dsj1n15]
+ */
 public class CustomerLogin implements Serializable, Validatable {
 	private static final long serialVersionUID = -4963506245761340239L;
+	// Password validation
+	private static final String VALID_PASSWORD_REGEX = 
+			"^(?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{6,}$";
 	private static final String SHA256_REGEX = "^[A-Fa-f0-9]{64}$";
-
+	
+	// Login properties
 	private final String username;
 	private String passwordHash;
+	// Integrity check
 	private String checksum;
 
+	/**
+	 * Instantiate a login with only final fields.
+	 * @param username Unique identifier of login
+	 */
+	public CustomerLogin(String username) {
+		this(username, null);
+	}
+	
+	/**
+	 * Instantiate a login with all fields.
+	 * @param username Unique identifier of login
+	 * @param password Initial password
+	 */
 	public CustomerLogin(String username, String password) {
 		this.username = username;
 		this.setPassword(password);
 	}
 
+	/**
+	 * @return Unique identifier attached to login
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * @return The stored password hash
+	 */
 	public String getPasswordHash() {
 		return passwordHash;
 	}
 
+	/**
+	 * Set the password using a raw string, hash it for storage.
+	 * Do not enforce password validity, passwords should be validated prior to set.
+	 * @param password
+	 */
 	public void setPassword(String password) {
 		if (password == null) {
 			this.passwordHash = null;
@@ -39,18 +78,25 @@ public class CustomerLogin implements Serializable, Validatable {
 		}
 	}
 
+	/**
+	 * Remake checksum and verify it against that held in the login object.
+	 * @return Whether the checksums are the same.
+	 */
 	public boolean isChecksumValid() {
 		final String newChecksum = makeChecksum();
-		if (checksum.equals(newChecksum)) {
-			return true;
-		}
-		return false;
+		return checksum.equals(newChecksum);
 	}
 
+	/**
+	 * Remake the checksum and set it to the login object.
+	 */
 	public void refreshChecksum() {
 		checksum = makeChecksum();
 	}
 
+	/**
+	 * @return A hash of username and the hashed password
+	 */
 	private String makeChecksum() {
 		return createHash(username + passwordHash);
 	}
@@ -69,10 +115,22 @@ public class CustomerLogin implements Serializable, Validatable {
 		return eb;
 	}
 
+	/**
+	 * Verify if a given string conforms to password rules.
+	 * (not blank, 6+ characters, uppercase, lowercase, digit)
+	 * @param password Password to verify (non-hashed)
+	 * @return Whether password follows rules
+	 */
 	public static boolean isPasswordValid(String password) {
-		return (password != null && !password.isEmpty());
+		return (password != null && password.matches(VALID_PASSWORD_REGEX));
 	}
 
+	/**
+	 * Verify the structure of a string to see if it matches that of a
+	 * SHA-256 regex.
+	 * @param password Hashed password
+	 * @return Whether structure implies hash
+	 */
 	public static boolean isPasswordHashed(String password) {
 		return password.matches(SHA256_REGEX);
 	}
