@@ -3,8 +3,6 @@ package general.model;
 import java.util.Collection;
 import java.util.HashSet;
 
-import business.model.Order;
-
 /**
  * Abstract class to handle the control flow of message handling for messages received by a single
  * instance of Comms. Implementations of MessageHandler should dictates how a received message is
@@ -46,7 +44,8 @@ public abstract class MessageHandler implements Runnable {
 					try {
 						handleMessage(rx);
 					} catch (Exception e) {
-						System.err.println(String.format("[MSG HANDLER] : Handling failed - %s", e.getMessage()));
+						System.err.println(String.format("[MSG HANDLER] : Handling failed - %s",
+								e.getMessage()));
 					}
 					// Remove thread from ongoing threads once handled
 					threads.remove(this);
@@ -65,16 +64,15 @@ public abstract class MessageHandler implements Runnable {
 			try {
 				thread.join();
 			} catch (final InterruptedException e) {
-				System.err
-						.println("[MSG HANDLER] : Unable to wait for message handling threads");
+				System.err.println("[MSG HANDLER] : Unable to wait for message handling threads");
 				e.printStackTrace();
 			}
 		}
 	}
 
 	/**
-	 * Cast given message to an object message using a checked cast. If message is not
-	 * of object message an exception is thrown.
+	 * Cast given message to an object message using a checked cast. If message is not of object
+	 * message an exception is thrown.
 	 * 
 	 * @param message Message, expected to be of type ObjectMessage
 	 * @return Message casted as ObjectMessage
@@ -87,7 +85,7 @@ public abstract class MessageHandler implements Runnable {
 			throw new ClassCastException("Expected object message");
 		}
 	}
-	
+
 	/**
 	 * Send a new message to the return address of another message.
 	 *
@@ -97,7 +95,7 @@ public abstract class MessageHandler implements Runnable {
 	protected void reply(Message rx, Message tx) {
 		comms.sendMessage(tx, rx.getSender());
 	}
-	
+
 	/**
 	 * Process message, handling data fields accordingly. Message handling should look for expected
 	 * data as opposed to interpreting given data for safety. Any unexpected message types should be

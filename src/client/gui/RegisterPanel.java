@@ -1,6 +1,6 @@
 package client.gui;
 
-import java.awt.Component;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,18 +22,21 @@ import javax.swing.SwingUtilities;
 import business.model.Customer;
 import business.model.CustomerLogin;
 import business.model.Postcode;
-import client.model.ClientModel;
 import general.gui.View;
-import general.gui.ViewHandler;
-import general.model.Message;
 import general.utility.ErrorBuilder;
+import java.awt.Font;
 
+/**
+ * A panel with components and implementation for registering a new user.
+ * 
+ * @author David Jones [dsj1n15]
+ */
 public class RegisterPanel extends JPanel implements View {
 	private static final long serialVersionUID = 2438993133579447512L;
-	private static final int DEFAULT_TXT_COLUMNS = 15;
-
-	ClientApplication application;
-
+	// Client model
+	private ClientApplication application;
+	// Record objects
+	private JButton btnRegister;
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
 	private JPasswordField txtConfirmPassword;
@@ -41,143 +45,204 @@ public class RegisterPanel extends JPanel implements View {
 	private JComboBox<Postcode> cboPostcode;
 
 	/**
-	 * Create the panel.
+	 * Instantiate the panel using the client application.
 	 */
 	public RegisterPanel(ClientApplication application) {
 		this.application = application;
 		init();
 	}
 
-	private void init() {
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] {20, 0, 0, 20};
-		gridBagLayout.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[] {0.4, 0.0, 0.2, 0.4};
-		gridBagLayout.rowWeights =
-				new double[] {0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5};
-		setLayout(gridBagLayout);
-
+	/**
+	 * Create the panel.
+	 */
+	private void init() {	
+		// Set layout
+		GridBagLayout layout = new GridBagLayout();
+		layout.columnWidths = new int[] {20, 0, 20};
+		layout.rowHeights = new int[] {0, 0, 0};
+		layout.columnWeights = new double[] {0.4, 1.0, 0.4};
+		layout.rowWeights = new double[] {0.5, 0.0, 0.5};
+		setLayout(layout);
+		setBackground(Color.WHITE);
+		
+		// Create content panel
+		JPanel pnlContent = new JPanel();
+		pnlContent.setBorder(
+				BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK),
+						BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		GridBagConstraints gbc_pnlContent = new GridBagConstraints();
+		gbc_pnlContent.insets = new Insets(0, 0, 5, 5);
+		gbc_pnlContent.fill = GridBagConstraints.BOTH;
+		gbc_pnlContent.gridx = 1;
+		gbc_pnlContent.gridy = 1;
+		add(pnlContent, gbc_pnlContent);
+		GridBagLayout gbl_pnlContent = new GridBagLayout();
+		gbl_pnlContent.columnWidths = new int[] {0};
+		gbl_pnlContent.rowHeights = new int[] {0, 0, 0, 0};
+		gbl_pnlContent.columnWeights = new double[] {1.0};
+		gbl_pnlContent.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0};
+		pnlContent.setLayout(gbl_pnlContent);
+		
+		// [Content Panel] <- 'Information' Label
 		JLabel lblInformation = new JLabel(
 				"<html>Enter registration details for a new customer (all fields required):</html>");
+		lblInformation.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		GridBagConstraints gbc_lblInformation = new GridBagConstraints();
-		gbc_lblInformation.gridwidth = 2;
-		gbc_lblInformation.anchor = GridBagConstraints.WEST;
-		gbc_lblInformation.insets = new Insets(10, 5, 10, 5);
-		gbc_lblInformation.gridx = 1;
-		gbc_lblInformation.gridy = 1;
-		add(lblInformation, gbc_lblInformation);
-		
+		gbc_lblInformation.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblInformation.insets = new Insets(10, 5, 10, 0);
+		gbc_lblInformation.gridx = 0;
+		gbc_lblInformation.gridy = 0;
+		pnlContent.add(lblInformation, gbc_lblInformation);
+
+		// [Content Panel] <- 'Login Detail' Panel
+		JPanel pnlLoginDetails = new JPanel();
+		pnlLoginDetails.setBorder(BorderFactory
+				.createTitledBorder(BorderFactory.createEtchedBorder(), "Login Details"));
+		GridBagConstraints gbc_pnlLoginDetails = new GridBagConstraints();
+		gbc_pnlLoginDetails.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pnlLoginDetails.anchor = GridBagConstraints.NORTH;
+		gbc_pnlLoginDetails.insets = new Insets(0, 0, 5, 0);
+		gbc_pnlLoginDetails.gridx = 0;
+		gbc_pnlLoginDetails.gridy = 1;
+		pnlContent.add(pnlLoginDetails, gbc_pnlLoginDetails);
+		GridBagLayout gbl_pnlLoginDetails = new GridBagLayout();
+		gbl_pnlLoginDetails.columnWidths = new int[] {0, 0};
+		gbl_pnlLoginDetails.rowHeights = new int[] {0};
+		gbl_pnlLoginDetails.columnWeights = new double[] {0, 1.0};
+		gbl_pnlLoginDetails.rowWeights = new double[] {Double.MIN_VALUE};
+		pnlLoginDetails.setLayout(gbl_pnlLoginDetails);
+
+		// [Login Detail Panel] <- 'Username' Label
 		JLabel lblUsername = new JLabel("Username:");
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 		gbc_lblUsername.anchor = GridBagConstraints.EAST;
 		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUsername.gridx = 1;
-		gbc_lblUsername.gridy = 2;
-		add(lblUsername, gbc_lblUsername);
-
+		gbc_lblUsername.gridx = 0;
+		gbc_lblUsername.gridy = 0;
+		pnlLoginDetails.add(lblUsername, gbc_lblUsername);
+		// [Login Detail Panel] <- 'Username' TextBox
 		txtUsername = new JTextField();
-		txtUsername.setColumns(DEFAULT_TXT_COLUMNS);
 		GridBagConstraints gbc_txtUsername = new GridBagConstraints();
-		gbc_txtUsername.insets = new Insets(0, 0, 5, 0);
+		gbc_txtUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_txtUsername.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtUsername.gridx = 2;
-		gbc_txtUsername.gridy = 2;
-		add(txtUsername, gbc_txtUsername);
+		gbc_txtUsername.gridx = 1;
+		gbc_txtUsername.gridy = 0;
+		pnlLoginDetails.add(txtUsername, gbc_txtUsername);
 
+		// [Login Detail Panel] <- 'Password' Label
 		JLabel lblPassword = new JLabel("Password:");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPassword.gridx = 1;
-		gbc_lblPassword.gridy = 3;
-		add(lblPassword, gbc_lblPassword);
-
+		gbc_lblPassword.gridx = 0;
+		gbc_lblPassword.gridy = 1;
+		pnlLoginDetails.add(lblPassword, gbc_lblPassword);
+		// [Login Detail Panel] <- 'Password' TextBox
 		txtPassword = new JPasswordField();
-		txtPassword.setColumns(DEFAULT_TXT_COLUMNS);
 		GridBagConstraints gbc_txtPassword = new GridBagConstraints();
-		gbc_txtPassword.insets = new Insets(0, 0, 5, 0);
+		gbc_txtPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_txtPassword.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtPassword.gridx = 2;
-		gbc_txtPassword.gridy = 3;
-		add(txtPassword, gbc_txtPassword);
+		gbc_txtPassword.gridx = 1;
+		gbc_txtPassword.gridy = 1;
+		pnlLoginDetails.add(txtPassword, gbc_txtPassword);
 
+		// [Login Detail Panel] <- 'Confirm Password' Label
 		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
 		GridBagConstraints gbc_lblConfirmPassword = new GridBagConstraints();
-		gbc_lblConfirmPassword.insets = new Insets(0, 0, 5, 5);
+		gbc_lblConfirmPassword.insets = new Insets(0, 5, 5, 5);
 		gbc_lblConfirmPassword.anchor = GridBagConstraints.EAST;
-		gbc_lblConfirmPassword.gridx = 1;
-		gbc_lblConfirmPassword.gridy = 4;
-		add(lblConfirmPassword, gbc_lblConfirmPassword);
-
+		gbc_lblConfirmPassword.gridx = 0;
+		gbc_lblConfirmPassword.gridy = 2;
+		pnlLoginDetails.add(lblConfirmPassword, gbc_lblConfirmPassword);
+		// [Login Detail Panel] <- 'Confirm Password' TextBox
 		txtConfirmPassword = new JPasswordField();
-		txtConfirmPassword.setColumns(DEFAULT_TXT_COLUMNS);
 		GridBagConstraints gbc_txtConfirmPassword = new GridBagConstraints();
-		gbc_txtConfirmPassword.insets = new Insets(0, 0, 5, 0);
+		gbc_txtConfirmPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_txtConfirmPassword.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtConfirmPassword.gridx = 2;
-		gbc_txtConfirmPassword.gridy = 4;
-		add(txtConfirmPassword, gbc_txtConfirmPassword);
+		gbc_txtConfirmPassword.gridx = 1;
+		gbc_txtConfirmPassword.gridy = 2;
+		pnlLoginDetails.add(txtConfirmPassword, gbc_txtConfirmPassword);
 
+		// [Content Panel] <- 'Customer Detail' Panel
+		JPanel pnlCustomerDetails = new JPanel();
+		pnlCustomerDetails.setBorder(BorderFactory
+				.createTitledBorder(BorderFactory.createEtchedBorder(), "Customer Details"));
+		GridBagConstraints gbc_pnlCustomerDetails = new GridBagConstraints();
+		gbc_pnlCustomerDetails.insets = new Insets(0, 0, 5, 0);
+		gbc_pnlCustomerDetails.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pnlCustomerDetails.anchor = GridBagConstraints.NORTH;
+		gbc_pnlCustomerDetails.gridx = 0;
+		gbc_pnlCustomerDetails.gridy = 2;
+		pnlContent.add(pnlCustomerDetails, gbc_pnlCustomerDetails);
+		GridBagLayout gbl_pnlCustomerDetails = new GridBagLayout();
+		gbl_pnlCustomerDetails.columnWidths = new int[] {0, 0};
+		gbl_pnlCustomerDetails.rowHeights = new int[] {0};
+		gbl_pnlCustomerDetails.columnWeights = new double[] {0, 1.0};
+		gbl_pnlCustomerDetails.rowWeights = new double[] {Double.MIN_VALUE};
+		pnlCustomerDetails.setLayout(gbl_pnlCustomerDetails);
+
+		// [Customer Detail Panel] <- 'Name' Label
 		JLabel lblFullName = new JLabel("Full Name:");
 		GridBagConstraints gbc_lblFullName = new GridBagConstraints();
 		gbc_lblFullName.anchor = GridBagConstraints.EAST;
-		gbc_lblFullName.insets = new Insets(0, 0, 5, 5);
-		gbc_lblFullName.gridx = 1;
-		gbc_lblFullName.gridy = 5;
-		add(lblFullName, gbc_lblFullName);
-
+		gbc_lblFullName.insets = new Insets(0, 5, 5, 5);
+		gbc_lblFullName.gridx = 0;
+		gbc_lblFullName.gridy = 0;
+		pnlCustomerDetails.add(lblFullName, gbc_lblFullName);
+		// [Customer Detail Panel] <- 'Name' TextBox
 		txtFullName = new JTextField();
-		txtFullName.setColumns(DEFAULT_TXT_COLUMNS);
 		GridBagConstraints gbc_txtFullName = new GridBagConstraints();
-		gbc_txtFullName.insets = new Insets(0, 0, 5, 0);
+		gbc_txtFullName.insets = new Insets(0, 0, 5, 5);
 		gbc_txtFullName.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtFullName.gridx = 2;
-		gbc_txtFullName.gridy = 5;
-		add(txtFullName, gbc_txtFullName);
+		gbc_txtFullName.gridx = 1;
+		gbc_txtFullName.gridy = 0;
+		pnlCustomerDetails.add(txtFullName, gbc_txtFullName);
 
+		// [Customer Detail Panel] <- 'Address' Label
 		JLabel lblAddress = new JLabel("Address:");
 		GridBagConstraints gbc_lblAddress = new GridBagConstraints();
-		gbc_lblAddress.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAddress.insets = new Insets(0, 5, 5, 5);
 		gbc_lblAddress.anchor = GridBagConstraints.EAST;
-		gbc_lblAddress.gridx = 1;
-		gbc_lblAddress.gridy = 6;
-		add(lblAddress, gbc_lblAddress);
-
+		gbc_lblAddress.gridx = 0;
+		gbc_lblAddress.gridy = 1;
+		pnlCustomerDetails.add(lblAddress, gbc_lblAddress);
+		// [Customer Detail Panel] <- 'Address' TextBox
 		txtAddress = new JTextField();
-		txtAddress.setColumns(DEFAULT_TXT_COLUMNS);
 		GridBagConstraints gbc_txtAddress = new GridBagConstraints();
 		gbc_txtAddress.anchor = GridBagConstraints.NORTH;
-		gbc_txtAddress.insets = new Insets(0, 0, 5, 0);
+		gbc_txtAddress.insets = new Insets(0, 0, 5, 5);
 		gbc_txtAddress.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtAddress.gridx = 2;
-		gbc_txtAddress.gridy = 6;
-		add(txtAddress, gbc_txtAddress);
+		gbc_txtAddress.gridx = 1;
+		gbc_txtAddress.gridy = 1;
+		pnlCustomerDetails.add(txtAddress, gbc_txtAddress);
 
+		// [Customer Detail Panel] <- 'Postcode' Label
 		JLabel lblPostcode = new JLabel("Postcode:");
 		GridBagConstraints gbc_lblPostcode = new GridBagConstraints();
-		gbc_lblPostcode.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPostcode.insets = new Insets(0, 5, 5, 5);
 		gbc_lblPostcode.anchor = GridBagConstraints.EAST;
-		gbc_lblPostcode.gridx = 1;
-		gbc_lblPostcode.gridy = 7;
-		add(lblPostcode, gbc_lblPostcode);
-
+		gbc_lblPostcode.gridx = 0;
+		gbc_lblPostcode.gridy = 2;
+		pnlCustomerDetails.add(lblPostcode, gbc_lblPostcode);
+		// [Customer Detail Panel] <- 'Postcode' ComboBox
 		cboPostcode = new JComboBox<>();
 		GridBagConstraints gbc_cboPostcode = new GridBagConstraints();
-		gbc_cboPostcode.insets = new Insets(0, 0, 5, 0);
+		gbc_cboPostcode.insets = new Insets(0, 0, 5, 5);
 		gbc_cboPostcode.fill = GridBagConstraints.HORIZONTAL;
-		gbc_cboPostcode.gridx = 2;
-		gbc_cboPostcode.gridy = 7;
-		add(cboPostcode, gbc_cboPostcode);
+		gbc_cboPostcode.gridx = 1;
+		gbc_cboPostcode.gridy = 2;
+		pnlCustomerDetails.add(cboPostcode, gbc_cboPostcode);
 
-		JButton btnRegister = new JButton("Register");
+		// [Content Panel] <- 'Submit Changes' Button
+		btnRegister = new JButton("Submit Changes");
 		GridBagConstraints gbc_btnRegister = new GridBagConstraints();
-		gbc_btnRegister.insets = new Insets(0, 0, 10, 0);
 		gbc_btnRegister.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnRegister.gridwidth = 2;
-		gbc_btnRegister.gridx = 1;
-		gbc_btnRegister.gridy = 8;
-		add(btnRegister, gbc_btnRegister);
-
+		gbc_btnRegister.gridx = 0;
+		gbc_btnRegister.gridy = 3;
+		pnlContent.add(btnRegister, gbc_btnRegister);
+		
+		
+		// [Register Customer] - Submit registration to server 
 		btnRegister.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -201,37 +266,12 @@ public class RegisterPanel extends JPanel implements View {
 					register(customer);
 				} else {
 					JOptionPane.showMessageDialog(null, eb.listComments("Registration Failed"),
-							"Registration Failed", JOptionPane.ERROR_MESSAGE); 
+							"Registration Failed", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
-
 	}
 
-	public void register(Customer customer) {
-		ErrorBuilder eb = new ErrorBuilder();
-		// Handle model behaviour (failure stops registration)
-		if (application.model.register(customer)) {
-			// Wait for message handler to handle response
-			if (application.model.registerResponse.waitForNew(ClientApplication.REQUEST_TIMEOUT)) {
-				eb.append(application.model.registerResponse.readComments());
-				// Verify and handle response
-				if (!eb.isError()) {
-					JOptionPane.showMessageDialog(null, "Registration Successful - You may now login",
-							"Registration Successful", JOptionPane.INFORMATION_MESSAGE);
-					application.setView("Login");
-				}	
-			}
-		} else {
-			eb.addError("No response from server");
-		}
-		// Alert user of any errors
-		if (eb.isError()) {
-			JOptionPane.showMessageDialog(null, eb.listComments("Registration Failed"),
-					"Registration Failed", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-	
 	@Override
 	public void initialise() {
 		refresh();
@@ -243,6 +283,46 @@ public class RegisterPanel extends JPanel implements View {
 		refreshPostcodes();
 	}
 
+	@Override
+	public JButton getAcceptButton() {
+		return btnRegister;
+	}
+	
+	/**
+	 * Attempt to register a new customer.
+	 * 
+	 * @param customer Customer object to register
+	 */
+	public void register(Customer customer) {
+		ErrorBuilder eb = new ErrorBuilder();
+		// Handle model behaviour (failure stops registration)
+		if (application.model.register(customer)) {
+			// Wait for message handler to handle response
+			if (application.model.registerResponse.waitForNew(ClientApplication.REQUEST_TIMEOUT)) {
+				eb.append(application.model.registerResponse.readComments());
+				// Verify and handle response
+				if (!eb.isError()) {
+					JOptionPane.showMessageDialog(null,
+							"Registration Successful - You may now login",
+							"Registration Successful", JOptionPane.INFORMATION_MESSAGE);
+					application.setView("Login");
+				}
+			} else {
+				eb.addError("Connection successful but server did not reply");
+			}
+		} else {
+			eb.addError("No response from server");
+		}
+		// Alert user of any errors
+		if (eb.isError()) {
+			JOptionPane.showMessageDialog(null, eb.listComments("Registration Failed"),
+					"Registration Failed", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	/**
+	 * Clear all input boxes.
+	 */
 	private void clear() {
 		txtUsername.setText(null);
 		txtPassword.setText(null);
@@ -252,13 +332,16 @@ public class RegisterPanel extends JPanel implements View {
 		cboPostcode.setSelectedItem(null);
 		txtUsername.requestFocusInWindow();
 	}
-	
+
+	/**
+	 * Load allowed postcodes from server, updating combo box.
+	 */
 	private void refreshPostcodes() {
 		// Don't attempt update if popup visible
 		if (cboPostcode.isPopupVisible()) {
 			return;
-		}	
-		Postcode[] postcodes = null;
+		}
+		Postcode[] postcodes = new Postcode[0];
 		// Handle model behaviour (failure clears postcodes)
 		if (application.model.refreshPostcodes()) {
 			// Wait for message handler to handle response
@@ -267,10 +350,6 @@ public class RegisterPanel extends JPanel implements View {
 			}
 		}
 		// Load postcodes
-		loadPostcodeComboBox(postcodes);	
-	}
-
-	private void loadPostcodeComboBox(Postcode[] postcodes) {
 		Arrays.sort(postcodes);
 		DefaultComboBoxModel<Postcode> model = new DefaultComboBoxModel<>(postcodes);
 		// Update model on EDT
@@ -287,31 +366,14 @@ public class RegisterPanel extends JPanel implements View {
 					if (model.getIndexOf(curPostcode) >= 0) {
 						cboPostcode.setSelectedItem(curPostcode);
 					} else {
-						JOptionPane.showMessageDialog(null, "Currently selected postcode no longer available",
+						JOptionPane.showMessageDialog(null,
+								"Currently selected postcode no longer available",
 								"Registration Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
-				
+
 			}
 		});
 	}
 
 }
-
-// class TitledComboBoxRenderer extends JLabel implements
-// ListCellRenderer<Object> {
-// private static final long serialVersionUID = -2195032473950218046L;
-// private String title;
-//
-// public TitledComboBoxRenderer(String title) {
-// this.title = title;
-// }
-//
-// @Override
-// public Component getListCellRendererComponent(JList<?> list, Object value,int
-// index,
-// boolean isSelected, boolean hasFocus) {
-// setText((value == null ? title : value.toString()));
-// return this;
-// }
-// }

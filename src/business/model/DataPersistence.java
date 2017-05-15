@@ -9,8 +9,8 @@ import java.io.IOException;
 import general.utility.SerializationUtils;
 
 /**
- * Data persistence layer for storage and retrieval of objects in files.
- * Defines location and file extension of stored objects.
+ * Data persistence layer for storage and retrieval of objects in files. Defines location and file
+ * extension of stored objects.
  * 
  * @author David Jones [dsj1n15]
  */
@@ -22,7 +22,7 @@ public class DataPersistence {
 	 * Do not allow this class to be instantiated.
 	 */
 	public DataPersistence() {}
-	
+
 	/**
 	 * Store the given object using the file determined from the identifier.
 	 * 
@@ -66,8 +66,9 @@ public class DataPersistence {
 
 	/**
 	 * Determine the persistence path for an identifier.
+	 * 
 	 * @param identifier Identifier to get path (File) for
-	 * @return File that identifier should represent  
+	 * @return File that identifier should represent
 	 */
 	private static File getFile(String identifier) {
 		return new File(String.format("%s/%s.%s", DIRECTORY, identifier, FILE_EXTENSION));

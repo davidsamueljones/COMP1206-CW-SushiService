@@ -9,10 +9,10 @@ import javax.swing.JButton;
 import javax.swing.border.Border;
 
 /**
- * Class ToolBarButton, this is a button that automatically formats itself to match that
- * of its parent ToolBar. It also features different aesthetics to standard buttons.
- * Note: Part of GUI extension that was done as opposed to changing look and feel UI managers,
- * or using external libraries - not all standard component coding practices may be acknowledged.
+ * Class ToolBarButton, this is a button that automatically formats itself to match that of its
+ * parent ToolBar. It also features different aesthetics to standard buttons. Note: Part of GUI
+ * extension that was done as opposed to changing look and feel UI managers, or using external
+ * libraries - not all standard component coding practices may be acknowledged.
  * 
  * @author David Jones [dsj1n15]
  */
@@ -23,6 +23,7 @@ public class ToolBarButton extends JButton {
 
 	/**
 	 * Instantiate a tool bar button that is attached to a parent tool bar.
+	 * 
 	 * @param parent Parent tool bar
 	 * @param text Text displayed by button
 	 */
@@ -45,9 +46,10 @@ public class ToolBarButton extends JButton {
 	public boolean isClickable() {
 		return clickable && isEnabled();
 	}
-	
+
 	/**
 	 * Change the visual appearance of component to indicatate it is not clickable.
+	 * 
 	 * @param clickable Whether component should be clickable
 	 */
 	public void setClickable(boolean clickable) {
@@ -64,6 +66,7 @@ public class ToolBarButton extends JButton {
 
 	/**
 	 * Change the visual appearance of component to indicate it is being highlighted.
+	 * 
 	 * @param highlight Whether the component should be highlighted
 	 */
 	private void setHighlight(boolean highlight) {
@@ -81,9 +84,10 @@ public class ToolBarButton extends JButton {
 		setBorder(border);
 
 	}
-	
+
 	/**
 	 * Mouse listener that handles button highlighting.
+	 * 
 	 * @author David Jones [dsj1n15]
 	 */
 	class HighlightDetect extends MouseAdapter {
@@ -101,7 +105,7 @@ public class ToolBarButton extends JButton {
 			setHighlight(false);
 			repaint();
 		}
-		
+
 	}
-	
+
 }

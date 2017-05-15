@@ -93,7 +93,8 @@ public class Drone extends Worker {
 			if (reqDelivery.size() > 0) {
 				// Get target customer as first in order list
 				targetCustomer = reqDelivery.iterator().next().getCustomer();
-				toDeliver = BusinessModel.getOrdersFromCustomer(targetCustomer.getLogin(), reqDelivery);
+				toDeliver =
+						BusinessModel.getOrdersFromCustomer(targetCustomer.getLogin(), reqDelivery);
 				// Start order dispatch
 				for (final Order order : toDeliver) {
 					// Remove reserved stock from stock

@@ -1,4 +1,4 @@
-package business.gui;
+package general.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,11 +22,9 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import business.gui.RecordEditor;
+import business.gui.RecordEditor.EditingMode;
 import business.model.BusinessModel;
-import general.gui.ListTableModel;
-import general.gui.ToolBar;
-import general.gui.ToolBarButton;
-import general.gui.View;
 import general.utility.Utilities;
 
 /**
@@ -63,9 +61,7 @@ public abstract class RecordPanel<T> extends JPanel implements View, RecordEdito
 	protected ToolBar tlbRecords;
 	protected ToolBarButton tbbExpandTable;
 	protected ToolBarButton tbbRefresh;
-
-	// Data model being displayed
-	protected BusinessModel model;
+	
 	// Current editing mode
 	protected RecordEditor.EditingMode editingMode;
 	private boolean newEnabled = true;
@@ -80,26 +76,18 @@ public abstract class RecordPanel<T> extends JPanel implements View, RecordEdito
 
 	/**
 	 * Instantiate the panel with default type.
-	 *
-	 * @param model Data model being served
 	 */
-	public RecordPanel(BusinessModel model) {
-		this(model, "Record", "Records");
+	public RecordPanel() {
+		this("Record", "Records");
 	}
 
 	/**
 	 * Instantiate the panel with given type.
-	 *
-	 * @param model Data model being served
+	 * 
 	 * @param singleType Type of a single record
 	 * @param pluralType Plural of single record
 	 */
-	public RecordPanel(BusinessModel model, String singleType, String pluralType) {
-		// Verify model is valid
-		if (model == null) {
-			throw new IllegalArgumentException("Business model cannot be null");
-		}
-		this.model = model;
+	public RecordPanel(String singleType, String pluralType) {
 		// Initialise GUI
 		initGUI(singleType, pluralType);
 		// Initialise event listeners

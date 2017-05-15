@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -42,6 +41,7 @@ import business.model.StockItem;
 import business.model.StockLevels;
 import business.model.StockMap;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.model.Quantity;
 import general.model.QuantityMap;
 import general.utility.ErrorBuilder;
@@ -55,6 +55,8 @@ import general.utility.Utilities;
  */
 public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 	private static final long serialVersionUID = -6211990855581822837L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private JTextField txtName;
 	private JTextArea txtDescription;
@@ -73,8 +75,10 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 	 * @param model Data model being served
 	 */
 	public DishesPanel(BusinessModel model) {
-		super(model, "Dish", "Dishes");
-
+		super("Dish", "Dishes");
+		// Store model
+		this.model = model;
+		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -99,7 +103,7 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 		gbc_txtName.gridx = 1;
 		gbc_txtName.gridy = 0;
 		pnlRecord.add(txtName, gbc_txtName);
-		
+
 		// [Record Panel] <- 'Description Field' Label
 		final JLabel lblDescription = new JLabel("Description:");
 		final GridBagConstraints gbc_lblDescription = new GridBagConstraints();
@@ -160,8 +164,9 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 		gbl_pnlIngredients.columnWeights = new double[] {1.0};
 		gbl_pnlIngredients.rowWeights = new double[] {0.0, 0.0, Double.MIN_VALUE};
 		pnlIngredients.setLayout(gbl_pnlIngredients);
-		pnlIngredients.setBorder(BorderFactory.createTitledBorder(
-				BorderFactory.createEtchedBorder(), "Ingredients", TitledBorder.LEADING, TitledBorder.TOP));
+		pnlIngredients
+				.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+						"Ingredients", TitledBorder.LEADING, TitledBorder.TOP));
 
 		// [Ingredients Panel] <- 'Ingredients Field' Table
 		tblIngredients = new JTable();
@@ -184,7 +189,7 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 		pnlIngredients.add(scrIngredients, gbc_scrIngredients);
 		scrIngredients.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		scrIngredients.setPreferredSize(new Dimension(0, 0));
-		
+
 		// [Ingredients Panel] <- 'Ingredient Controls' Table
 		pnlIngredientControls = new JPanel();
 		final GridBagConstraints gbc_pnlIngredientControls = new GridBagConstraints();
@@ -199,7 +204,7 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 		gbl_pnlIngredientControls.columnWeights = new double[] {0.0, 1.0};
 		gbl_pnlIngredientControls.rowWeights = new double[] {0.0, 0.0, 0.0, Double.MIN_VALUE};
 		pnlIngredientControls.setLayout(gbl_pnlIngredientControls);
-		
+
 		// [Ingredients Controls Panel] <- 'Ingredient' ComboBox
 		cboIngredient = new JComboBox<>();
 		final GridBagConstraints gbc_cboNewIngredient = new GridBagConstraints();
@@ -277,7 +282,7 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 				}
 			}
 		});
-		
+
 		// [Set Ingredient Quantity] - Set ingredient quantity in recipe
 		btnSetIngredientQuantity.addActionListener(new ActionListener() {
 			@Override
@@ -319,8 +324,7 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 	}
 
 	/**
-	 * Load available ingredients into combo box
-	 * This thread should be invoked on the EDT
+	 * Load available ingredients into combo box This thread should be invoked on the EDT
 	 */
 	private void loadIngredients() {
 		final Ingredient[] array;
@@ -573,7 +577,7 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 			}
 		}
 	}
-	
+
 	/**
 	 * An extension of ListTableModel that displays ingredients and a respective quantity.
 	 *

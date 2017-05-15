@@ -21,6 +21,7 @@ import business.model.Customer;
 import business.model.CustomerLogin;
 import business.model.Postcode;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
 
@@ -31,6 +32,8 @@ import general.utility.Utilities;
  */
 public class CustomersPanel extends RecordPanel<Customer> {
 	private static final long serialVersionUID = 5315161679613333363L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private final JTextField txtUsername;
 	private final JTextField txtFullName;
@@ -44,8 +47,10 @@ public class CustomersPanel extends RecordPanel<Customer> {
 	 * @param model Data model being served
 	 */
 	public CustomersPanel(BusinessModel model) {
-		super(model, "Customer", "Customers");
-
+		super("Customer", "Customers");
+		// Store model
+		this.model = model;
+		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};

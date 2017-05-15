@@ -1,10 +1,10 @@
 package general.utility;
 
 /**
- * Class UpdateAlert, class that alerts waiting threads when an update occurs. An update is defined as
- * a comment field being written to. When comments are written a flag is set to indicate new comments
- * are available. When the comments are read the flag is reset.  Appropriate methods are provided to allow 
- * for waiting for an update.
+ * Class UpdateAlert, class that alerts waiting threads when an update occurs. An update is defined
+ * as a comment field being written to. When comments are written a flag is set to indicate new
+ * comments are available. When the comments are read the flag is reset. Appropriate methods are
+ * provided to allow for waiting for an update.
  *
  * @author David Jones [dsj1n15]
  */
@@ -34,8 +34,7 @@ public class UpdateAlert {
 	}
 
 	/**
-	 * Write an error builder to the update alert, triggering those waiting for
-	 * an update.
+	 * Write an error builder to the update alert, triggering those waiting for an update.
 	 * 
 	 * @param eb Error builder with comments regarding update alert
 	 */
@@ -96,6 +95,14 @@ public class UpdateAlert {
 			System.err.println("[UPDATE ALERT] : Timeout whilst waiting for new");
 			return false;
 		}
+	}
+
+	/**
+	 * Clear the current state and contents
+	 */
+	public synchronized void clear() {
+		setErrorBuilder(null);
+		this.isNew = false;
 	}
 
 }

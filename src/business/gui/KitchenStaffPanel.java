@@ -22,6 +22,7 @@ import business.model.BusinessModel;
 import business.model.KitchenStaffMember;
 import business.model.Worker;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
@@ -33,6 +34,8 @@ import general.utility.Utilities;
  */
 public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 	private static final long serialVersionUID = 2779726580663814359L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private final JTextField txtName;
 	private final JLabel lblAction;
@@ -46,8 +49,10 @@ public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 	 * @param model Data model being served
 	 */
 	public KitchenStaffPanel(BusinessModel model) {
-		super(model, "Staff Member", "Staff");
-
+		super("Staff Member", "Staff");
+		// Store model
+		this.model = model;
+		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -55,7 +60,7 @@ public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 		gbl_pnlRecord.columnWeights = new double[] {0.0, 1.0};
 		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0};
 		pnlRecord.setLayout(gbl_pnlRecord);
-		
+
 		// [Record Panel] <- 'Name Field' Label
 		final JLabel lblName = new JLabel("Name:");
 		final GridBagConstraints gbc_lblName = new GridBagConstraints();
@@ -136,7 +141,8 @@ public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 
 	/**
 	 * Stop a worker.
-	 * @param worker Worker to stop 
+	 * 
+	 * @param worker Worker to stop
 	 * @param work Whether worker should stop
 	 * @return Whether worker was stoppable
 	 */

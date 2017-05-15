@@ -5,9 +5,9 @@ import java.io.Serializable;
 import general.utility.Validatable;
 
 /**
- * Abstract class worker, a runnable that owns a thread and executes a task systematically.
- * Provides methods that handle thread termination and starting safely. Worker owns a thread
- * as opposed to being a thread so that thread can be restarted (a new thread is created).
+ * Abstract class worker, a runnable that owns a thread and executes a task systematically. Provides
+ * methods that handle thread termination and starting safely. Worker owns a thread as opposed to
+ * being a thread so that thread can be restarted (a new thread is created).
  * 
  * @author David Jones [dsj1n15]
  */

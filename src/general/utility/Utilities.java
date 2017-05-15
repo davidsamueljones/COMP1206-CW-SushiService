@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -201,6 +203,15 @@ public class Utilities {
 			}
 		}
 		return null;
+	}
+	
+	// This still doesn't work!
+	public static String getHostname() {
+		try {
+			return InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			return "";
+		}
 	}
 
 }

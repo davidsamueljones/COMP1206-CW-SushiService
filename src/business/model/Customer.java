@@ -22,14 +22,16 @@ public class Customer implements Serializable, Validatable {
 
 	/**
 	 * Instantiate a customer with final fields only.
+	 * 
 	 * @param login Login owned by customer
 	 */
 	public Customer(CustomerLogin login) {
 		this(null, null, null, login);
 	}
-	
+
 	/**
 	 * Instantiate a customer with all fields.
+	 * 
 	 * @param name Full name or nickname for customer (not used for equality)
 	 * @param address Customers address, addressable when combined with postcode
 	 * @param postcode Postcode/area customer is located in
@@ -69,7 +71,7 @@ public class Customer implements Serializable, Validatable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	/**
 	 * @return Customer's postcode/area
 	 */
@@ -84,7 +86,7 @@ public class Customer implements Serializable, Validatable {
 	public void setPostcode(Postcode postcode) {
 		this.postcode = postcode;
 	}
-	
+
 	/**
 	 * @return Customer's respective login object
 	 */

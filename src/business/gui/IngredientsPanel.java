@@ -23,6 +23,7 @@ import business.model.StockLevels;
 import business.model.StockMap;
 import business.model.Supplier;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
@@ -34,6 +35,8 @@ import general.utility.Utilities;
  */
 public class IngredientsPanel extends RecordPanel<StockItem<Ingredient>> {
 	private static final long serialVersionUID = 5163613751286161072L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private final JTextField txtName;
 	private final JComboBox<Ingredient.Unit> cboUnit;
@@ -46,8 +49,10 @@ public class IngredientsPanel extends RecordPanel<StockItem<Ingredient>> {
 	 * @param model Data model being served
 	 */
 	public IngredientsPanel(BusinessModel model) {
-		super(model, "Ingredient", "Ingredients");
-
+		super("Ingredient", "Ingredients");
+		// Store model
+		this.model = model;
+		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};

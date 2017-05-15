@@ -183,21 +183,21 @@ public class StockLevels implements Serializable {
 	}
 
 	/**
-	 * @return Whether stock should be allowed to restocked; this is 
-	 * not enforced but can be used as a flag.
+	 * @return Whether stock should be allowed to restocked; this is not enforced but can be used as
+	 *         a flag.
 	 */
 	public boolean isStockable() {
 		return stockable;
 	}
 
 	/**
-	 * @param stockable Whether stock should be allowed to restocked; this will 
-	 * not be enforced but should be used as a flag.
+	 * @param stockable Whether stock should be allowed to restocked; this will not be enforced but
+	 *        should be used as a flag.
 	 */
 	public void setStockable(boolean stockable) {
 		this.stockable = stockable;
 	}
-	
+
 	/**
 	 * Available stock is defined as all stock that is not reserved or being restocked.
 	 *

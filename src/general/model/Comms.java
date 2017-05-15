@@ -99,7 +99,8 @@ public class Comms {
 			SerializationUtils.serialize(message, client.getOutputStream());
 			return true;
 		} catch (IOException e) {
-			System.err.println(String.format("[COMMS] Failed sending %s : Could not connect to server", message));
+			System.err.println(String
+					.format("[COMMS] Failed sending %s : Could not connect to server", message));
 			return false;
 		} finally {
 			if (client != null) {

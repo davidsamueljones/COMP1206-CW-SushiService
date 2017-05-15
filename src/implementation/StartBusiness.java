@@ -6,15 +6,15 @@ import business.gui.BusinessApplication;
 import business.model.BusinessLocation;
 
 /**
- * Test class for starting a specific business location.
- * This should be run before any client connections are attempted.
+ * Test class for starting a specific business location. This must be running for any clients to 
+ * work as intended.
  * 
  * @author David Jones [dsj1n15]
  */
 public class StartBusiness {
 
 	/**
-	 * Launch the business application for a single business location. 
+	 * Launch the business application for a single business location.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

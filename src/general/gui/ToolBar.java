@@ -1,10 +1,12 @@
 package general.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -12,16 +14,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /**
- * Class ToolBarButton, this is a tool bar that holds many components horizontally. 
- * Note: Part of GUI extension that was done as opposed to changing look and feel UI managers,
- * or using external libraries - not all standard component coding practices may be acknowledged.
- * The swing tool bar was not customisable enough to get the desired design.
+ * Class ToolBarButton, this is a tool bar that holds many components horizontally. Note: Part of
+ * GUI extension that was done as opposed to changing look and feel UI managers, or using external
+ * libraries - not all standard component coding practices may be acknowledged. The reason for creating
+ * this component is that the swing tool bar was not customisable enough to get the desired design.
  * 
  * @author David Jones [dsj1n15]
  */
 public class ToolBar extends JPanel {
 	private static final long serialVersionUID = 4589560152804039907L;
-	// Buttons 
+	// Buttons
 	protected final ArrayList<ToolBarButton> buttons = new ArrayList<>();
 	// Theme
 	private final Color background;
@@ -30,6 +32,7 @@ public class ToolBar extends JPanel {
 
 	/**
 	 * Instantiate a tool bar with a given theme.
+	 * 
 	 * @param background Tool bar colour
 	 * @param foreground Text colour
 	 * @param highlight Button colour on hover
@@ -43,6 +46,8 @@ public class ToolBar extends JPanel {
 		setBackground(background);
 		// Organise layout
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		// Set minimum height
+		add(Box.createRigidArea(new Dimension(0, 25)));
 	}
 
 	/**
@@ -65,9 +70,10 @@ public class ToolBar extends JPanel {
 	public Color getHighlightColour() {
 		return highlight;
 	}
-	
+
 	/**
 	 * Add a new button using given information.
+	 * 
 	 * @param text Text to assign to button
 	 * @return Created button
 	 */
@@ -77,6 +83,7 @@ public class ToolBar extends JPanel {
 
 	/**
 	 * Add a new button using given information.
+	 * 
 	 * @param text Text to assign to button
 	 * @param img Image to assign to button as icon
 	 * @return Created button
@@ -94,7 +101,8 @@ public class ToolBar extends JPanel {
 	}
 
 	/**
-	 * Add non-clickable text to toolbar. 
+	 * Add non-clickable text to toolbar.
+	 * 
 	 * @param text Text to assign to label
 	 * @param alignment Alignment of text
 	 * @return Created label
@@ -109,7 +117,7 @@ public class ToolBar extends JPanel {
 	}
 
 	/**
-	 * Create a label with text '|' acting as a separator 
+	 * Create a label with text '|' acting as a separator
 	 */
 	public void addSeparator() {
 		addLabel("|", SwingConstants.CENTER);

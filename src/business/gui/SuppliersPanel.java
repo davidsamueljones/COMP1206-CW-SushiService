@@ -21,6 +21,7 @@ import business.model.BusinessModel;
 import business.model.Ingredient;
 import business.model.Supplier;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
@@ -32,6 +33,8 @@ import general.utility.Utilities;
  */
 public class SuppliersPanel extends RecordPanel<Supplier> {
 	private static final long serialVersionUID = -5294497133864971568L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private final JTextField txtName;
 	private final JSpinner nudDistance;
@@ -44,8 +47,10 @@ public class SuppliersPanel extends RecordPanel<Supplier> {
 	 * @param model Data model being served
 	 */
 	public SuppliersPanel(BusinessModel model) {
-		super(model, "Supplier", "Suppliers");
-
+		super("Supplier", "Suppliers");
+		// Store model
+		this.model = model;
+		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -302,6 +307,7 @@ public class SuppliersPanel extends RecordPanel<Supplier> {
 		private static final long serialVersionUID = 6848893576001534549L;
 		private final String[] COLUMN_TITLES = {"Name", "Distance (km)", "Restocking"};
 		private final Class<?>[] COLUMN_CLASSES = {String.class, Double.class, Boolean.class};
+
 		/**
 		 * Instantiate table model with default column titles and classes.
 		 */

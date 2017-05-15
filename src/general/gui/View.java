@@ -1,5 +1,7 @@
 package general.gui;
 
+import javax.swing.JButton;
+
 /**
  * Interface for handling a View. A view is defined as something that should have an initialisation
  * and refresh behaviour. The implementation should dictate exact behaviour but it is assumed that
@@ -18,5 +20,13 @@ public interface View {
 	 * Refresh changes in the view.
 	 */
 	public abstract void refresh();
+
+	/**
+	 * Get the accept button of the view, default behaviour returns null.
+	 * @return The accept button
+	 */
+	public default JButton getAcceptButton() {
+		return null;
+	}
 
 }

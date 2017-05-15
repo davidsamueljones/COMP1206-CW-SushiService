@@ -1,8 +1,8 @@
 package general.utility;
 
 /**
- * Class UpdateAlertObject is an implementation of UpdateAlert that also holds an object of generic 
- * type. Writing of this object will trigger an update; this is alongside the default implementation 
+ * Class UpdateAlertObject is an implementation of UpdateAlert that also holds an object of generic
+ * type. Writing of this object will trigger an update; this is alongside the default implementation
  * of a comment trigger behaviour. When the object or comment is read, the flag is reset.
  *
  * @author David Jones [dsj1n15]
@@ -58,4 +58,11 @@ public class UpdateAlertObject<T> extends UpdateAlert {
 		this.object = object;
 	}
 
+	/**
+	 * Clear the current state and contents
+	 */
+	public synchronized void clear() {
+		super.clear();
+		setObject(null);
+	}
 }

@@ -2,13 +2,16 @@ package implementation;
 
 import java.awt.EventQueue;
 
-import business.gui.BusinessApplication;
 import business.model.BusinessLocation;
 import client.gui.ClientApplication;
-import client.model.ClientModel;
 
+/**
+ * Test class for starting a client targeting a specific business location.
+ * 
+ * @author David Jones [dsj1n15]
+ */
 public class StartClient {
-	
+
 	/**
 	 * Launch the client application targeting a specific business location
 	 */
@@ -33,5 +36,5 @@ public class StartClient {
 			}
 		});
 	}
-	
+
 }

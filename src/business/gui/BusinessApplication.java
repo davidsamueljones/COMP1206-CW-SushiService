@@ -4,22 +4,32 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import business.model.BusinessLocation;
 import business.model.BusinessModel;
 import business.model.DataPersistence;
 import general.gui.Header;
+import general.gui.NavigationBar;
 import general.gui.View;
 import general.gui.ViewHandler;
 import general.utility.Utilities;
 
+/**
+ * Main application class for handling a business model. Holds record editing panels,
+ * managing navigation and refresh behaviour using view handling interfaces. In addition
+ * handles persistence layer shutdown behaviour. Only a single instance of this class can
+ * be instantiated on the same system; this is to protect data persistence files.
+ * 
+ * @author David Jones [dsj1n15]
+ *
+ */
 public class BusinessApplication extends JFrame implements ViewHandler {
 	private static final long serialVersionUID = 329700147679546872L;
 	// Refresh rate of displayed data
@@ -138,9 +148,10 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 		setContentPane(contentPane);
 
 		// Create header
-		pnlHeader = new Header(this, "Business Application");
+		pnlHeader = new Header("Business Application");
 		contentPane.add(pnlHeader, BorderLayout.NORTH);
-
+		NavigationBar navigationBar = pnlHeader.addNavigationBar("MAIN", this);
+		
 		// Create content viewing panel
 		pnlView = new JPanel();
 		cl_pnlView = new CardLayout();
@@ -152,24 +163,29 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 
 		// Create views and add them to viewing panel
 		final JPanel pnlIngredients = new IngredientsPanel(model);
-		addView(pnlIngredients, "Ingredients", true);
+		addView(pnlIngredients, "Ingredients", navigationBar);
 		final JPanel pnlDishes = new DishesPanel(model);
-		addView(pnlDishes, "Dishes", true);
+		addView(pnlDishes, "Dishes", navigationBar);
 		final JPanel pnlSuppliers = new SuppliersPanel(model);
-		addView(pnlSuppliers, "Suppliers", true);
+		addView(pnlSuppliers, "Suppliers", navigationBar);
 		final JPanel pnlCustomers = new CustomersPanel(model);
-		addView(pnlCustomers, "Customers", true);
+		addView(pnlCustomers, "Customers", navigationBar);
 		final JPanel pnlOrders = new OrdersPanel(model);
-		addView(pnlOrders, "Orders", true);
+		addView(pnlOrders, "Orders", navigationBar);
 		final JPanel pnlKitchenStaff = new KitchenStaffPanel(model);
-		addView(pnlKitchenStaff, "Kitchen Staff", true);
+		addView(pnlKitchenStaff, "Kitchen Staff", navigationBar);
 		final JPanel pnlDrones = new DronesPanel(model);
-		addView(pnlDrones, "Drones", true);
+		addView(pnlDrones, "Drones", navigationBar);
 		final JPanel pnlPostcodes = new PostcodesPanel(model);
-		addView(pnlPostcodes, "Postcodes", true);
-		
+		addView(pnlPostcodes, "Postcodes", navigationBar);
+
 		// Set initial selection to ingredients page
-		setView("Ingredients");
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				setView("Ingredients");
+			}
+		});	
 	}
 
 	/**
@@ -195,17 +211,18 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 	}
 
 	@Override
-	public boolean addView(Component component, String name, boolean navigable) {
+	public boolean addView(Component component, String name, NavigationBar[] navigationBars) {
 		// Do not add if not a view or view of same name exists
 		if (!(component instanceof View) || views.containsKey(name)) {
+			System.err.println("[APPLICATION] : Unable to add view");
 			return false;
 		}
 		// Add component to card layout
 		pnlView.add(component);
 		cl_pnlView.addLayoutComponent(component, name);
 		// Add to header's navigation bar if it should be accessible directly
-		if (navigable) {
-			pnlHeader.getNavigationBar().addNavigationButton(name);
+		for (NavigationBar navigationBar : navigationBars) {
+			navigationBar.addNavigationButton(name);
 		}
 		// Keep track of relevant view interfaces
 		views.put(name, (View) component);
@@ -215,8 +232,7 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 	@Override
 	public void setView(String view) {
 		cl_pnlView.show(pnlView, view);
-		pnlHeader.setPage(view);
-		pnlHeader.getNavigationBar().setSelected(view);
+		pnlHeader.setPage(view, this);
 		synchronized (viewLock) {
 			currentView = views.get(view);
 		}

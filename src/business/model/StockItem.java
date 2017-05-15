@@ -15,6 +15,7 @@ public class StockItem<T> {
 
 	/**
 	 * Instantiate a stock item.
+	 * 
 	 * @param item Item that stock item should represent
 	 * @param stockLevels Stock levels attached to item
 	 */

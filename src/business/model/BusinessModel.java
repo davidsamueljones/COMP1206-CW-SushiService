@@ -35,7 +35,7 @@ public class BusinessModel implements Serializable {
 		CREATE_TEST();
 	}
 
-	//!!! TEST
+	// !!! TEST
 	public void CREATE_TEST() {
 		// !!! Test postcodes
 		final Postcode postcode1 = new Postcode("PO7", 4);
@@ -100,7 +100,7 @@ public class BusinessModel implements Serializable {
 		drones.add(drone1);
 		drone1.startWorking();
 	}
-	
+
 	/**
 	 * @return Current comms instance
 	 */
@@ -222,18 +222,23 @@ public class BusinessModel implements Serializable {
 		}
 	}
 
-	public void addCustomer(Customer customer) {
-		synchronized (customers) {
-			customers.put(customer.getLogin(), customer);
-		}
-	}
-
+	/**
+	 * Filter the models set of orders to get only those with a particular status.
+	 * @param status Status to filter by
+	 * @return Filtered set of orders
+	 */
 	public Set<Order> getOrdersOfStatus(Order.Status status) {
 		synchronized (orders) {
 			return getOrdersOfStatus(status, orders);
 		}
 	}
 
+	/**
+	 * Filter a set of orders to only those with a particular status.
+	 * @param status Status to filter by
+	 * @param orders Orders to filter
+	 * @return Filtered set of orders
+	 */
 	public static Set<Order> getOrdersOfStatus(Order.Status status, Set<Order> orders) {
 		final Set<Order> reqDelivery = new LinkedHashSet<>();
 		for (final Order order : orders) {
@@ -243,13 +248,24 @@ public class BusinessModel implements Serializable {
 		}
 		return reqDelivery;
 	}
-
+	
+	/**
+	 * Filter the models set of orders to get only those with a particular customer login.
+	 * @param login Customer login to filter by
+	 * @return Filtered set of orders
+	 */
 	public Set<Order> getOrdersFromCustomer(CustomerLogin login) {
 		synchronized (orders) {
 			return getOrdersFromCustomer(login, orders);
 		}
 	}
 
+	/**
+	 * Filter a set of orders to only those with a particular customer login.
+	 * @param login Customer login to filter by
+	 * @param orders Orders to filter
+	 * @return Filtered set of orders
+	 */
 	public static Set<Order> getOrdersFromCustomer(CustomerLogin login, Set<Order> orders) {
 		final Set<Order> fromCustomer = new HashSet<>();
 		for (final Order order : orders) {
@@ -259,7 +275,5 @@ public class BusinessModel implements Serializable {
 		}
 		return fromCustomer;
 	}
-
-
 
 }

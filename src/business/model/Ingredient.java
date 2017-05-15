@@ -107,7 +107,8 @@ public class Ingredient implements Serializable, Validatable, Comparable<Ingredi
 	}
 
 	/**
-	 * List of units allowed by ingredient. 
+	 * List of units allowed by ingredient.
+	 * 
 	 * @author David Jones [dsj1n15]
 	 */
 	public static enum Unit {

@@ -29,6 +29,7 @@ import business.model.BusinessModel;
 import business.model.Dish;
 import business.model.Order;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.gui.ToolBarButton;
 import general.model.Quantity;
 import general.utility.ErrorBuilder;
@@ -42,6 +43,8 @@ import general.utility.Utilities;
  */
 public class OrdersPanel extends RecordPanel<Order> {
 	private static final long serialVersionUID = 8046768538848728633L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private final ToolBarButton tbbDeleteCompleted;
 	private final JTextField txtDate;
@@ -59,8 +62,10 @@ public class OrdersPanel extends RecordPanel<Order> {
 	 * @param model Data model being served
 	 */
 	public OrdersPanel(BusinessModel model) {
-		super(model, "Order", "Orders");
-
+		super("Order", "Orders");
+		// Store model
+		this.model = model;
+		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -87,7 +92,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		gbc_txtDate.gridy = 0;
 		pnlRecord.add(txtDate, gbc_txtDate);
 		txtDate.setEnabled(false);
-
+		// [Record Panel] <- 'Status Field' Label
 		final JLabel lblStatus = new JLabel("Status:");
 		final GridBagConstraints gbc_lblStatus = new GridBagConstraints();
 		gbc_lblStatus.anchor = GridBagConstraints.EAST;
@@ -95,7 +100,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		gbc_lblStatus.gridx = 0;
 		gbc_lblStatus.gridy = 1;
 		pnlRecord.add(lblStatus, gbc_lblStatus);
-
+		// [Record Panel] <- 'Status Field' TextBox
 		txtStatus = new JTextField();
 		final GridBagConstraints gbc_txtStatus = new GridBagConstraints();
 		gbc_txtStatus.insets = new Insets(0, 0, 5, 5);
@@ -105,7 +110,8 @@ public class OrdersPanel extends RecordPanel<Order> {
 		pnlRecord.add(txtStatus, gbc_txtStatus);
 		txtStatus.setColumns(10);
 		txtStatus.setEnabled(false);
-
+		
+		// [Record Panel] <- 'Customer Field' Label
 		final JLabel lblCustomer = new JLabel("Customer:");
 		final GridBagConstraints gbc_lblCustomer = new GridBagConstraints();
 		gbc_lblCustomer.anchor = GridBagConstraints.EAST;
@@ -113,7 +119,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		gbc_lblCustomer.gridx = 0;
 		gbc_lblCustomer.gridy = 2;
 		pnlRecord.add(lblCustomer, gbc_lblCustomer);
-
+		// [Record Panel] <- 'Customer Field' TextBox
 		txtCustomer = new JTextField();
 		final GridBagConstraints gbc_txtCustomer = new GridBagConstraints();
 		gbc_txtCustomer.insets = new Insets(0, 0, 5, 5);
@@ -124,6 +130,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		txtCustomer.setColumns(10);
 		txtCustomer.setEnabled(false);
 
+		// [Record Panel] <- 'Dishes' Panel
 		final JPanel pnlDishes = new JPanel();
 		final GridBagConstraints gbc_pnlDishes = new GridBagConstraints();
 		gbc_pnlDishes.gridwidth = 2;
@@ -140,6 +147,8 @@ public class OrdersPanel extends RecordPanel<Order> {
 		pnlDishes.setLayout(gbl_pnlDishes);
 		pnlDishes.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				"Dishes", TitledBorder.LEADING, TitledBorder.TOP));
+		
+		// [Dishes Panel] <- 'Dishes' Table
 		tblDishes = new JTable();
 		tblDishes.setEnabled(false);
 		tblDishes.setGridColor(Color.LIGHT_GRAY);
@@ -148,7 +157,6 @@ public class OrdersPanel extends RecordPanel<Order> {
 		tblDishes.setModel(model_tblDishes);
 		tblDishes.getRowSorter().toggleSortOrder(0);
 		Utilities.setColumnStringFormat(tblDishes, 2, Utilities.PRICE_FORMAT, SwingConstants.RIGHT);
-
 		// Make scrollable
 		final JScrollPane scrDishes = new JScrollPane(tblDishes);
 		scrDishes.setBackground(this.getBackground());
@@ -163,6 +171,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		scrDishes.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		scrDishes.setPreferredSize(new Dimension(0, 0));
 
+		// [Dishes Panel] <- 'Total Price' Label
 		final JLabel lblTotalPrice = new JLabel("Total Price (£):");
 		final GridBagConstraints gbc_lblTotalPrice = new GridBagConstraints();
 		gbc_lblTotalPrice.anchor = GridBagConstraints.EAST;
@@ -170,7 +179,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		gbc_lblTotalPrice.gridx = 0;
 		gbc_lblTotalPrice.gridy = 1;
 		pnlDishes.add(lblTotalPrice, gbc_lblTotalPrice);
-
+		// [Dishes Panel] <- 'Total Price' TextBox
 		txtTotalPrice = new JTextField();
 		final GridBagConstraints gbc_txtTotalPrice = new GridBagConstraints();
 		gbc_txtTotalPrice.insets = new Insets(0, 0, 5, 5);
@@ -181,6 +190,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		txtTotalPrice.setColumns(10);
 		txtTotalPrice.setEnabled(false);
 
+		// [Record Panel] <- 'Cancel Order' Button
 		btnCancelOrder = new JButton("Cancel Order");
 		final GridBagConstraints gbc_btnCancelOrder = new GridBagConstraints();
 		gbc_btnCancelOrder.fill = GridBagConstraints.HORIZONTAL;
@@ -193,7 +203,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		// Disable Creation/Editing
 		setNewEnabled(false);
 		setEditEnabled(false);
-		
+
 		// Add delete completed to toolbar
 		tbbDeleteCompleted = tlbRecords.addButton("Delete Completed",
 				Utilities.loadImage(new File("resources/imgDeleteMultiple.png")));
@@ -250,6 +260,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 
 	/**
 	 * Cancel the given order if possible.
+	 * 
 	 * @return Whether the order was cancelled successfully
 	 */
 	public boolean cancelOrder(Order order) {
@@ -303,10 +314,10 @@ public class OrdersPanel extends RecordPanel<Order> {
 			@Override
 			public void run() {
 				// Create local copy so table not backed by map ensuring thread
-				// safety. This is done as an alternative to locking customers
+				// safety. This is done as an alternative to locking orders
 				// whilst refreshing due to the reduced time the lock is required.
 				Collection<Order> orders;
-				synchronized (model.customers) {
+				synchronized (model.orders) {
 					// Cast safe due to known functionality of deep clone
 					orders = (Collection<Order>) SerializationUtils.deepClone(model.orders);
 				}

@@ -10,9 +10,9 @@ import general.utility.ErrorBuilder;
 import general.utility.Validatable;
 
 /**
- * Order class, holds data about an order. Combination of customer and date define 
- * equality. Date is not immutable so it is suggested that this is only ever changed
- * when it is known that the order is not held in any collections. 
+ * Order class, holds data about an order. Combination of customer and date define equality. Date is
+ * not immutable so it is suggested that this is only ever changed when it is known that the order
+ * is not held in any collections.
  *
  * @author David Jones [dsj1n15]
  */
@@ -25,6 +25,7 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Instantiate a new order from a customer with given dishes.
+	 * 
 	 * @param customer Customer who made order
 	 * @param dishes Dishes in order
 	 */
@@ -48,12 +49,24 @@ public class Order implements Serializable, Validatable {
 	public QuantityMap<Dish> getDishes() {
 		return dishes;
 	}
-	
+
 	/**
 	 * Calculate the price of all dishes in the order.
+	 * 
 	 * @return Total price
 	 */
 	public double getTotalPrice() {
+		return getTotalPrice(dishes);
+	}
+
+	/**
+	 * Static implementation to calculate the price of all dishes in
+	 * a quantity map.
+	 * 
+	 * @param dishes Quantity map of dishes
+	 * @return Total price
+	 */
+	public static double getTotalPrice(QuantityMap<Dish> dishes) {
 		double price = 0;
 		for (final Entry<Dish, Double> dish : dishes.entrySet()) {
 			price += dish.getKey().getPrice() * dish.getValue();
@@ -69,8 +82,9 @@ public class Order implements Serializable, Validatable {
 	}
 
 	/**
-	 * Set the date/time of the order; this can be set so a business can update the 
-	 * time to be in respect to the server clock.
+	 * Set the date/time of the order; this can be set so a business can update the time to be in
+	 * respect to the server clock.
+	 * 
 	 * @param date The date/time of the order
 	 */
 	public void setDate(LocalDateTime date) {
@@ -94,6 +108,7 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Non-static implementation of Status.isCancellable.
+	 * 
 	 * @return Whether status implies order is cancellable
 	 */
 	public boolean isCancellable() {
@@ -102,12 +117,13 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Non-static implementation of Status.isComplete.
+	 * 
 	 * @return Whether status implies order is complete
 	 */
 	public boolean isComplete() {
 		return Status.isComplete(status);
 	}
-	
+
 	@Override
 	public ErrorBuilder validate() {
 		final ErrorBuilder eb = new ErrorBuilder();
@@ -120,7 +136,7 @@ public class Order implements Serializable, Validatable {
 		if (status == null) {
 			eb.addError("No status has been set");
 		}
-		return null;
+		return eb;
 	}
 
 	@Override

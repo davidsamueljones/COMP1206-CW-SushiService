@@ -19,14 +19,14 @@ import javax.swing.border.TitledBorder;
 import business.model.StockLevels;
 
 /**
- * An inner record editor that handles a stock level; this class must be contained
- * in an enclosing record editor class.
+ * An inner record editor that handles a stock level; this class must be contained in an enclosing
+ * record editor class.
  *
  * @author David Jones [dsj1n15]
  */
 public class StockPanel extends JPanel implements RecordEditor<StockLevels> {
 	private static final long serialVersionUID = 4953583908325886546L;
-	
+
 	// Record objects
 	private final JPanel pnlStockLevels;
 	private final JTextField txtReserved;
@@ -245,6 +245,8 @@ public class StockPanel extends JPanel implements RecordEditor<StockLevels> {
 	public void setEditingMode(RecordEditor.EditingMode editingMode) {
 		switch (editingMode) {
 			case NEW:
+				// Default behaviour to not stockable
+				radStockableNo.setSelected(true);
 			case EDIT:
 				showStockLevels(false);
 				nudRestockLevel.setEnabled(true);

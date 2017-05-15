@@ -1,23 +1,20 @@
 package general.model;
 
-import java.io.Serializable;
-import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
-import general.model.Message.Command;
 import general.utility.ErrorBuilder;
 
 /**
- * Extension of message class to send a map of objects with a standard message. 
- * Map is addition and view only meaning objects cannot be removed once added. 
+ * Extension of message class to send a map of objects with a standard message. Map is addition and
+ * view only meaning objects cannot be removed once added.
  *
  * @author David Jones [dsj1n15]
  */
 public class ObjectMessage extends Message {
 	private static final long serialVersionUID = 9014642389601797656L;
 	private final Map<String, Object> objects;
-	
+
 	/**
 	 * Initialise a message with only a command.
 	 *
@@ -26,7 +23,7 @@ public class ObjectMessage extends Message {
 	public ObjectMessage(Command command) {
 		this(command, null, null);
 	}
-	
+
 	/**
 	 * Initialise a message with a command and comments held by an error builder.
 	 *
@@ -41,21 +38,22 @@ public class ObjectMessage extends Message {
 	 * Initialise a message with a command and a map of objects.
 	 *
 	 * @param command Command dictating how message should be handled
-	 * @param objects Map of identifiers and objects to send, null will cause a new map to be created
+	 * @param objects Map of identifiers and objects to send, null will cause a new map to be
+	 *        created
 	 */
 	public ObjectMessage(Command command, Map<String, Object> objects) {
 		this(command, null, objects);
 	}
-	
+
 	/**
-	 * Initialise a message with a command, comments held by an error builder and a map
-	 * of objects.
+	 * Initialise a message with a command, comments held by an error builder and a map of objects.
 	 * 
 	 * @param command Command dictating how message should be handled
 	 * @param eb Comments in error builder to send
-	 * @param objects Map of identifiers and objects to send, null will cause a new map to be created
+	 * @param objects Map of identifiers and objects to send, null will cause a new map to be
+	 *        created
 	 */
-	public ObjectMessage(Command command, ErrorBuilder eb,  Map<String, Object> objects) {
+	public ObjectMessage(Command command, ErrorBuilder eb, Map<String, Object> objects) {
 		super(command, eb);
 		// Handle object argument
 		if (objects == null) {
@@ -65,24 +63,23 @@ public class ObjectMessage extends Message {
 	}
 
 	/**
-	 * Get an attached object from the stored map. If the identifier is not found an exception
-	 * is thrown as this indicates a structural problem with the message.
+	 * Get an attached object from the stored map. If the identifier is not found an exception is
+	 * thrown as this indicates a structural problem with the message.
 	 * 
 	 * @param identifier Key for object to get
 	 * @return Attached object
 	 */
 	public Object getObject(String identifier) {
 		if (!objects.containsKey(identifier)) {
-			throw new IllegalArgumentException(
-					"Message does not contain message with identifier");
+			throw new IllegalArgumentException("Message does not contain message with identifier");
 		}
 		return objects.get(identifier);
 	}
-	
+
 	/**
-	 * Get an attached object from the stored map as a given type using a safe cast. 
-	 * This method only has defined behaviour for single object instances of a single type. 
-	 * Failure to cast will result in null being returned.
+	 * Get an attached object from the stored map as a given type using a safe cast. This method
+	 * only has defined behaviour for single object instances of a single type. Failure to cast will
+	 * result in null being returned.
 	 *
 	 * @param identifier Key for object to get
 	 * @param type Type to cast to
@@ -91,14 +88,14 @@ public class ObjectMessage extends Message {
 	public <T> T getObject(String identifier, Class<T> type) {
 		// Get object
 		Object object = getObject(identifier);
-		// Attempt cast
-		if (type.isInstance(object)) {
+		// Accept if null, otherwise attempt cast
+		if (object == null || type.isInstance(object)) {
 			return type.cast(object);
 		} else {
 			throw new ClassCastException("Message object not of expected type");
 		}
 	}
-	
+
 	/**
 	 * Add an object to the messages stored map.
 	 * 

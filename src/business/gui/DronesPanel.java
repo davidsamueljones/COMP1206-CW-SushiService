@@ -27,6 +27,7 @@ import business.model.BusinessModel;
 import business.model.Drone;
 import business.model.Worker;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
@@ -38,6 +39,8 @@ import general.utility.Utilities;
  */
 public class DronesPanel extends RecordPanel<Drone> {
 	private static final long serialVersionUID = 8542794426225148740L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private final JTextField txtIdentifier;
 	private final JSpinner nudSpeed;
@@ -52,8 +55,10 @@ public class DronesPanel extends RecordPanel<Drone> {
 	 * @param model Data model being served
 	 */
 	public DronesPanel(BusinessModel model) {
-		super(model, "Drone", "Drones");
-
+		super("Drone", "Drones");
+		// Store model
+		this.model = model;
+		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -79,7 +84,7 @@ public class DronesPanel extends RecordPanel<Drone> {
 		gbc_txtIdentifier.gridy = 0;
 		pnlRecord.add(txtIdentifier, gbc_txtIdentifier);
 		txtIdentifier.setEnabled(false);
-		
+
 		// [Record Panel] <- 'Speed Field' Label
 		final JLabel lblSpeed = new JLabel("Speed (km/h):");
 		final GridBagConstraints gbc_lblSpeed = new GridBagConstraints();
@@ -157,7 +162,8 @@ public class DronesPanel extends RecordPanel<Drone> {
 
 	/**
 	 * Stop a worker.
-	 * @param worker Worker to stop 
+	 * 
+	 * @param worker Worker to stop
 	 * @param work Whether worker should stop
 	 * @return Whether worker was stoppable
 	 */
@@ -188,9 +194,10 @@ public class DronesPanel extends RecordPanel<Drone> {
 				"Set Working Failed", JOptionPane.ERROR_MESSAGE);
 		return false;
 	}
-	
+
 	/**
 	 * Get a random and unique identifier for a drone.
+	 * 
 	 * @return New identifier
 	 */
 	public String getNewIdentifier() {
@@ -210,7 +217,7 @@ public class DronesPanel extends RecordPanel<Drone> {
 			}
 		}
 	}
-	
+
 	@Override
 	public void initialise() {
 		refresh();

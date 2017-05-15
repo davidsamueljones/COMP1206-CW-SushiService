@@ -1,49 +1,49 @@
 package business.gui;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import business.gui.SuppliersPanel.SupplierTableModel;
 import business.model.BusinessModel;
-import business.model.Customer;
-import business.model.Ingredient;
 import business.model.Postcode;
-import business.model.Supplier;
 import general.gui.ListTableModel;
+import general.gui.RecordPanel;
 import general.utility.ErrorBuilder;
 import general.utility.SerializationUtils;
 import general.utility.Utilities;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.JSpinner;
 
 /**
  * An extension of AbstractRecordPanel that handles postcodes.
  *
  * @author David Jones [dsj1n15]
  */
-public class PostcodesPanel extends RecordPanel<Postcode>{
+public class PostcodesPanel extends RecordPanel<Postcode> {
 	private static final long serialVersionUID = -2292781651332679948L;
+	// Business model
+	private final BusinessModel model;
 	// Record objects
 	private JTextField txtPostcode;
 	private JSpinner nudDistance;
-	
+
 	/**
 	 * Create the panel.
 	 *
 	 * @param model Data model being served
 	 */
 	public PostcodesPanel(BusinessModel model) {
-		super(model, "Postcode", "Postcodes");
+		super("Postcode", "Postcodes");
+		// Store model
+		this.model = model;
 		
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
@@ -52,7 +52,7 @@ public class PostcodesPanel extends RecordPanel<Postcode>{
 		gbl_pnlRecord.columnWeights = new double[] {0.0, 1.0};
 		gbl_pnlRecord.rowWeights = new double[] {0.0, 0.0, 1.0};
 		pnlRecord.setLayout(gbl_pnlRecord);
-		
+
 		// [Record Panel] <- 'Postcode Field' Label
 		JLabel lblPostcode = new JLabel("Postcode:");
 		GridBagConstraints gbc_lblPostcode = new GridBagConstraints();
@@ -70,7 +70,7 @@ public class PostcodesPanel extends RecordPanel<Postcode>{
 		gbc_txtPostcode.gridy = 0;
 		pnlRecord.add(txtPostcode, gbc_txtPostcode);
 		txtPostcode.setColumns(10);
-		
+
 		// [Record Panel] <- 'Distance Field' Label
 		JLabel lblDistance = new JLabel("Distance (km):");
 		GridBagConstraints gbc_lblDistance = new GridBagConstraints();
@@ -92,7 +92,7 @@ public class PostcodesPanel extends RecordPanel<Postcode>{
 		tblRecords.setModel(model_tblRecords);
 		tblRecords.getRowSorter().toggleSortOrder(0);
 		Utilities.setColumnStringFormat(tblRecords, 1, "%.2f", SwingConstants.RIGHT);
-		
+
 		// Finalise
 		setEditingMode(RecordEditor.EditingMode.VIEW);
 	}
@@ -124,7 +124,8 @@ public class PostcodesPanel extends RecordPanel<Postcode>{
 				Collection<Postcode> postcodes;
 				synchronized (model.postcodes) {
 					// Cast safe due to known functionality of deep clone
-					postcodes = (Collection<Postcode>) SerializationUtils.deepClone(model.postcodes);
+					postcodes =
+							(Collection<Postcode>) SerializationUtils.deepClone(model.postcodes);
 				}
 				// Refresh using local copy
 				refreshTable(new ArrayList<>(postcodes));
@@ -182,7 +183,7 @@ public class PostcodesPanel extends RecordPanel<Postcode>{
 				break;
 		}
 	}
-	
+
 	@Override
 	public boolean saveNewRecord() {
 		final ErrorBuilder eb = new ErrorBuilder();
@@ -258,6 +259,7 @@ public class PostcodesPanel extends RecordPanel<Postcode>{
 		private static final long serialVersionUID = -4968121277188554566L;
 		private final String[] COLUMN_TITLES = {"Name", "Distance (km)"};
 		private final Class<?>[] COLUMN_CLASSES = {String.class, Double.class};
+
 		/**
 		 * Instantiate table model with default column titles and classes.
 		 */
@@ -283,5 +285,5 @@ public class PostcodesPanel extends RecordPanel<Postcode>{
 		}
 
 	}
-	
+
 }

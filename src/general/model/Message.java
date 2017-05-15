@@ -71,7 +71,7 @@ public class Message implements Serializable {
 	public String toString() {
 		return String.format("[Message %s@%s]", command, hashCode());
 	}
-	
+
 	/**
 	 * An enumeration of hard-coded command types accepted in messages.
 	 *
@@ -81,7 +81,7 @@ public class Message implements Serializable {
 		// Client
 		SUBMIT_LOGIN, REGISTER_NEW_CUSTOMER, GET_POSTCODES, GET_EXISTING_ORDERS, GET_DISH_STOCK, SUBMIT_ORDER,
 		// Business
-		LOGIN_RESPONSE, REGISTER_RESPONSE, UPDATE_POSTCODES, UPDATE_EXISTING_ORDERS, UPDATE_DISH_STOCK, ORDER_RESPONSE;
+		LOGIN_RESPONSE, REGISTER_RESPONSE, UPDATE_POSTCODES, UPDATE_EXISTING_ORDERS, UPDATE_DISH_STOCK, ORDER_RESPONSE, MODIFY_CUSTOMER;
 	}
 
 }
