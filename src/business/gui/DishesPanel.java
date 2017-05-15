@@ -391,7 +391,7 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 	public void clearRecord() {
 		txtName.setText(null);
 		txtDescription.setText(null);
-		nudPrice.setValue(0);
+		nudPrice.setValue(0.0);
 		model_tblIngredients.setList(new ArrayList<Quantity<Ingredient>>());
 		cboIngredient.setSelectedIndex(-1);
 		pnlStockLevels.clearRecord();
