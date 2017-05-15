@@ -15,7 +15,12 @@ import javax.swing.JPanel;
 
 import general.utility.Utilities;
 
-
+/**
+ * Generic header for SpeediSushi. Handles multiple navigation bars that can be toggled,
+ * branding, page titlting and user accounts.
+ *  
+ * @author David Jones [dsjn15]
+ */
 public class Header extends JPanel {
 	private static final long serialVersionUID = -6888273333186980776L;
 	// Default colouring
@@ -23,9 +28,8 @@ public class Header extends JPanel {
 	private static final Color DEFAULT_FOREGROUND = new Color(255, 255, 255);
 	private static final Color DEFAULT_HIGHLIGHT = new Color(224, 102, 102);
 
-	private final String identifier;
-
 	// Header objects
+	private final String identifier;
 	private UserAccountHeader pnlUserAccount;
 	private JLabel lblPage;
 	// Handled navigation bars
@@ -33,11 +37,19 @@ public class Header extends JPanel {
 	private JPanel pnlNavigationBar;
 	private CardLayout cl_pnlNavigationBar;
 
+	/**
+	 * Instantiate a header.
+	 * 
+	 * @param identifier Identifier to use in titles
+	 */
 	public Header(String identifier) {
 		this.identifier = identifier;
 		init();
 	}
 
+	/**
+	 * Create the panel.
+	 */
 	private void init() {
 		// Define layout
 		final GridBagLayout gridBagLayout = new GridBagLayout();

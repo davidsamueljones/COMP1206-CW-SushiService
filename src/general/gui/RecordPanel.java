@@ -104,13 +104,14 @@ public abstract class RecordPanel<T> extends JPanel implements View, RecordEdito
 		lblRecordTitle.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		tlbRecord.addSeparator();
 		// Add record editing buttons to tool bar
-		tbbNew = tlbRecord.addButton("New", Utilities.loadImage(new File("resources/imgNew.png")));
-		tbbEdit =
-				tlbRecord.addButton("Edit", Utilities.loadImage(new File("resources/imgEdit.png")));
+		tbbNew = tlbRecord.addButton("New", 
+				Utilities.loadImage(new File("resources/imgNew.png")));
+		tbbEdit =tlbRecord.addButton("Edit", 
+				Utilities.loadImage(new File("resources/imgEdit.png")));
 		tbbDelete = tlbRecord.addButton("Delete",
 				Utilities.loadImage(new File("resources/imgDelete.png")));
-		tbbSave =
-				tlbRecord.addButton("Save", Utilities.loadImage(new File("resources/imgSave.png")));
+		tbbSave = tlbRecord.addButton("Save", 
+				Utilities.loadImage(new File("resources/imgSave.png")));
 		tbbCancel = tlbRecord.addButton("Cancel",
 				Utilities.loadImage(new File("resources/imgCancel.png")));
 		// Add bottom border to tool bar

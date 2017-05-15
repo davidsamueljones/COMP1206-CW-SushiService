@@ -51,7 +51,7 @@ public class SerializationUtils {
 		try {
 			oos = new ObjectOutputStream(os);
 			oos.writeObject(obj);
-		} catch (final IOException e) {
+		} catch(IOException e) {
 			System.err.println("Serialization failed");
 		} finally {
 			try {
@@ -60,7 +60,7 @@ public class SerializationUtils {
 					oos.flush();
 					oos.close();
 				}
-			} catch (final IOException ex) {
+			} catch(IOException ex) {
 				// close failed, ignore
 			}
 		}
@@ -91,7 +91,7 @@ public class SerializationUtils {
 				if (ois != null) {
 					ois.close();
 				}
-			} catch (final IOException e) {
+			} catch(IOException e) {
 				// close failed, ignore
 			}
 		}

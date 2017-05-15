@@ -184,7 +184,7 @@ public class DronesPanel extends RecordPanel<Drone> {
 						storedRecord.stopWorking();
 					}
 					return true;
-				} catch (final Exception e) {
+				} catch (Exception e) {
 					eb.addError(e.getMessage());
 				}
 			}

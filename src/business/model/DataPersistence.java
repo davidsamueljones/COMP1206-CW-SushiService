@@ -39,7 +39,7 @@ public class DataPersistence {
 		SerializationUtils.serialize(object, fos);
 		try {
 			fos.close();
-		} catch (final IOException e) {
+		} catch(IOException e) {
 			// close failed, ignore
 		}
 	}
@@ -58,7 +58,7 @@ public class DataPersistence {
 		final Object object = SerializationUtils.deserialize(fis);
 		try {
 			fis.close();
-		} catch (final IOException e) {
+		} catch(IOException e) {
 			// close failed, ignore
 		}
 		return object;

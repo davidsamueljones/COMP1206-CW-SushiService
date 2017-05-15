@@ -1,0 +1,180 @@
+Searching 887 files for "catch (final"
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/business/gui/BusinessApplication.java:
+  200  					try {
+  201  						Thread.sleep(REFRESH_RATE);
+  202: 					} catch (final InterruptedException e) {
+  203  						break;
+  204  					}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/business/model/BusinessModel.java:
+   87  			messageHandlerThread.join();
+   88  			System.out.println("[MODEL] : Message handler thread finished");
+   89: 		} catch (final InterruptedException e) {
+   90  			System.err.println("[MODEL] : Unable to wait for message handler thread completion");
+   91  		}
+   ..
+   94  			interruptWorkerThreads(true);
+   95  			System.out.println("[MODEL] : Worker threads finished");
+   96: 		} catch (final InterruptedException e) {
+   97  			System.err.println("[MODEL] : Unable to wait for worker thread completion");
+   98  		}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/business/model/CustomerLogin.java:
+  175  			}
+  176  			return sb.toString();
+  177: 		} catch (final NoSuchAlgorithmException e1) {
+  178  			e1.printStackTrace();
+  179  		}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/business/model/DataPersistence.java:
+   40  		try {
+   41  			fos.close();
+   42: 		} catch (final IOException e) {
+   43  			// close failed, ignore
+   44  		}
+   ..
+   59  		try {
+   60  			fis.close();
+   61: 		} catch (final IOException e) {
+   62  			// close failed, ignore
+   63  		}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/business/model/Drone.java:
+  113  			actionUpdate(String.format("Delivering to '%s'", targetCustomer.getName()));
+  114  			doJourney(targetCustomer.getPostcode().getDistance());
+  115: 		} catch (final InterruptedException e) {
+  116  			// Early interruption leads to preemptive delivery
+  117  			for (final Order order : toDeliver) {
+  ...
+  156  		try {
+  157  			doJourney(targetSupplier.getDistance());
+  158: 		} catch (final InterruptedException e) {
+  159  			// Early interruption leads to cancelling of restock
+  160  			targetSupplier.setBeingRestocked(false);
+  ...
+  175  			actionUpdate("Returning to Business");
+  176  			doJourney(targetSupplier.getDistance());
+  177: 		} catch (final InterruptedException e) {
+  178  			// Early interruption leads to preemptive restock finishing
+  179  			model.stock.ingredients.finishRestock(toRestock);
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/business/model/KitchenStaffMember.java:
+   65  		try {
+   66  			randomWait(PREP_TIME_LOWER_BOUND, PREP_TIME_UPPER_BOUND);
+   67: 		} catch (final InterruptedException e) {
+   68  			// Early interruption leads to preemptive restock finishing
+   69  			finishDishPreparation(toRestock);
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/business/model/Worker.java:
+   48  				// Wait before moving to next task
+   49  				Thread.sleep(WAIT_TIME);
+   50: 			} catch (final InterruptedException e) {
+   51  				// Worker interrupted whilst working so set status to suspend
+   52  				setStatus(Status.SUSPENDED);
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/client/gui/ClientApplication.java:
+  187  					try {
+  188  						Thread.sleep(REFRESH_RATE);
+  189: 					} catch (final InterruptedException e) {
+  190  						break;
+  191  					}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/general/model/Comms.java:
+   62  			// Update port number of source in case of dynamic assignment
+   63  			this.source = new InetSocketAddress(source.getAddress(), server.getPort());
+   64: 		} catch (final BindException e) {
+   65  			throw new IllegalArgumentException("Port number in use - Server not being hosted");
+   66  		}
+   ..
+   99  			SerializationUtils.serialize(message, client.getOutputStream());
+  100  			return true;
+  101: 		} catch (final IOException e) {
+  102  			System.err.println(String
+  103  					.format("[COMMS] Failed sending %s : Could not connect to server", message));
+  ...
+  107  				try {
+  108  					client.close();
+  109: 				} catch (final IOException e) {
+  110  					// close failed, ignore
+  111  				}
+  ...
+  150  			try {
+  151  				serverSocket = new ServerSocket(port);
+  152: 			} catch (final BindException e) {
+  153  				throw e;
+  154: 			} catch (final IOException e) {
+  155  				e.printStackTrace();
+  156  			}
+  ...
+  179  						System.err.println("[Server] : Error receiving ");
+  180  					}
+  181: 				} catch (final SocketTimeoutException s) {
+  182  					System.err.println("[Server] : Socket timed out!");
+  183  					break;
+  184: 				} catch (final IOException e) {
+  185  					System.err.println("[Server] : Error getting connection");
+  186  					break;
+  ...
+  188  					try {
+  189  						server.close();
+  190: 					} catch (final IOException e) {
+  191  						// close failed, ignore
+  192  					}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/general/model/MessageHandler.java:
+   32  			try {
+   33  				rx = comms.receiveMessage();
+   34: 			} catch (final InterruptedException e) {
+   35  				// Exit loop, stopping message handler
+   36  				break;
+   ..
+   64  			try {
+   65  				thread.join();
+   66: 			} catch (final InterruptedException e) {
+   67  				System.err.println("[MSG HANDLER] : Unable to wait for message handling threads");
+   68  				e.printStackTrace();
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/general/utility/SerializationUtils.java:
+   52  			oos = new ObjectOutputStream(os);
+   53  			oos.writeObject(obj);
+   54: 		} catch (final IOException e) {
+   55  			System.err.println("Serialization failed");
+   56  		} finally {
+   ..
+   61  					oos.close();
+   62  				}
+   63: 			} catch (final IOException ex) {
+   64  				// close failed, ignore
+   65  			}
+   ..
+   92  					ois.close();
+   93  				}
+   94: 			} catch (final IOException e) {
+   95  				// close failed, ignore
+   96  			}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/general/utility/UpdateAlert.java:
+   86  				this.wait(timeout);
+   87  			}
+   88: 		} catch (final InterruptedException e) {
+   89  			// wait was interrupted but still check if update has occurred
+   90  		}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Programming 2/Coursework/SushiService/src/general/utility/Utilities.java:
+   52  		try {
+   53  			return ImageIO.read(file);
+   54: 		} catch (final IOException e) {
+   55  			return null;
+   56  		}
+   ..
+  267  		try {
+  268  			return InetAddress.getLocalHost().getHostName();
+  269: 		} catch (final UnknownHostException e) {
+  270  			return "";
+  271  		}
+
+/Users/David/Google Drive/Southampton University/Semester 2/Data Management/Coursework/SQL/reviews_folder<:
+    ERROR: Unable to open file
+
+28 matches across 13 files

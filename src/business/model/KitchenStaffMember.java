@@ -18,7 +18,7 @@ public class KitchenStaffMember extends Worker {
 	private static final long serialVersionUID = 8752641082220001781L;
 	// Working times
 	private static final int PREP_TIME_LOWER_BOUND = 20000;
-	private static final int PREP_TIME_UPPER_BOUND = 40000;
+	private static final int PREP_TIME_UPPER_BOUND = 60000;
 	// Stock being managed
 	private final Stock stock;
 
@@ -64,7 +64,7 @@ public class KitchenStaffMember extends Worker {
 		// Wait (simulate dish preparation)
 		try {
 			randomWait(PREP_TIME_LOWER_BOUND, PREP_TIME_UPPER_BOUND);
-		} catch (final InterruptedException e) {
+		} catch(InterruptedException e) {
 			// Early interruption leads to preemptive restock finishing
 			finishDishPreparation(toRestock);
 			// Rethrow exception to propogate up worker task structure
@@ -112,7 +112,10 @@ public class KitchenStaffMember extends Worker {
 	 * @throws InterruptedException A re-thrown exception indicating that the worker should stop
 	 */
 	private static void randomWait(int lowerBound, int upperBound) throws InterruptedException {
-		final int time = (new Random()).nextInt(lowerBound + upperBound) + lowerBound;
+		int time = (new Random()).nextInt(lowerBound + upperBound) + lowerBound;
+		// Apply speed modifier
+		time = (int) Math.round(BusinessModel.SPEED_MODIFIER * time);
+		// Sleep thread for time
 		Thread.sleep(time);
 	}
 

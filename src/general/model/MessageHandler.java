@@ -31,7 +31,7 @@ public abstract class MessageHandler implements Runnable {
 			Message rx;
 			try {
 				rx = comms.receiveMessage();
-			} catch (final InterruptedException e) {
+			} catch(InterruptedException e) {
 				// Exit loop, stopping message handler
 				break;
 			}
@@ -43,7 +43,7 @@ public abstract class MessageHandler implements Runnable {
 				public void run() {
 					try {
 						handleMessage(rx);
-					} catch (final Exception e) {
+					} catch (Exception e) {
 						System.err.println(String.format("[MSG HANDLER] : Handling failed - %s",
 								e.getMessage()));
 					}
@@ -63,7 +63,7 @@ public abstract class MessageHandler implements Runnable {
 		for (final Thread thread : threads) {
 			try {
 				thread.join();
-			} catch (final InterruptedException e) {
+			} catch(InterruptedException e) {
 				System.err.println("[MSG HANDLER] : Unable to wait for message handling threads");
 				e.printStackTrace();
 			}

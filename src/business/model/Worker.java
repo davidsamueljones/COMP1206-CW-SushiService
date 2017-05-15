@@ -47,7 +47,7 @@ public abstract class Worker implements Runnable, Serializable, Validatable {
 				doWork();
 				// Wait before moving to next task
 				Thread.sleep(WAIT_TIME);
-			} catch (final InterruptedException e) {
+			} catch(InterruptedException e) {
 				// Worker interrupted whilst working so set status to suspend
 				setStatus(Status.SUSPENDED);
 				// Exit loop to terminate thread terminating thread

@@ -31,7 +31,7 @@ public class StartClient {
 					} else {
 						throw new RuntimeException("Location identifier not found");
 					}
-				} catch (final Exception e) {
+				} catch (Exception e) {
 					System.err.println(e.getMessage());
 				}
 			}

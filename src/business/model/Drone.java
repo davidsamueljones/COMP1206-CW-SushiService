@@ -20,7 +20,7 @@ public class Drone extends Worker {
 	private static final long serialVersionUID = 2025025460905127854L;
 	// Constants used for timing
 	private static final int HOUR_MS = 3600000;
-	private static final double SPEED_MODIFIER = 0.001; // 0.1% of actual
+	private static final double RESTOCK_MODIFIER = 1.2;
 	// Drone speed
 	private double speed;
 	// Model being served
@@ -88,13 +88,13 @@ public class Drone extends Worker {
 		Set<Order> toDeliver;
 		synchronized (model.orders) {
 			// Find orders ready for dispatch
-			final Set<Order> reqDelivery =
-					BusinessModel.getOrdersOfStatus(Order.Status.READY_FOR_DISPATCH, model.orders);
+			final Set<Order> reqDelivery = BusinessModel.getOrdersOfStatus(
+					Order.Status.READY_FOR_DISPATCH, model.orders);
 			if (reqDelivery.size() > 0) {
 				// Get target customer as first in order list
 				targetCustomer = reqDelivery.iterator().next().getCustomer();
-				toDeliver =
-						BusinessModel.getOrdersFromCustomer(targetCustomer.getLogin(), reqDelivery);
+				toDeliver = BusinessModel.getOrdersFromCustomer(
+						targetCustomer.getLogin(), reqDelivery);
 				// Start order dispatch
 				for (final Order order : toDeliver) {
 					// Remove reserved stock from stock
@@ -112,7 +112,7 @@ public class Drone extends Worker {
 		try {
 			actionUpdate(String.format("Delivering to '%s'", targetCustomer.getName()));
 			doJourney(targetCustomer.getPostcode().getDistance());
-		} catch (final InterruptedException e) {
+		} catch(InterruptedException e) {
 			// Early interruption leads to preemptive delivery
 			for (final Order order : toDeliver) {
 				order.setStatus(Order.Status.DELIVERED);
@@ -155,7 +155,7 @@ public class Drone extends Worker {
 		// Wait (simulate drone journey to supplier)
 		try {
 			doJourney(targetSupplier.getDistance());
-		} catch (final InterruptedException e) {
+		} catch(InterruptedException e) {
 			// Early interruption leads to cancelling of restock
 			targetSupplier.setBeingRestocked(false);
 			// Rethrow exception to propogate up worker task structure
@@ -166,7 +166,7 @@ public class Drone extends Worker {
 		synchronized (model.stock.ingredients) {
 			QuantityMap<Ingredient> reqStock = model.stock.ingredients.getStockRequired();
 			reqStock = Stock.getIngredientsFromSupplier(targetSupplier, reqStock);
-			toRestock = getWholeUnits(reqStock);
+			toRestock = getRestockAmount(reqStock);
 			model.stock.ingredients.startRestock(toRestock);
 			targetSupplier.setBeingRestocked(false);
 		}
@@ -174,7 +174,7 @@ public class Drone extends Worker {
 		try {
 			actionUpdate("Returning to Business");
 			doJourney(targetSupplier.getDistance());
-		} catch (final InterruptedException e) {
+		} catch(InterruptedException e) {
 			// Early interruption leads to preemptive restock finishing
 			model.stock.ingredients.finishRestock(toRestock);
 			// Rethrow exception to propogate up worker task structure
@@ -187,18 +187,19 @@ public class Drone extends Worker {
 	}
 
 	/**
-	 * Round up every decimal value in a quantity map, simulating the purchase of only whole units
-	 * from the supplier.
+	 * Apply restock modifier and round up any decimal value to an integer to every ingredient 
+	 * in a quantity map; this simulates the purchase of extra stock to avoid continuous restocking
+	 * and the purchase of only whole units only.
 	 *
-	 * @param ingredients Map of ingredients to round up
-	 * @return Rounded map of ingredients
+	 * @param ingredients Map of ingredients to calculate restock amount for
+	 * @return Scaled map of ingredients
 	 */
-	private static QuantityMap<Ingredient> getWholeUnits(QuantityMap<Ingredient> ingredients) {
-		final QuantityMap<Ingredient> ceilinged = new QuantityMap<>();
+	private static QuantityMap<Ingredient> getRestockAmount(QuantityMap<Ingredient> ingredients) {
+		final QuantityMap<Ingredient> restockAmounts = new QuantityMap<>();
 		for (final Entry<Ingredient, Double> entry : ingredients.entrySet()) {
-			ceilinged.put(entry.getKey(), Math.ceil(entry.getValue()));
+			restockAmounts.put(entry.getKey(), Math.ceil(entry.getValue() * RESTOCK_MODIFIER));
 		}
-		return ceilinged;
+		return restockAmounts;
 	}
 
 	/**
@@ -209,7 +210,7 @@ public class Drone extends Worker {
 	 * @throws InterruptedException A re-thrown exception indicating that the worker should stop
 	 */
 	private void doJourney(double distance) throws InterruptedException {
-		final int time = (int) Math.round(HOUR_MS * distance / speed * SPEED_MODIFIER);
+		final int time = (int) Math.round(HOUR_MS * distance / speed * BusinessModel.SPEED_MODIFIER);
 		Thread.sleep(time);
 	}
 

@@ -1,5 +1,13 @@
 package business.gui;
 
+/**
+ * Interface that provides expected implementation required for modifying records.
+ * Any operation that is not implemented should throw an illegal state exception.
+ * 
+ * @author David Jones [dsj1n15]
+ *
+ * @param <T> Type of records being edited
+ */
 public interface RecordEditor<T> {
 
 	/**
@@ -35,6 +43,11 @@ public interface RecordEditor<T> {
 	 */
 	public abstract void updateRecord(T record);
 
+	/**
+	 * Editing modes of a record editor.
+	 * 
+	 * @author David Jones [dsj1n15]
+	 */
 	public static enum EditingMode {
 		NEW, EDIT, VIEW
 	}

@@ -174,7 +174,7 @@ public class CustomerLogin implements Serializable, Validatable {
 				sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
 			}
 			return sb.toString();
-		} catch (final NoSuchAlgorithmException e1) {
+		} catch(NoSuchAlgorithmException e1) {
 			e1.printStackTrace();
 		}
 		return null;

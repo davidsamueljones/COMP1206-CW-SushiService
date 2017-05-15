@@ -164,8 +164,8 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 		gbl_pnlIngredients.columnWeights = new double[] {1.0};
 		gbl_pnlIngredients.rowWeights = new double[] {0.0, 0.0, Double.MIN_VALUE};
 		pnlIngredients.setLayout(gbl_pnlIngredients);
-		pnlIngredients
-				.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+		pnlIngredients.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 						"Ingredients", TitledBorder.LEADING, TitledBorder.TOP));
 
 		// [Ingredients Panel] <- 'Ingredients Field' Table
@@ -256,10 +256,10 @@ public class DishesPanel extends RecordPanel<StockItem<Dish>> {
 		model_tblRecords = new DishesTableModel();
 		tblRecords.setModel(model_tblRecords);
 		tblRecords.getRowSorter().toggleSortOrder(0);
-		Utilities.setColumnStringFormat(tblRecords, 1, Utilities.PRICE_FORMAT,
-				SwingConstants.RIGHT);
-		Utilities.setColumnColouredBoolean(tblRecords, 7, Utilities.COLOR_RED,
-				Utilities.COLOR_GREEN);
+		Utilities.setColumnStringFormat(tblRecords, 1, 
+				Utilities.PRICE_FORMAT, SwingConstants.RIGHT);
+		Utilities.setColumnColouredBoolean(tblRecords, 7, 
+				Utilities.COLOR_RED, Utilities.COLOR_GREEN);
 
 		// Finalise
 		setEditingMode(RecordEditor.EditingMode.VIEW);

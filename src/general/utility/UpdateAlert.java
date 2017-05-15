@@ -85,7 +85,7 @@ public class UpdateAlert {
 			if (!isNew()) {
 				this.wait(timeout);
 			}
-		} catch (final InterruptedException e) {
+		} catch(InterruptedException e) {
 			// wait was interrupted but still check if update has occurred
 		}
 		// Check if new now available

@@ -28,7 +28,6 @@ import general.utility.Utilities;
  * system; this is to protect data persistence files.
  *
  * @author David Jones [dsj1n15]
- *
  */
 public class BusinessApplication extends JFrame implements ViewHandler {
 	private static final long serialVersionUID = 329700147679546872L;
@@ -110,7 +109,7 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 						"Persistence Error", JOptionPane.ERROR_MESSAGE);
 				throw new RuntimeException("Unable to load model");
 			}
-		} catch (final FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			// No model exists so create a new model
 			System.out.println("[APPLICATION] : Creating new model...");
 			model = new BusinessModel();
@@ -132,7 +131,7 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 					System.out.println("[APPLICATION] : Storing model...");
 					DataPersistence.store(location.getIdentifier() + "-DM", model);
 					System.out.println("[APPLICATION] : Model stored");
-				} catch (final FileNotFoundException e) {
+				} catch (FileNotFoundException e) {
 					System.err.println("[APPLICATION] : Unable to store model");
 				}
 			}
@@ -200,7 +199,7 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 					// Wait for given refresh rate
 					try {
 						Thread.sleep(REFRESH_RATE);
-					} catch (final InterruptedException e) {
+					} catch(InterruptedException e) {
 						break;
 					}
 					// Refresh current view, note that this call is not on the EDT

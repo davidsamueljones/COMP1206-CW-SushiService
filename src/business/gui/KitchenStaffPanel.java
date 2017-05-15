@@ -163,7 +163,7 @@ public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 						storedRecord.stopWorking();
 					}
 					return true;
-				} catch (final Exception e) {
+				} catch (Exception e) {
 					eb.addError(e.getMessage());
 				}
 			}

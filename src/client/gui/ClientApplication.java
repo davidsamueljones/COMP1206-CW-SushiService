@@ -24,6 +24,12 @@ import general.gui.ViewHandler;
 import general.utility.ErrorBuilder;
 import general.utility.Utilities;
 
+/**
+ * Main application class for a client interacting with a business. Holds order and account handling
+ * panels. Navigation and refresh behaviour uses view handling interfaces.
+ *
+ * @author David Jones [dsj1n15]
+ */
 public class ClientApplication extends JFrame implements ViewHandler {
 	private static final long serialVersionUID = 554152094859674365L;
 	// Refresh rate of displayed data
@@ -64,7 +70,7 @@ public class ClientApplication extends JFrame implements ViewHandler {
 	}
 
 	/**
-	 * Instantiate a new client application gui.
+	 * Create a new client application gui.
 	 */
 	private void init() {
 		final JPanel contentPane = new JPanel();
@@ -180,7 +186,7 @@ public class ClientApplication extends JFrame implements ViewHandler {
 					// Wait for given refresh rate
 					try {
 						Thread.sleep(REFRESH_RATE);
-					} catch (final InterruptedException e) {
+					} catch(InterruptedException e) {
 						break;
 					}
 					// Refresh current view, note that this call is not on the EDT

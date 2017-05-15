@@ -17,6 +17,13 @@ import general.utility.UpdateAlert;
 import general.utility.UpdateAlertObject;
 import general.utility.Utilities;
 
+/**
+ * Main client model class that holds all server data sent by a business. This model class 
+ * is designed to be completely independent of any interface. The model expects to handle 
+ * connections to the business and therefore includes a communication layer.
+ * 
+ * @author David Jones [dsj1n15]
+ */
 public class ClientModel {
 	private static final String HOSTNAME = Utilities.getHostname();
 	private static final int PORT = 0; // auto-set

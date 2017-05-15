@@ -61,7 +61,7 @@ public class Comms {
 			server.start();
 			// Update port number of source in case of dynamic assignment
 			this.source = new InetSocketAddress(source.getAddress(), server.getPort());
-		} catch (final BindException e) {
+		} catch(BindException e) {
 			throw new IllegalArgumentException("Port number in use - Server not being hosted");
 		}
 		// Remember default location
@@ -98,7 +98,7 @@ public class Comms {
 			// Write message to object output stream
 			SerializationUtils.serialize(message, client.getOutputStream());
 			return true;
-		} catch (final IOException e) {
+		} catch(IOException e) {
 			System.err.println(String
 					.format("[COMMS] Failed sending %s : Could not connect to server", message));
 			return false;
@@ -106,7 +106,7 @@ public class Comms {
 			if (client != null) {
 				try {
 					client.close();
-				} catch (final IOException e) {
+				} catch(IOException e) {
 					// close failed, ignore
 				}
 			}
@@ -149,9 +149,9 @@ public class Comms {
 		public MessageReceiver(int port) throws BindException {
 			try {
 				serverSocket = new ServerSocket(port);
-			} catch (final BindException e) {
+			} catch(BindException e) {
 				throw e;
-			} catch (final IOException e) {
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -178,16 +178,16 @@ public class Comms {
 					} else {
 						System.err.println("[Server] : Error receiving ");
 					}
-				} catch (final SocketTimeoutException s) {
+				} catch(SocketTimeoutException s) {
 					System.err.println("[Server] : Socket timed out!");
 					break;
-				} catch (final IOException e) {
+				} catch(IOException e) {
 					System.err.println("[Server] : Error getting connection");
 					break;
 				} finally {
 					try {
 						server.close();
-					} catch (final IOException e) {
+					} catch(IOException e) {
 						// close failed, ignore
 					}
 				}

@@ -12,7 +12,7 @@ import business.model.BusinessLocation;
  * @author David Jones [dsj1n15]
  */
 public class StartBusiness {
-
+	
 	/**
 	 * Launch the business application for a single business location.
 	 */
@@ -32,7 +32,7 @@ public class StartBusiness {
 					} else {
 						throw new RuntimeException("Location identifier not found");
 					}
-				} catch (final Exception e) {
+				} catch (Exception e) {
 					System.err.println(e.getMessage());
 				}
 			}
