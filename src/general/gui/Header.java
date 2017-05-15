@@ -22,17 +22,17 @@ public class Header extends JPanel {
 	private static final Color DEFAULT_BACKGROUND = new Color(204, 0, 0);
 	private static final Color DEFAULT_FOREGROUND = new Color(255, 255, 255);
 	private static final Color DEFAULT_HIGHLIGHT = new Color(224, 102, 102);
-	
+
 	private final String identifier;
-	
+
 	// Header objects
 	private UserAccountHeader pnlUserAccount;
-	private JLabel lblPage;	
+	private JLabel lblPage;
 	// Handled navigation bars
-	private Map<String, NavigationBar> navigationBars = new HashMap<>();
+	private final Map<String, NavigationBar> navigationBars = new HashMap<>();
 	private JPanel pnlNavigationBar;
 	private CardLayout cl_pnlNavigationBar;
-	
+
 	public Header(String identifier) {
 		this.identifier = identifier;
 		init();
@@ -47,7 +47,7 @@ public class Header extends JPanel {
 		gridBagLayout.rowWeights = new double[] {0.0, 0.5, 0.5, 0.0};
 		setLayout(gridBagLayout);
 		setBackground(Color.WHITE);
-		
+
 		// [Content] <- 'Logo' Image Label
 		final JLabel lblLogo = new JLabel();
 		Utilities.setLabelImage(lblLogo, new File("resources/imgLogo.png"));
@@ -105,8 +105,8 @@ public class Header extends JPanel {
 	}
 
 	/**
-	 * Attach an account header to the header, formatting it and displaying as appropriate. 
-	 *  
+	 * Attach an account header to the header, formatting it and displaying as appropriate.
+	 * 
 	 * @param userAccountHeader Account header to attach.
 	 */
 	public void setAccountHeader(UserAccountHeader userAccountHeader) {
@@ -123,7 +123,7 @@ public class Header extends JPanel {
 
 	/**
 	 * Set the current page title and update navigation bars to identify selected page.
-	 * 
+	 *
 	 * @param page Page to select
 	 * @param viewHandler View handler page is on
 	 */
@@ -132,7 +132,7 @@ public class Header extends JPanel {
 		final String text = String.format("<html><b>%s -</b> %s</html>", identifier, page);
 		lblPage.setText(text);
 		// Update navigation bars
-		for (NavigationBar navigationBar : navigationBars.values()) {
+		for (final NavigationBar navigationBar : navigationBars.values()) {
 			if (navigationBar.getViewHandler() == viewHandler) {
 				navigationBar.setSelected(page);
 			}
@@ -141,35 +141,35 @@ public class Header extends JPanel {
 
 	/**
 	 * Get the navigation bar with a given identifier.
-	 * 
+	 *
 	 * @param identifier Navigation bar identifier
 	 * @return Navigation bar that matches identifier
 	 */
 	public NavigationBar getNavigationBar(String identifier) {
 		return navigationBars.get(identifier);
 	}
-	
+
 	/**
 	 * Show the navigation bar with the given identifier.
-	 * 
+	 *
 	 * @param identifier Navigation bar identifier
 	 */
 	public void showNavigationBar(String identifier) {
 		cl_pnlNavigationBar.show(pnlNavigationBar, identifier);
 	}
-	
+
 	/**
 	 * Create a new navigation bar for a given view handler and represented with the given string
 	 * identifier bar. The newly created navigation bar can then be shown or retrieved with the
 	 * given identifier.
-	 * 
+	 *
 	 * @param identifier Identifier for navigation bar storage
 	 * @param viewHandler View handler for navigation bar to affect
 	 * @return New navigation bar
 	 */
 	public NavigationBar addNavigationBar(String identifier, ViewHandler viewHandler) {
-		NavigationBar navigationBar = new NavigationBar(viewHandler, 
-				DEFAULT_BACKGROUND, DEFAULT_FOREGROUND, DEFAULT_HIGHLIGHT);
+		final NavigationBar navigationBar = new NavigationBar(viewHandler, DEFAULT_BACKGROUND,
+				DEFAULT_FOREGROUND, DEFAULT_HIGHLIGHT);
 		// Store navigation bar
 		navigationBars.put(identifier, navigationBar);
 		// Put navigation bar in card layout

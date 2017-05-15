@@ -29,8 +29,7 @@ import general.model.Quantity;
 import general.utility.Utilities;
 
 /**
- * An extension of AbstractRecordPanel that handles viewing of orders for
- * a single customer.
+ * An extension of AbstractRecordPanel that handles viewing of orders for a single customer.
  *
  * @author David Jones [dsj1n15]
  */
@@ -47,14 +46,14 @@ public class ViewOrdersPanel extends RecordPanel<Order> {
 
 	/**
 	 * Create the panel.
-	 * 
+	 *
 	 * @param model Data model being served
 	 */
 	public ViewOrdersPanel(ClientModel model) {
 		super("Order", "Orders");
 		// Store model
 		this.model = model;
-		
+
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -118,7 +117,7 @@ public class ViewOrdersPanel extends RecordPanel<Order> {
 		pnlDishes.setLayout(gbl_pnlDishes);
 		pnlDishes.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				"Dishes", TitledBorder.LEADING, TitledBorder.TOP));
-		
+
 		// [Dishes Panel] <- 'Dishes' Table
 		tblDishes = new JTable();
 		tblDishes.setEnabled(false);
@@ -165,7 +164,7 @@ public class ViewOrdersPanel extends RecordPanel<Order> {
 		setNewEnabled(false);
 		setEditEnabled(false);
 		setDeleteEnabled(false);
-		
+
 		// Load relevant table model
 		model_tblRecords = new OrderTableModel();
 		tblRecords.setModel(model_tblRecords);
@@ -214,7 +213,7 @@ public class ViewOrdersPanel extends RecordPanel<Order> {
 			}
 		});
 	}
-	
+
 	@Override
 	public void loadRecord(Order record) {
 		final String dateTime = record.getDate().format(Utilities.DATE_TIME_FORMAT);
@@ -256,7 +255,7 @@ public class ViewOrdersPanel extends RecordPanel<Order> {
 	public boolean deleteRecord(Order record) {
 		throw new IllegalStateException("Unsupported operation");
 	}
-	
+
 	/**
 	 * An extension of ListTableModel that displays orders.
 	 *
@@ -265,7 +264,8 @@ public class ViewOrdersPanel extends RecordPanel<Order> {
 	class OrderTableModel extends ListTableModel<Order> {
 		private static final long serialVersionUID = 7294325804359010564L;
 		private final String[] COLUMN_TITLES = {"Date", "Status", "Total Price (£)"};
-		private final Class<?>[] COLUMN_CLASSES = {LocalDateTime.class, Order.Status.class, Double.class};
+		private final Class<?>[] COLUMN_CLASSES =
+				{LocalDateTime.class, Order.Status.class, Double.class};
 
 		/**
 		 * Instantiate table model with default column titles and classes.

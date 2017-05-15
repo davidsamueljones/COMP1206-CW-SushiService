@@ -58,7 +58,7 @@ public class DronesPanel extends RecordPanel<Drone> {
 		super("Drone", "Drones");
 		// Store model
 		this.model = model;
-		
+
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -162,7 +162,7 @@ public class DronesPanel extends RecordPanel<Drone> {
 
 	/**
 	 * Stop a worker.
-	 * 
+	 *
 	 * @param worker Worker to stop
 	 * @param work Whether worker should stop
 	 * @return Whether worker was stoppable
@@ -197,7 +197,7 @@ public class DronesPanel extends RecordPanel<Drone> {
 
 	/**
 	 * Get a random and unique identifier for a drone.
-	 * 
+	 *
 	 * @return New identifier
 	 */
 	public String getNewIdentifier() {

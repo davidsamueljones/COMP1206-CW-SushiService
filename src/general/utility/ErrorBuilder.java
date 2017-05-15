@@ -27,7 +27,7 @@ public class ErrorBuilder implements Serializable {
 
 	/**
 	 * Adds a comment to an array list that is defined as an error.
-	 * 
+	 *
 	 * @param newError Error to add
 	 */
 	public void addError(String newError) {
@@ -36,7 +36,7 @@ public class ErrorBuilder implements Serializable {
 
 	/**
 	 * Add a comment to an array list. This does not have to be an error.
-	 * 
+	 *
 	 * @param newComment Comment to add
 	 * @param causeError Whether comment is an error
 	 */
@@ -56,7 +56,7 @@ public class ErrorBuilder implements Serializable {
 
 	/**
 	 * Lists comments as points preceeded by a title.
-	 * 
+	 *
 	 * @param title Title of list
 	 * @return Title string of held list
 	 */
@@ -80,7 +80,7 @@ public class ErrorBuilder implements Serializable {
 	 * Append another error builder to this instance of error builder. Appending adds all comments
 	 * from other error builder to end of this error builder. If an error exists in other, copy
 	 * error.
-	 * 
+	 *
 	 * @param other Other error builder, ignored if null
 	 */
 	public void append(ErrorBuilder other) {

@@ -23,8 +23,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import business.gui.RecordEditor;
-import business.gui.RecordEditor.EditingMode;
-import business.model.BusinessModel;
 import general.utility.Utilities;
 
 /**
@@ -61,7 +59,7 @@ public abstract class RecordPanel<T> extends JPanel implements View, RecordEdito
 	protected ToolBar tlbRecords;
 	protected ToolBarButton tbbExpandTable;
 	protected ToolBarButton tbbRefresh;
-	
+
 	// Current editing mode
 	protected RecordEditor.EditingMode editingMode;
 	private boolean newEnabled = true;
@@ -83,7 +81,7 @@ public abstract class RecordPanel<T> extends JPanel implements View, RecordEdito
 
 	/**
 	 * Instantiate the panel with given type.
-	 * 
+	 *
 	 * @param singleType Type of a single record
 	 * @param pluralType Plural of single record
 	 */

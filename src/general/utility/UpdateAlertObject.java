@@ -23,7 +23,7 @@ public class UpdateAlertObject<T> extends UpdateAlert {
 
 	/**
 	 * Read from object field, indicating that field has been read.
-	 * 
+	 *
 	 * @return Stored object
 	 */
 	public synchronized T readObject() {
@@ -33,7 +33,7 @@ public class UpdateAlertObject<T> extends UpdateAlert {
 
 	/**
 	 * Write an object with no error builder.
-	 * 
+	 *
 	 * @param object Object to store
 	 */
 	public void write(T object) {
@@ -42,7 +42,7 @@ public class UpdateAlertObject<T> extends UpdateAlert {
 
 	/**
 	 * Write an object and respective error builder.
-	 * 
+	 *
 	 * @param object Object to store
 	 * @param eb Error builder with comments relating to object update
 	 */
@@ -61,6 +61,7 @@ public class UpdateAlertObject<T> extends UpdateAlert {
 	/**
 	 * Clear the current state and contents
 	 */
+	@Override
 	public synchronized void clear() {
 		super.clear();
 		setObject(null);

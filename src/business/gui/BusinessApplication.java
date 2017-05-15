@@ -22,11 +22,11 @@ import general.gui.ViewHandler;
 import general.utility.Utilities;
 
 /**
- * Main application class for handling a business model. Holds record editing panels,
- * managing navigation and refresh behaviour using view handling interfaces. In addition
- * handles persistence layer shutdown behaviour. Only a single instance of this class can
- * be instantiated on the same system; this is to protect data persistence files.
- * 
+ * Main application class for handling a business model. Holds record editing panels, managing
+ * navigation and refresh behaviour using view handling interfaces. In addition handles persistence
+ * layer shutdown behaviour. Only a single instance of this class can be instantiated on the same
+ * system; this is to protect data persistence files.
+ *
  * @author David Jones [dsj1n15]
  *
  */
@@ -150,8 +150,8 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 		// Create header
 		pnlHeader = new Header("Business Application");
 		contentPane.add(pnlHeader, BorderLayout.NORTH);
-		NavigationBar navigationBar = pnlHeader.addNavigationBar("MAIN", this);
-		
+		final NavigationBar navigationBar = pnlHeader.addNavigationBar("MAIN", this);
+
 		// Create content viewing panel
 		pnlView = new JPanel();
 		cl_pnlView = new CardLayout();
@@ -185,7 +185,7 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 			public void run() {
 				setView("Ingredients");
 			}
-		});	
+		});
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class BusinessApplication extends JFrame implements ViewHandler {
 		pnlView.add(component);
 		cl_pnlView.addLayoutComponent(component, name);
 		// Add to header's navigation bar if it should be accessible directly
-		for (NavigationBar navigationBar : navigationBars) {
+		for (final NavigationBar navigationBar : navigationBars) {
 			navigationBar.addNavigationButton(name);
 		}
 		// Keep track of relevant view interfaces

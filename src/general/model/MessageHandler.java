@@ -43,7 +43,7 @@ public abstract class MessageHandler implements Runnable {
 				public void run() {
 					try {
 						handleMessage(rx);
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						System.err.println(String.format("[MSG HANDLER] : Handling failed - %s",
 								e.getMessage()));
 					}
@@ -73,7 +73,7 @@ public abstract class MessageHandler implements Runnable {
 	/**
 	 * Cast given message to an object message using a checked cast. If message is not of object
 	 * message an exception is thrown.
-	 * 
+	 *
 	 * @param message Message, expected to be of type ObjectMessage
 	 * @return Message casted as ObjectMessage
 	 * @throws ClassCastException Message not ObjectMessage

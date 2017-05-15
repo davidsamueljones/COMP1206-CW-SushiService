@@ -47,7 +47,7 @@ public class ObjectMessage extends Message {
 
 	/**
 	 * Initialise a message with a command, comments held by an error builder and a map of objects.
-	 * 
+	 *
 	 * @param command Command dictating how message should be handled
 	 * @param eb Comments in error builder to send
 	 * @param objects Map of identifiers and objects to send, null will cause a new map to be
@@ -65,7 +65,7 @@ public class ObjectMessage extends Message {
 	/**
 	 * Get an attached object from the stored map. If the identifier is not found an exception is
 	 * thrown as this indicates a structural problem with the message.
-	 * 
+	 *
 	 * @param identifier Key for object to get
 	 * @return Attached object
 	 */
@@ -87,7 +87,7 @@ public class ObjectMessage extends Message {
 	 */
 	public <T> T getObject(String identifier, Class<T> type) {
 		// Get object
-		Object object = getObject(identifier);
+		final Object object = getObject(identifier);
 		// Accept if null, otherwise attempt cast
 		if (object == null || type.isInstance(object)) {
 			return type.cast(object);
@@ -98,7 +98,7 @@ public class ObjectMessage extends Message {
 
 	/**
 	 * Add an object to the messages stored map.
-	 * 
+	 *
 	 * @param identifier Key for object to be assigned to, must not exist in map or be null
 	 * @param object Object to attach (value assigned to key)
 	 */

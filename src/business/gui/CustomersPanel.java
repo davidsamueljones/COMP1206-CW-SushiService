@@ -50,7 +50,7 @@ public class CustomersPanel extends RecordPanel<Customer> {
 		super("Customer", "Customers");
 		// Store model
 		this.model = model;
-		
+
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};

@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
  * object. Implementations of this model dictate how these objects are displayed. Column classes can
  * be explicitly set to avoid requiring table structure remake if a new record is added to a blank
  * model.
- * 
+ *
  * @author David Jones [dsj1n15]
  *
  * @param <T> Type of list model is serving
@@ -23,7 +23,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
 
 	/**
 	 * Change the columns, automatically triggering table update.
-	 * 
+	 *
 	 * @param columnNames The name for each column as an array
 	 */
 	public void setColumnNames(String[] columnNames) {
@@ -47,7 +47,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
 
 	/**
 	 * Change the list being displayed, automatically displays table update.
-	 * 
+	 *
 	 * @param list A list for model to display
 	 */
 	public void setList(List<T> list) {
@@ -57,7 +57,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
 
 	/**
 	 * Get the object being displayed at a specific row index.
-	 * 
+	 *
 	 * @param rowIndex Row index to get object for (in model)
 	 * @return Object at row index
 	 */
@@ -71,7 +71,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
 
 	/**
 	 * Find the position of an object in the model.
-	 * 
+	 *
 	 * @param object Object to find
 	 * @return Index of object in model, -1 of object not found
 	 */
@@ -81,7 +81,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
 
 	/**
 	 * Return the selected object from the given table using this model.
-	 * 
+	 *
 	 * @param table Table to get object selection from
 	 * @return Object that is selected
 	 */
@@ -96,7 +96,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
 
 	/**
 	 * Select an object in the given table using this model.
-	 * 
+	 *
 	 * @param table Table to select object in
 	 * @param object Object to select
 	 * @return Whether object was selected

@@ -52,7 +52,7 @@ public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 		super("Staff Member", "Staff");
 		// Store model
 		this.model = model;
-		
+
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -141,7 +141,7 @@ public class KitchenStaffPanel extends RecordPanel<KitchenStaffMember> {
 
 	/**
 	 * Stop a worker.
-	 * 
+	 *
 	 * @param worker Worker to stop
 	 * @param work Whether worker should stop
 	 * @return Whether worker was stoppable

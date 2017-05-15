@@ -1,6 +1,7 @@
 package client.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,15 +14,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import business.model.CustomerLogin;
 import general.gui.View;
-import java.awt.Font;
 
 /**
  * A panel with components and implementation for logging in using an existing user.
- * 
+ *
  * @author David Jones [dsj1n15]
  */
 public class LoginPanel extends JPanel implements View {
@@ -46,35 +45,35 @@ public class LoginPanel extends JPanel implements View {
 	 */
 	private void init() {
 		// Set layout
-		GridBagLayout layout = new GridBagLayout();
+		final GridBagLayout layout = new GridBagLayout();
 		layout.columnWidths = new int[] {20, 0, 20};
 		layout.rowHeights = new int[] {0, 0, 0};
 		layout.columnWeights = new double[] {0.4, 0.2, 0.4};
 		layout.rowWeights = new double[] {0.5, 0.0, 0.5};
 		setLayout(layout);
 		setBackground(Color.WHITE);
-		
+
 		// [Content Panel]
-		JPanel pnlContent = new JPanel();
-		pnlContent.setBorder(BorderFactory.createCompoundBorder(				
-				BorderFactory.createLineBorder(Color.BLACK), 
-				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-		GridBagLayout gbl_pnlContent = new GridBagLayout();
+		final JPanel pnlContent = new JPanel();
+		pnlContent.setBorder(
+				BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK),
+						BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		final GridBagLayout gbl_pnlContent = new GridBagLayout();
 		gbl_pnlContent.columnWidths = new int[] {0, 0};
 		gbl_pnlContent.rowHeights = new int[] {0, 0, 0, 0};
 		gbl_pnlContent.columnWeights = new double[] {0, 1.0};
 		gbl_pnlContent.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0};
 		pnlContent.setLayout(gbl_pnlContent);
-		GridBagConstraints gbc_pnlContent = new GridBagConstraints();
+		final GridBagConstraints gbc_pnlContent = new GridBagConstraints();
 		gbc_pnlContent.fill = GridBagConstraints.BOTH;
 		gbc_pnlContent.gridx = 1;
 		gbc_pnlContent.gridy = 1;
 		add(pnlContent, gbc_pnlContent);
-		
+
 		// [Content Panel] <- 'Information' Label
-		JLabel lblInformation = new JLabel("<html>Enter customer login details:</html>");
+		final JLabel lblInformation = new JLabel("<html>Enter customer login details:</html>");
 		lblInformation.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		GridBagConstraints gbc_lblInformation = new GridBagConstraints();
+		final GridBagConstraints gbc_lblInformation = new GridBagConstraints();
 		gbc_lblInformation.gridwidth = 2;
 		gbc_lblInformation.anchor = GridBagConstraints.WEST;
 		gbc_lblInformation.insets = new Insets(10, 5, 10, 5);
@@ -83,8 +82,8 @@ public class LoginPanel extends JPanel implements View {
 		pnlContent.add(lblInformation, gbc_lblInformation);
 
 		// [Content Panel] <- 'Username' Label
-		JLabel lblUsername = new JLabel("Username:");
-		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+		final JLabel lblUsername = new JLabel("Username:");
+		final GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 		gbc_lblUsername.insets = new Insets(0, 5, 5, 5);
 		gbc_lblUsername.anchor = GridBagConstraints.EAST;
 		gbc_lblUsername.gridx = 0;
@@ -92,16 +91,16 @@ public class LoginPanel extends JPanel implements View {
 		pnlContent.add(lblUsername, gbc_lblUsername);
 		// [Content Panel] <- 'Username' TextBox
 		txtUsername = new JTextField();
-		GridBagConstraints gbc_txtLoginUsername = new GridBagConstraints();
+		final GridBagConstraints gbc_txtLoginUsername = new GridBagConstraints();
 		gbc_txtLoginUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_txtLoginUsername.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtLoginUsername.gridx = 1;
 		gbc_txtLoginUsername.gridy = 1;
 		pnlContent.add(txtUsername, gbc_txtLoginUsername);
-		
+
 		// [Content Panel] <- 'Password' Label
-		JLabel lblPassword = new JLabel("Password:");
-		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		final JLabel lblPassword = new JLabel("Password:");
+		final GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.insets = new Insets(0, 5, 5, 5);
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.gridx = 0;
@@ -109,7 +108,7 @@ public class LoginPanel extends JPanel implements View {
 		pnlContent.add(lblPassword, gbc_lblPassword);
 		// [Content Panel] <- 'Password' TextBox
 		txtPassword = new JPasswordField();
-		GridBagConstraints gbc_txtLoginPassword = new GridBagConstraints();
+		final GridBagConstraints gbc_txtLoginPassword = new GridBagConstraints();
 		gbc_txtLoginPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_txtLoginPassword.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtLoginPassword.gridx = 1;
@@ -118,7 +117,7 @@ public class LoginPanel extends JPanel implements View {
 
 		// [Content Panel] <- 'Login' Button
 		btnLogin = new JButton("Login");
-		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
+		final GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnLogin.gridwidth = 2;
 		gbc_btnLogin.insets = new Insets(0, 5, 5, 5);
@@ -130,7 +129,7 @@ public class LoginPanel extends JPanel implements View {
 		btnLogin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CustomerLogin login = new CustomerLogin(txtUsername.getText(),
+				final CustomerLogin login = new CustomerLogin(txtUsername.getText(),
 						String.valueOf(txtPassword.getPassword()));
 				application.login(login);
 			}
@@ -146,12 +145,12 @@ public class LoginPanel extends JPanel implements View {
 	public void refresh() {
 		// do nothing
 	}
-	
+
 	@Override
 	public JButton getAcceptButton() {
 		return btnLogin;
 	}
-	
+
 	/**
 	 * Clear the login components.
 	 */
@@ -160,5 +159,5 @@ public class LoginPanel extends JPanel implements View {
 		txtPassword.setText(null);
 		txtUsername.requestFocus();
 	}
-	
+
 }

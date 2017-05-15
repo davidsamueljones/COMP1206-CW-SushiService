@@ -11,7 +11,7 @@ import general.utility.SerializationUtils;
 /**
  * Data persistence layer for storage and retrieval of objects in files. Defines location and file
  * extension of stored objects.
- * 
+ *
  * @author David Jones [dsj1n15]
  */
 public class DataPersistence {
@@ -25,7 +25,7 @@ public class DataPersistence {
 
 	/**
 	 * Store the given object using the file determined from the identifier.
-	 * 
+	 *
 	 * @param identifier Identifier to use for storage
 	 * @param object Object to store
 	 * @throws FileNotFoundException Unable to open file location found using identifier
@@ -46,7 +46,7 @@ public class DataPersistence {
 
 	/**
 	 * Retrieve an object from the persistence layer with the given identifier.
-	 * 
+	 *
 	 * @param identifier Identifier to try and find stored object for
 	 * @return Object loaded from file
 	 * @throws FileNotFoundException Unable to open file location found using identifier
@@ -66,7 +66,7 @@ public class DataPersistence {
 
 	/**
 	 * Determine the persistence path for an identifier.
-	 * 
+	 *
 	 * @param identifier Identifier to get path (File) for
 	 * @return File that identifier should represent
 	 */

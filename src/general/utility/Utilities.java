@@ -204,12 +204,12 @@ public class Utilities {
 		}
 		return null;
 	}
-	
+
 	// This still doesn't work!
 	public static String getHostname() {
 		try {
 			return InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
+		} catch (final UnknownHostException e) {
 			return "";
 		}
 	}

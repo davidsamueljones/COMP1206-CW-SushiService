@@ -65,7 +65,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		super("Order", "Orders");
 		// Store model
 		this.model = model;
-		
+
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -110,7 +110,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		pnlRecord.add(txtStatus, gbc_txtStatus);
 		txtStatus.setColumns(10);
 		txtStatus.setEnabled(false);
-		
+
 		// [Record Panel] <- 'Customer Field' Label
 		final JLabel lblCustomer = new JLabel("Customer:");
 		final GridBagConstraints gbc_lblCustomer = new GridBagConstraints();
@@ -147,7 +147,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 		pnlDishes.setLayout(gbl_pnlDishes);
 		pnlDishes.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				"Dishes", TitledBorder.LEADING, TitledBorder.TOP));
-		
+
 		// [Dishes Panel] <- 'Dishes' Table
 		tblDishes = new JTable();
 		tblDishes.setEnabled(false);
@@ -260,7 +260,7 @@ public class OrdersPanel extends RecordPanel<Order> {
 
 	/**
 	 * Cancel the given order if possible.
-	 * 
+	 *
 	 * @return Whether the order was cancelled successfully
 	 */
 	public boolean cancelOrder(Order order) {

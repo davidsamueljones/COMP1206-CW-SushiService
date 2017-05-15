@@ -23,7 +23,7 @@ public class SerializationUtils {
 	/**
 	 * Serialise and then deserialise an object to create a deep clone. This method is slow but is
 	 * provided as an alternative to external libraries.
-	 * 
+	 *
 	 * @param obj Object to clone
 	 * @return Clone of object
 	 */
@@ -37,7 +37,7 @@ public class SerializationUtils {
 
 	/**
 	 * Serialse an object to an output stream.
-	 * 
+	 *
 	 * @param obj Object to serialise
 	 * @param os Output stream to target
 	 */
@@ -68,7 +68,7 @@ public class SerializationUtils {
 
 	/**
 	 * Deserialise an object from an input stream.
-	 * 
+	 *
 	 * @param is Input stream to get object from
 	 * @return Object from input stream, returns null on error
 	 */

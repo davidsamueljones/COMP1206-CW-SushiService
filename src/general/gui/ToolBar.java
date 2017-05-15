@@ -16,9 +16,10 @@ import javax.swing.SwingConstants;
 /**
  * Class ToolBarButton, this is a tool bar that holds many components horizontally. Note: Part of
  * GUI extension that was done as opposed to changing look and feel UI managers, or using external
- * libraries - not all standard component coding practices may be acknowledged. The reason for creating
- * this component is that the swing tool bar was not customisable enough to get the desired design.
- * 
+ * libraries - not all standard component coding practices may be acknowledged. The reason for
+ * creating this component is that the swing tool bar was not customisable enough to get the desired
+ * design.
+ *
  * @author David Jones [dsj1n15]
  */
 public class ToolBar extends JPanel {
@@ -32,7 +33,7 @@ public class ToolBar extends JPanel {
 
 	/**
 	 * Instantiate a tool bar with a given theme.
-	 * 
+	 *
 	 * @param background Tool bar colour
 	 * @param foreground Text colour
 	 * @param highlight Button colour on hover
@@ -73,7 +74,7 @@ public class ToolBar extends JPanel {
 
 	/**
 	 * Add a new button using given information.
-	 * 
+	 *
 	 * @param text Text to assign to button
 	 * @return Created button
 	 */
@@ -83,7 +84,7 @@ public class ToolBar extends JPanel {
 
 	/**
 	 * Add a new button using given information.
-	 * 
+	 *
 	 * @param text Text to assign to button
 	 * @param img Image to assign to button as icon
 	 * @return Created button
@@ -102,7 +103,7 @@ public class ToolBar extends JPanel {
 
 	/**
 	 * Add non-clickable text to toolbar.
-	 * 
+	 *
 	 * @param text Text to assign to label
 	 * @param alignment Alignment of text
 	 * @return Created label

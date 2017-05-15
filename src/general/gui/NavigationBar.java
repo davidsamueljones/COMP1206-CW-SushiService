@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
  * Class NavigationBar, this is a tool bar that handles a view and the buttons required to navigate
  * it. Note: Part of GUI extension that was done as opposed to changing look and feel UI managers,
  * or using external libraries - not all standard component coding practices may be acknowledged.
- * 
+ *
  * @author David Jones [dsj1n15]
  */
 public class NavigationBar extends ToolBar {
@@ -18,7 +18,7 @@ public class NavigationBar extends ToolBar {
 
 	/**
 	 * Instantiate as a toolbar with attached view handler.
-	 * 
+	 *
 	 * @param viewHandler View handler being controlled by navigation bar
 	 * @param background Navigation bar colour
 	 * @param foreground Text colour
@@ -32,7 +32,7 @@ public class NavigationBar extends ToolBar {
 
 	/**
 	 * Create a new navigation button with the given text assigned to it.
-	 * 
+	 *
 	 * @param text Text to assign to button; this should be the same text as the view handler
 	 *        identifier.
 	 * @return Created button
@@ -64,7 +64,7 @@ public class NavigationBar extends ToolBar {
 
 	/**
 	 * Select a button in the navigation bar by its text.
-	 * 
+	 *
 	 * @param text Text of button
 	 */
 	public void setSelected(String text) {
@@ -78,7 +78,7 @@ public class NavigationBar extends ToolBar {
 
 	/**
 	 * Select a button in the navigation bar.
-	 * 
+	 *
 	 * @param selButton Button to select
 	 */
 	private void setSelected(ToolBarButton selButton) {
@@ -87,7 +87,7 @@ public class NavigationBar extends ToolBar {
 		}
 		selButton.setClickable(false);
 	}
-	
+
 	/**
 	 * @return View handler being managed by navigation bar
 	 */

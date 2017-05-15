@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * StockItem class, pairs a stock level with an item.
- * 
+ *
  * @author David Jones [dsj1n15]
  *
  * @param <T> The type of item being handled
@@ -15,7 +15,7 @@ public class StockItem<T> {
 
 	/**
 	 * Instantiate a stock item.
-	 * 
+	 *
 	 * @param item Item that stock item should represent
 	 * @param stockLevels Stock levels attached to item
 	 */

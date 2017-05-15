@@ -10,17 +10,17 @@ import general.model.QuantityMap;
 import general.utility.ErrorBuilder;
 
 /**
- * Extension of MessageHandler that handles the influence of a received message 
- * on the business side.
- * 
+ * Extension of MessageHandler that handles the influence of a received message on the business
+ * side.
+ *
  * @author David Jones [dsj1n15]
  */
 public class BusinessMessageHandler extends MessageHandler {
 	private final BusinessModel model;
 
 	/**
-	 * Instantiate a new message handler that has influence over the business model. 
-	 * 
+	 * Instantiate a new message handler that has influence over the business model.
+	 *
 	 * @param model Business model to interact with
 	 */
 	public BusinessMessageHandler(BusinessModel model) {
@@ -59,15 +59,14 @@ public class BusinessMessageHandler extends MessageHandler {
 	}
 
 	/**
-	 * Handle a new registration, expect a fully defined customer object 
-	 * attached to the message. Do not add new customer if customer is not fully defined
-	 * or login exists.
-	 * 
+	 * Handle a new registration, expect a fully defined customer object attached to the message. Do
+	 * not add new customer if customer is not fully defined or login exists.
+	 *
 	 * @param rx Object message with customer attached
 	 */
 	private void handleRegistration(Message rx) {
 		// Get expected objects from message
-		ObjectMessage rxObj = expectObjectMessage(rx);
+		final ObjectMessage rxObj = expectObjectMessage(rx);
 		final Customer sentCustomer = rxObj.getObject("CUSTOMER", Customer.class);
 
 		// Validate locally
@@ -89,17 +88,16 @@ public class BusinessMessageHandler extends MessageHandler {
 	}
 
 	/**
-	 * Handle a login attempt, expect a fully defined customer login object attached
-	 * to the message. Reject login if login does not exist or password does not match
-	 * expected.
-	 * 
+	 * Handle a login attempt, expect a fully defined customer login object attached to the message.
+	 * Reject login if login does not exist or password does not match expected.
+	 *
 	 * @param rx Object message with customer login attached
 	 */
 	private void handleSubmitLogin(Message rx) {
 		// Get expected objects from message
-		ObjectMessage rxObj = expectObjectMessage(rx);
+		final ObjectMessage rxObj = expectObjectMessage(rx);
 		final CustomerLogin sentLogin = rxObj.getObject("CUSTOMER_LOGIN", CustomerLogin.class);
-		
+
 		Customer storedCustomer;
 		final ErrorBuilder eb = new ErrorBuilder();
 		synchronized (model.customers) {
@@ -114,28 +112,28 @@ public class BusinessMessageHandler extends MessageHandler {
 				eb.addError("Incorrect username or password");
 				// Clear customer from variable so it is not sent
 				storedCustomer = null;
-			}		
+			}
 		}
 
 		// Reply with login response, CUSTOMER object null on failure and eb contains error
-		ObjectMessage tx = new ObjectMessage(Message.Command.LOGIN_RESPONSE, eb);
+		final ObjectMessage tx = new ObjectMessage(Message.Command.LOGIN_RESPONSE, eb);
 		tx.addObject("CUSTOMER", storedCustomer);
 		reply(rx, tx);
 	}
-	
+
 	/**
-	 * Handle changes to an existing customer, expect an existing customer for reference and
-	 * a fully defined customer object to replace the existing customer. Do not make changes
-	 * if customer is not fully defined/valid or reference customer does not exist.
-	 * 
+	 * Handle changes to an existing customer, expect an existing customer for reference and a fully
+	 * defined customer object to replace the existing customer. Do not make changes if customer is
+	 * not fully defined/valid or reference customer does not exist.
+	 *
 	 * @param rx Object message with two customers attached
 	 */
 	private void handleModifyCustomer(Message rx) {
 		// Get expected objects from message
-		ObjectMessage rxObj = expectObjectMessage(rx);
+		final ObjectMessage rxObj = expectObjectMessage(rx);
 		final Customer refCustomer = rxObj.getObject("EXISTING_CUSTOMER", Customer.class);
 		final Customer modCustomer = rxObj.getObject("MODIFIED_CUSTOMER", Customer.class);
-		
+
 		// Validate locally
 		final ErrorBuilder eb = modCustomer.validate();
 		if (!eb.isError()) {
@@ -151,14 +149,14 @@ public class BusinessMessageHandler extends MessageHandler {
 		}
 
 		// Reply with login response, CUSTOMER object null on failure and eb contains error
-		ObjectMessage tx = new ObjectMessage(Message.Command.LOGIN_RESPONSE, eb);
+		final ObjectMessage tx = new ObjectMessage(Message.Command.LOGIN_RESPONSE, eb);
 		tx.addObject("CUSTOMER", modCustomer);
 		reply(rx, tx);
 	}
 
 	/**
 	 * Handle a postcode request. Reply with all postcodes served.
-	 * 
+	 *
 	 * @param rx Received request message
 	 */
 	private void handleGetPostcodes(Message rx) {
@@ -174,7 +172,7 @@ public class BusinessMessageHandler extends MessageHandler {
 
 	/**
 	 * Handle a dish request. Reply with all dishes and available stock.
-	 * 
+	 *
 	 * @param rx Received request message
 	 */
 	private void handleGetDishStock(Message rx) {
@@ -186,14 +184,14 @@ public class BusinessMessageHandler extends MessageHandler {
 	}
 
 	/**
-	 * Handle an order request, expect a customer login attached to the message to filter
-	 * orders to return. Reply with orders found.
-	 * 
+	 * Handle an order request, expect a customer login attached to the message to filter orders to
+	 * return. Reply with orders found.
+	 *
 	 * @param rx Received request message
 	 */
 	private void handleGetExistingOrders(Message rx) {
 		// Get expected objects from message
-		ObjectMessage rxObj = expectObjectMessage(rx);
+		final ObjectMessage rxObj = expectObjectMessage(rx);
 		final CustomerLogin sentLogin = rxObj.getObject("CUSTOMER_LOGIN", CustomerLogin.class);
 
 		// Reply with set of customer orders
@@ -206,14 +204,14 @@ public class BusinessMessageHandler extends MessageHandler {
 
 	/**
 	 * Handle a new order, expect an order object with dishes and a customer to be defined and
-	 * attached. Accept order if validation passes, customer postcode is still served by the business
-	 * and there is enough existing stock to accept the order.
-	 * 
+	 * attached. Accept order if validation passes, customer postcode is still served by the
+	 * business and there is enough existing stock to accept the order.
+	 *
 	 * @param rx Object message with order attached
 	 */
 	private void handleSubmitOrder(Message rx) {
 		// Get expected objects from message
-		ObjectMessage rxObj = expectObjectMessage(rx);
+		final ObjectMessage rxObj = expectObjectMessage(rx);
 		final Order order = rxObj.getObject("ORDER", Order.class);
 
 		// Update order time to use business time
@@ -221,10 +219,10 @@ public class BusinessMessageHandler extends MessageHandler {
 		order.setStatus(Order.Status.RECEIVED);
 
 		// Validate order locally
-		ErrorBuilder eb = order.validate();
+		final ErrorBuilder eb = order.validate();
 		// Check postcode of customer is being served
-		Customer customer = order.getCustomer();
-		synchronized (model.postcodes){
+		final Customer customer = order.getCustomer();
+		synchronized (model.postcodes) {
 			if (!model.postcodes.contains(customer.getPostcode())) {
 				eb.addError("Customer postcode not served by business");
 			}
@@ -243,7 +241,7 @@ public class BusinessMessageHandler extends MessageHandler {
 				eb.addError("Not enough stock available to complete order");
 			}
 		}
-		
+
 		// Reply with order response, eb contains error on failure
 		reply(rx, new Message(Message.Command.ORDER_RESPONSE, eb));
 	}

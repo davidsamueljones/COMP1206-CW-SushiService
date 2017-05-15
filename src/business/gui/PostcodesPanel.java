@@ -32,8 +32,8 @@ public class PostcodesPanel extends RecordPanel<Postcode> {
 	// Business model
 	private final BusinessModel model;
 	// Record objects
-	private JTextField txtPostcode;
-	private JSpinner nudDistance;
+	private final JTextField txtPostcode;
+	private final JSpinner nudDistance;
 
 	/**
 	 * Create the panel.
@@ -44,7 +44,7 @@ public class PostcodesPanel extends RecordPanel<Postcode> {
 		super("Postcode", "Postcodes");
 		// Store model
 		this.model = model;
-		
+
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};
@@ -54,8 +54,8 @@ public class PostcodesPanel extends RecordPanel<Postcode> {
 		pnlRecord.setLayout(gbl_pnlRecord);
 
 		// [Record Panel] <- 'Postcode Field' Label
-		JLabel lblPostcode = new JLabel("Postcode:");
-		GridBagConstraints gbc_lblPostcode = new GridBagConstraints();
+		final JLabel lblPostcode = new JLabel("Postcode:");
+		final GridBagConstraints gbc_lblPostcode = new GridBagConstraints();
 		gbc_lblPostcode.anchor = GridBagConstraints.EAST;
 		gbc_lblPostcode.insets = new Insets(5, 5, 5, 5);
 		gbc_lblPostcode.gridx = 0;
@@ -63,7 +63,7 @@ public class PostcodesPanel extends RecordPanel<Postcode> {
 		pnlRecord.add(lblPostcode, gbc_lblPostcode);
 		// [Record Panel] <- 'Postcode Field' TextBox
 		txtPostcode = new JTextField();
-		GridBagConstraints gbc_txtPostcode = new GridBagConstraints();
+		final GridBagConstraints gbc_txtPostcode = new GridBagConstraints();
 		gbc_txtPostcode.insets = new Insets(5, 0, 5, 5);
 		gbc_txtPostcode.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtPostcode.gridx = 1;
@@ -72,15 +72,15 @@ public class PostcodesPanel extends RecordPanel<Postcode> {
 		txtPostcode.setColumns(10);
 
 		// [Record Panel] <- 'Distance Field' Label
-		JLabel lblDistance = new JLabel("Distance (km):");
-		GridBagConstraints gbc_lblDistance = new GridBagConstraints();
+		final JLabel lblDistance = new JLabel("Distance (km):");
+		final GridBagConstraints gbc_lblDistance = new GridBagConstraints();
 		gbc_lblDistance.insets = new Insets(0, 5, 5, 5);
 		gbc_lblDistance.gridx = 0;
 		gbc_lblDistance.gridy = 1;
 		pnlRecord.add(lblDistance, gbc_lblDistance);
 		// [Record Panel] <- 'Distance Field' Spinner
 		nudDistance = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 1000, 0.01));
-		GridBagConstraints gbc_nudDistance = new GridBagConstraints();
+		final GridBagConstraints gbc_nudDistance = new GridBagConstraints();
 		gbc_nudDistance.fill = GridBagConstraints.HORIZONTAL;
 		gbc_nudDistance.insets = new Insets(0, 0, 5, 5);
 		gbc_nudDistance.gridx = 1;

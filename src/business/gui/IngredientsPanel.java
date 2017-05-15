@@ -52,7 +52,7 @@ public class IngredientsPanel extends RecordPanel<StockItem<Ingredient>> {
 		super("Ingredient", "Ingredients");
 		// Store model
 		this.model = model;
-		
+
 		// [Record Panel] - Set layout as grid bag
 		final GridBagLayout gbl_pnlRecord = new GridBagLayout();
 		gbl_pnlRecord.columnWidths = new int[] {0, 0};

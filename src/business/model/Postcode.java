@@ -8,7 +8,7 @@ import general.utility.Validatable;
 
 /**
  * Postcode class, holds data about a postcode. Postcode defines equality.
- * 
+ *
  * @author David Jones [dsj1n15]
  */
 public class Postcode implements Serializable, Validatable, Comparable<Postcode> {
@@ -19,7 +19,7 @@ public class Postcode implements Serializable, Validatable, Comparable<Postcode>
 
 	/**
 	 * Instantiate postcode with only final fields.
-	 * 
+	 *
 	 * @param postcode Postcode represented by object
 	 */
 	public Postcode(String postcode) {
@@ -28,7 +28,7 @@ public class Postcode implements Serializable, Validatable, Comparable<Postcode>
 
 	/**
 	 * Instantiate postcode with all fields.
-	 * 
+	 *
 	 * @param postcode Postcode represented by object
 	 * @param distance Distance of postcode from business (km)
 	 */
@@ -80,7 +80,7 @@ public class Postcode implements Serializable, Validatable, Comparable<Postcode>
 	 * does not have to be complete meaning many postcodes falling under it. An example of this is
 	 * PO7 7** would include PO7 7NH and PO7 8ED as valid options. An initial area code is the only
 	 * enforced part. Valid for postcodes: A9 9AA, A9A 9AA, A99 9AA, AA9 9AA, AA9A 9AA, AA99 9AA
-	 * 
+	 *
 	 * @param postcode Postcode to verify
 	 * @return Whether postcode is valid
 	 */
@@ -91,7 +91,7 @@ public class Postcode implements Serializable, Validatable, Comparable<Postcode>
 		if (postcode.matches(VALID_POSTCODE_REGEX)) {
 			// Verify that any generalisation is not made specific at any point
 			// i.e. Allow: AA* *** but not AA* *AA
-			int generalStart = postcode.indexOf("*");
+			final int generalStart = postcode.indexOf("*");
 			if (generalStart >= 0) {
 				return postcode.substring(generalStart).matches("^(\\*+|\\s)$");
 			}

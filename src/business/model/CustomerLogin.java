@@ -14,7 +14,7 @@ import general.utility.Validatable;
  * CustomerLogin class, holds login information for a customer. The login can be verified using a
  * checksum consisting of username and the password hash. It should be noted that this is not a
  * hugely secure implementation but shows some of the methods that may be required in data storage.
- * 
+ *
  * Username of customer login defines class equality.
  *
  * @author David Jones [dsj1n15]
@@ -34,7 +34,7 @@ public class CustomerLogin implements Serializable, Validatable {
 
 	/**
 	 * Instantiate a login with only final fields.
-	 * 
+	 *
 	 * @param username Unique identifier of login
 	 */
 	public CustomerLogin(String username) {
@@ -43,7 +43,7 @@ public class CustomerLogin implements Serializable, Validatable {
 
 	/**
 	 * Instantiate a login with all fields.
-	 * 
+	 *
 	 * @param username Unique identifier of login
 	 * @param password Initial password
 	 */
@@ -69,7 +69,7 @@ public class CustomerLogin implements Serializable, Validatable {
 	/**
 	 * Set the password using a raw string, hash it for storage. Do not enforce password validity,
 	 * passwords should be validated prior to set.
-	 * 
+	 *
 	 * @param password
 	 */
 	public void setPassword(String password) {
@@ -84,7 +84,7 @@ public class CustomerLogin implements Serializable, Validatable {
 
 	/**
 	 * Remake checksum and verify it against that held in the login object.
-	 * 
+	 *
 	 * @return Whether the checksums are the same.
 	 */
 	public boolean isChecksumValid() {
@@ -124,19 +124,19 @@ public class CustomerLogin implements Serializable, Validatable {
 
 	/**
 	 * Verify if a given string conforms to username rules (not blank, no whitespace).
-	 * 
-	 * @param username Username to verify 
+	 *
+	 * @param username Username to verify
 	 * @return Whether username follows rules
 	 */
 	public static boolean isUsernameValid(String username) {
-		Matcher matcher = Pattern.compile("\\s").matcher(username);
-		return (username != null && ! username.isEmpty() && !matcher.find());
+		final Matcher matcher = Pattern.compile("\\s").matcher(username);
+		return (username != null && !username.isEmpty() && !matcher.find());
 	}
-	
+
 	/**
 	 * Verify if a given string conforms to password rules (not blank, 6+ characters, uppercase,
 	 * lowercase, digit).
-	 * 
+	 *
 	 * @param password Password to verify (non-hashed)
 	 * @return Whether password follows rules
 	 */
@@ -146,7 +146,7 @@ public class CustomerLogin implements Serializable, Validatable {
 
 	/**
 	 * Verify the structure of a string to see if it matches that of a SHA-256 regex.
-	 * 
+	 *
 	 * @param password Hashed password
 	 * @return Whether structure implies hash
 	 */
@@ -158,8 +158,7 @@ public class CustomerLogin implements Serializable, Validatable {
 	 * Function to hash a String using SHA-256. This is a one way encryption and would not be secure
 	 * enough for a final implementation, at the very least it should be salted. It may also be
 	 * better to have two way encryption implemented so that password verification can happen
-	 * business side.
-	 * The code to create the hash was sourced from:
+	 * business side. The code to create the hash was sourced from:
 	 * http://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
 	 *
 	 * @param string String to hash

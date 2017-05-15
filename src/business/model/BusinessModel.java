@@ -224,6 +224,7 @@ public class BusinessModel implements Serializable {
 
 	/**
 	 * Filter the models set of orders to get only those with a particular status.
+	 * 
 	 * @param status Status to filter by
 	 * @return Filtered set of orders
 	 */
@@ -235,6 +236,7 @@ public class BusinessModel implements Serializable {
 
 	/**
 	 * Filter a set of orders to only those with a particular status.
+	 * 
 	 * @param status Status to filter by
 	 * @param orders Orders to filter
 	 * @return Filtered set of orders
@@ -248,9 +250,10 @@ public class BusinessModel implements Serializable {
 		}
 		return reqDelivery;
 	}
-	
+
 	/**
 	 * Filter the models set of orders to get only those with a particular customer login.
+	 * 
 	 * @param login Customer login to filter by
 	 * @return Filtered set of orders
 	 */
@@ -262,6 +265,7 @@ public class BusinessModel implements Serializable {
 
 	/**
 	 * Filter a set of orders to only those with a particular customer login.
+	 * 
 	 * @param login Customer login to filter by
 	 * @param orders Orders to filter
 	 * @return Filtered set of orders

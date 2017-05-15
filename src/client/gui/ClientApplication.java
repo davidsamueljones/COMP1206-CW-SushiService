@@ -45,6 +45,7 @@ public class ClientApplication extends JFrame implements ViewHandler {
 
 	/**
 	 * Instantiate a new client application targetting a specific business application.
+	 * 
 	 * @param location Location for client application to target
 	 */
 	public ClientApplication(BusinessLocation location) {
@@ -74,12 +75,12 @@ public class ClientApplication extends JFrame implements ViewHandler {
 		pnlHeader = new Header("Client Application");
 		contentPane.add(pnlHeader, BorderLayout.NORTH);
 		// Create navigation bars
-		NavigationBar nbLoggedIn = pnlHeader.addNavigationBar("LOGGED_IN", this);
-		NavigationBar nbLoggedOut = pnlHeader.addNavigationBar("LOGGED_OUT", this);
+		final NavigationBar nbLoggedIn = pnlHeader.addNavigationBar("LOGGED_IN", this);
+		final NavigationBar nbLoggedOut = pnlHeader.addNavigationBar("LOGGED_OUT", this);
 		// Create user account header
 		userAccountHeader = new UserAccountHeader();
 		pnlHeader.setAccountHeader(userAccountHeader);
-		
+
 		// Create content viewing panel
 		pnlView = new JPanel();
 		cl_pnlView = new CardLayout();
@@ -97,7 +98,7 @@ public class ClientApplication extends JFrame implements ViewHandler {
 		final JPanel pnlNewOrder = new NewOrderPanel(this);
 		addView(pnlNewOrder, "New Order", nbLoggedIn);
 		final JPanel pnlViewOrder = new ViewOrdersPanel(model);
-		addView(pnlViewOrder, "View Orders", nbLoggedIn);	
+		addView(pnlViewOrder, "View Orders", nbLoggedIn);
 		final JPanel pnlUserAccount = new UserAccountPanel(model);
 		addView(pnlUserAccount, "User Account", nbLoggedIn);
 
@@ -108,29 +109,29 @@ public class ClientApplication extends JFrame implements ViewHandler {
 				logout();
 			}
 		});
-		
+
 		// [Logout Button] - Handle logout request
 		userAccountHeader.getLogoutButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int res = JOptionPane.showConfirmDialog(null,
-						"Are you sure you want to logout?", "Logout", 
-						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				final int res =
+						JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?",
+								"Logout", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (res == JOptionPane.YES_OPTION) {
 					logout();
 				}
-				
-			}	
+
+			}
 		});
 	}
 
 	/**
 	 * Attempt to login to the system, call model behaviour and update application.
-	 * 
-	 * @param login CustomerLogin to use for attempt 
+	 *
+	 * @param login CustomerLogin to use for attempt
 	 */
 	public void login(CustomerLogin login) {
-		ErrorBuilder eb = new ErrorBuilder();
+		final ErrorBuilder eb = new ErrorBuilder();
 		// Handle model behaviour (failure stops login)
 		if (model.login(login)) {
 			// Wait for message handler to handle response
@@ -140,7 +141,8 @@ public class ClientApplication extends JFrame implements ViewHandler {
 				if (!eb.isError()) {
 					setView("New Order");
 					pnlHeader.showNavigationBar("LOGGED_IN");
-					userAccountHeader.setCustomerName(model.loggedInCustomer.readObject().getName());
+					userAccountHeader
+							.setCustomerName(model.loggedInCustomer.readObject().getName());
 					userAccountHeader.setVisible(true);
 				}
 			} else {
@@ -157,8 +159,7 @@ public class ClientApplication extends JFrame implements ViewHandler {
 	}
 
 	/**
-	 * Logout the current user of the model and application. Update the view
-	 * respectively.
+	 * Logout the current user of the model and application. Update the view respectively.
 	 */
 	public void logout() {
 		model.logout();
@@ -200,14 +201,14 @@ public class ClientApplication extends JFrame implements ViewHandler {
 		pnlView.add(component);
 		cl_pnlView.addLayoutComponent(component, name);
 		// Add to header's navigation bar if it should be accessible directly
-		for (NavigationBar navigationBar : navigationBars) {
+		for (final NavigationBar navigationBar : navigationBars) {
 			navigationBar.addNavigationButton(name);
 		}
 		// Keep track of relevant view interfaces
 		views.put(name, (View) component);
 		return true;
 	}
-	
+
 	@Override
 	public void setView(String view) {
 		cl_pnlView.show(pnlView, view);

@@ -61,7 +61,7 @@ public class Comms {
 			server.start();
 			// Update port number of source in case of dynamic assignment
 			this.source = new InetSocketAddress(source.getAddress(), server.getPort());
-		} catch (BindException e) {
+		} catch (final BindException e) {
 			throw new IllegalArgumentException("Port number in use - Server not being hosted");
 		}
 		// Remember default location
@@ -98,7 +98,7 @@ public class Comms {
 			// Write message to object output stream
 			SerializationUtils.serialize(message, client.getOutputStream());
 			return true;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.err.println(String
 					.format("[COMMS] Failed sending %s : Could not connect to server", message));
 			return false;
@@ -106,7 +106,7 @@ public class Comms {
 			if (client != null) {
 				try {
 					client.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// close failed, ignore
 				}
 			}
@@ -149,9 +149,9 @@ public class Comms {
 		public MessageReceiver(int port) throws BindException {
 			try {
 				serverSocket = new ServerSocket(port);
-			} catch (BindException e) {
+			} catch (final BindException e) {
 				throw e;
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -164,11 +164,11 @@ public class Comms {
 					// Wait for connection
 					server = serverSocket.accept();
 					// Receive message object
-					Object object = SerializationUtils.deserialize(server.getInputStream());
+					final Object object = SerializationUtils.deserialize(server.getInputStream());
 					if (object != null) {
 						// Verify message object - ignore if not message
 						if (object instanceof Message) {
-							Message message = (Message) object;
+							final Message message = (Message) object;
 							// Add message to queue (thread-safe)
 							messages.add(message);
 						} else {
@@ -178,16 +178,16 @@ public class Comms {
 					} else {
 						System.err.println("[Server] : Error receiving ");
 					}
-				} catch (SocketTimeoutException s) {
+				} catch (final SocketTimeoutException s) {
 					System.err.println("[Server] : Socket timed out!");
 					break;
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					System.err.println("[Server] : Error getting connection");
 					break;
 				} finally {
 					try {
 						server.close();
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						// close failed, ignore
 					}
 				}

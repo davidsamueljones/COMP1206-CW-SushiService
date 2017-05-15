@@ -1,23 +1,18 @@
 package general.gui;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import business.model.Customer;
-import general.utility.Utilities;
-
 /**
  * Class UserAccountHeader, displays an account login and provides a button to logout.
- * 
+ *
  * @author David Jones [dsj1n15]
  */
 public class UserAccountHeader extends JPanel {
@@ -25,7 +20,7 @@ public class UserAccountHeader extends JPanel {
 
 	private final JLabel lblCustomerName;
 	private final JButton btnLogout;
-	
+
 	/**
 	 * Create the panel.
 	 */
@@ -38,7 +33,7 @@ public class UserAccountHeader extends JPanel {
 		gbl_pnlUserAccount.rowWeights = new double[] {1.0};
 		setLayout(gbl_pnlUserAccount);
 
-		//  [Content] <- 'Login Message' Label
+		// [Content] <- 'Login Message' Label
 		final JLabel lblLoginMessage = new JLabel("You are logged in as:");
 		final GridBagConstraints gbc_lblLoginMessage = new GridBagConstraints();
 		gbc_lblLoginMessage.insets = new Insets(0, 0, 0, 5);
@@ -46,7 +41,7 @@ public class UserAccountHeader extends JPanel {
 		gbc_lblLoginMessage.gridy = 0;
 		add(lblLoginMessage, gbc_lblLoginMessage);
 
-		//  [Content] <- 'Customer Name' Label
+		// [Content] <- 'Customer Name' Label
 		lblCustomerName = new JLabel();
 		lblCustomerName.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
 		final GridBagConstraints gbc_lblCustomerFullName = new GridBagConstraints();
@@ -55,7 +50,7 @@ public class UserAccountHeader extends JPanel {
 		gbc_lblCustomerFullName.gridy = 0;
 		add(lblCustomerName, gbc_lblCustomerFullName);
 
-		//  [Content] <- 'Logout' Button
+		// [Content] <- 'Logout' Button
 		btnLogout = new JButton("Logout");
 		btnLogout.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		final GridBagConstraints gbc_lbllogout = new GridBagConstraints();
@@ -65,16 +60,16 @@ public class UserAccountHeader extends JPanel {
 		add(btnLogout, gbc_lbllogout);
 
 	}
-	
+
 	/**
 	 * Sets the name displayed in the account header.
-	 * 
+	 *
 	 * @param name Name to display
 	 */
 	public void setCustomerName(String name) {
 		lblCustomerName.setText(name);
 	}
-	
+
 	/**
 	 * @return A reference to the logout button
 	 */

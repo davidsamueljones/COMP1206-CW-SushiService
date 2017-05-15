@@ -25,7 +25,7 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Instantiate a new order from a customer with given dishes.
-	 * 
+	 *
 	 * @param customer Customer who made order
 	 * @param dishes Dishes in order
 	 */
@@ -52,7 +52,7 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Calculate the price of all dishes in the order.
-	 * 
+	 *
 	 * @return Total price
 	 */
 	public double getTotalPrice() {
@@ -60,9 +60,8 @@ public class Order implements Serializable, Validatable {
 	}
 
 	/**
-	 * Static implementation to calculate the price of all dishes in
-	 * a quantity map.
-	 * 
+	 * Static implementation to calculate the price of all dishes in a quantity map.
+	 *
 	 * @param dishes Quantity map of dishes
 	 * @return Total price
 	 */
@@ -73,7 +72,7 @@ public class Order implements Serializable, Validatable {
 		}
 		return price;
 	}
-	
+
 	/**
 	 * @return The date/time when the order was created
 	 */
@@ -84,7 +83,7 @@ public class Order implements Serializable, Validatable {
 	/**
 	 * Set the date/time of the order; this can be set so a business can update the time to be in
 	 * respect to the server clock.
-	 * 
+	 *
 	 * @param date The date/time of the order
 	 */
 	public void setDate(LocalDateTime date) {
@@ -108,7 +107,7 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Non-static implementation of Status.isCancellable.
-	 * 
+	 *
 	 * @return Whether status implies order is cancellable
 	 */
 	public boolean isCancellable() {
@@ -117,7 +116,7 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Non-static implementation of Status.isComplete.
-	 * 
+	 *
 	 * @return Whether status implies order is complete
 	 */
 	public boolean isComplete() {
@@ -161,7 +160,7 @@ public class Order implements Serializable, Validatable {
 
 	/**
 	 * Enumeration of statuses for an order.
-	 * 
+	 *
 	 * @author David Jones [dsj1n15]
 	 */
 	public static enum Status {
